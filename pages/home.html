@@ -1,126 +1,174 @@
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap");
 
   .home-container {
     position: relative;
     width: 100%;
-    height: 100%;
-    padding: 40px;
+    height: 100vh;
     box-sizing: border-box;
-    color: white;
     font-family: "Open Sans", sans-serif;
+    color: white;
+    padding: 60px 60px 20px 60px;
+    overflow: hidden;
   }
 
   .logo {
     position: absolute;
-    top: 20px;
-    left: 40px;
-    font-size: 42px;
+    top: 8px;
+    left: 20px;
+    font-size: 32px;
     font-family: "Playfair Display", serif;
     font-weight: bold;
-    letter-spacing: 1px;
     color: white;
-    z-index: 3;
+    z-index: 100;
   }
 
-  .description {
-    position: absolute;
-    top: 25%;
-    left: 10%;
-    width: 40%;
-    z-index: 2;
+  .content-wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 40px;
+    height: 58%;
   }
 
-  .description h1 {
+  .description-box {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .description-box h1 {
+    font-size: 28px;
+    font-weight: 600;
     margin-bottom: 10px;
-    font-size: 36px;
   }
 
-  .description p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 12px;
+  .description-box p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
   }
 
   .cv-photo {
-    position: absolute;
-    top: 25%;
-    right: 10%;
-    width: 280px;
+    flex: 0 0 300px;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    object-fit: cover;
+  }
+
+  .gallery {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .gallery a {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    max-width: 30%;
+    flex: 1 1 250px;
+  }
+
+  .gallery a:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .gallery img {
+    width: 100%;
     height: auto;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    z-index: 2;
+    object-fit: contain;
+    display: block;
   }
 
-  .art-img {
-    position: absolute;
-    opacity: 0.8;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-    z-index: 1;
-    transition: transform 0.3s ease;
-  }
+  @media (max-width: 900px) {
+    .home-container {
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
+      padding-top: 80px; /* évite le chevauchement avec le header */
+    }
 
-  .art-img:hover {
-    transform: scale(1.05) rotate(2deg);
-  }
+    .logo {
+      top: 16px;
+      left: 20px;
+      font-size: 26px;
+    }
 
-  .img1 {
-    top: 70%;
-    left: 5%;
-    width: 200px;
-    transform: rotate(-10deg);
-  }
-  .img2 {
-    top: 65%;
-    right: 10%;
-    width: 220px;
-    transform: rotate(8deg);
-  }
-  .img3 {
-    top: 78%;
-    left: 45%;
-    width: 200px;
-    transform: rotate(-5deg);
-  }
+    .content-wrapper {
+      flex-direction: column;
+      align-items: center;
+      height: auto;
+    }
 
-  .cv-button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 24px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background 0.3s;
-  }
+    .cv-photo {
+      width: 100%;
+      height: auto;
+      max-width: 300px;
+    }
 
-  .cv-button:hover {
-    background: rgba(255, 255, 255, 0.4);
+    .gallery {
+      flex-direction: column;
+      height: auto;
+      margin-top: 30px;
+    }
+
+    .gallery a {
+      width: 90%;
+      height: auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+    }
   }
 </style>
 
 <div class="logo">Yunes Errachid</div>
 
-<div class="description">
-  <h1>Jeune entrepreneur ambitieux</h1>
-  <p>
-    Je conçois des sites web modernes et impactants, des jeux innovants, et des
-    interfaces engageantes.
-  </p>
-  <p>
-    Mon objectif ? Aider les marques, commerçants et indépendants à créer une
-    présence en ligne unique, qui attire et fidélise leurs clients.
-  </p>
-  <p>
-    Design, développement, visibilité : je m’occupe de tout pour que votre
-    projet prenne vie.
-  </p>
-</div>
+<div class="home-container">
+  <div class="content-wrapper">
+    <div class="description-box">
+      <h1>Jeune entrepreneur ambitieux</h1>
+      <p>
+        Je conçois des sites web modernes et impactants, des jeux innovants, et
+        des interfaces engageantes.
+      </p>
+      <p>
+        Mon objectif ? Aider les marques, commerçants et indépendants à créer
+        une présence en ligne unique, qui attire et fidélise leurs clients.
+      </p>
+      <p>
+        Design, développement, visibilité : je m’occupe de tout pour que votre
+        projet prenne vie.
+      </p>
+    </div>
+    <img src="images/photocv.jpg" class="cv-photo" alt="Photo CV" />
+  </div>
 
-<img src="images/photocv.jpg" class="cv-photo" alt="Photo CV" />
-<img src="images/templelilas.jpg" class="art-img img1" alt="Temple des Lilas" />
-<img src="images/atelierstyle.jpg" class="art-img img2" alt="Atelier Style" />
-<img src="images/lamiedor.jpg" class="art-img img3" alt="La Mie d'Or" />
+  <div class="gallery">
+    <a href="https://hisok4yez.github.io/templedeslilas/" target="_blank">
+      <img src="images/templelilas.jpg" alt="Temple des Lilas" />
+    </a>
+    <a href="https://hisok4yez.github.io/atelierdustyle/" target="_blank">
+      <img src="images/atelierstyle.jpg" alt="Atelier Style" />
+    </a>
+    <a href="https://hisok4yez.github.io/lamiedor/" target="_blank">
+      <img src="images/lamiedor.jpg" alt="La Mie d'Or" />
+    </a>
+  </div>
+</div>
