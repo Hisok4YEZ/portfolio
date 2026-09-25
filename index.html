@@ -1,436 +1,1390 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <style>
-    html, body { margin:0; padding:0; background:#141414; color:#fff; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
-    a { color:#fff; text-decoration:none; } a:hover { color:#B3B3B3; }
-    [data-row]::-webkit-scrollbar { display:none; }
-    /* --- INTRO --- */
-    @keyframes introLetter { 0% { opacity:0; transform:scale(2.4) translateY(10px); filter:blur(8px); } 40% { opacity:1; transform:scale(1); filter:blur(0); } 70% { opacity:1; transform:scale(1); letter-spacing:.06em; } 100% { opacity:0; transform:scale(1.15); letter-spacing:.5em; filter:blur(4px); } }
-    @keyframes introRibbon { 0% { transform:scaleY(0); opacity:0; } 35% { transform:scaleY(1); opacity:1; } 100% { transform:scaleY(2.2) translateY(-30%); opacity:0; } }
-    @keyframes introFlash { 0% { opacity:0; } 20% { opacity:.9; } 100% { opacity:0; } }
-    @keyframes introOut { to { opacity:0; visibility:hidden; } }
-    @keyframes pulse { 0%,100% { opacity:.5; } 50% { opacity:1; } }
-    @keyframes badgeDot { 0%,100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.5); opacity:.5; } }
-    /* --- MOBILE (inspiré de l'app mobile : hero centré, boutons pleine largeur) --- */
-    @media (max-width: 680px) {
-      [data-m="hero"] { padding:96px 5vw 36px !important; min-height:88vh !important; }
-      [data-m="hero-photo"] { width:100% !important; }
-      [data-m="hero-shade"] { background:linear-gradient(0deg,#141414 0%,rgba(20,20,20,.85) 30%,rgba(20,20,20,.3) 60%,rgba(20,20,20,.6) 100%) !important; }
-      [data-m="hero-text"] { align-items:center !important; text-align:center; max-width:100% !important; }
-      [data-m="hero-text"] p { max-width:100% !important; font-size:14px !important; }
-      [data-m="btns"] { width:100%; margin-top:16px !important; }
-      [data-m="btns"] a { flex:1 1 0; justify-content:center; padding:13px 16px !important; }
-      [data-m="badge"] { top:70px !important; right:5vw !important; font-size:10px !important; padding:6px 10px !important; }
-      [data-m="collection"] { grid-template-columns:1fr !important; }
-      [data-m="collection-tiles"] { min-height:120px; }
-      [data-m="arrow"], [data-m="nav-link"] { display:none !important; }
-      [data-m="row-title"] { font-size:17px !important; }
-      [data-m="rank"] { font-size:96px !important; margin-right:-8px !important; -webkit-text-stroke-width:3px !important; }
-      [data-m="flag"] { width:72px !important; height:72px !important; font-size:40px !important; }
-      [data-m="tabs"] { gap:20px !important; overflow-x:auto; scrollbar-width:none; }
-    }
-  </style>
-</helmet>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          html,
+          body {
+            margin: 0;
+            padding: 0;
+            background: #141414;
+            color: #fff;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+          }
+          a {
+            color: #fff;
+            text-decoration: none;
+          }
+          a:hover {
+            color: #b3b3b3;
+          }
+          [data-row]::-webkit-scrollbar {
+            display: none;
+          }
+          /* --- INTRO --- */
+          @keyframes introLetter {
+            0% {
+              opacity: 0;
+              transform: scale(2.4) translateY(10px);
+              filter: blur(8px);
+            }
+            40% {
+              opacity: 1;
+              transform: scale(1);
+              filter: blur(0);
+            }
+            70% {
+              opacity: 1;
+              transform: scale(1);
+              letter-spacing: 0.06em;
+            }
+            100% {
+              opacity: 0;
+              transform: scale(1.15);
+              letter-spacing: 0.5em;
+              filter: blur(4px);
+            }
+          }
+          @keyframes introRibbon {
+            0% {
+              transform: scaleY(0);
+              opacity: 0;
+            }
+            35% {
+              transform: scaleY(1);
+              opacity: 1;
+            }
+            100% {
+              transform: scaleY(2.2) translateY(-30%);
+              opacity: 0;
+            }
+          }
+          @keyframes introFlash {
+            0% {
+              opacity: 0;
+            }
+            20% {
+              opacity: 0.9;
+            }
+            100% {
+              opacity: 0;
+            }
+          }
+          @keyframes introOut {
+            to {
+              opacity: 0;
+              visibility: hidden;
+            }
+          }
+          @keyframes pulse {
+            0%,
+            100% {
+              opacity: 0.5;
+            }
+            50% {
+              opacity: 1;
+            }
+          }
+          @keyframes badgeDot {
+            0%,
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              transform: scale(1.5);
+              opacity: 0.5;
+            }
+          }
+          /* --- MOBILE (inspiré de l'app mobile : hero aligné à gauche, boutons pleine largeur) --- */
+          @media (max-width: 680px) {
+            [data-m="hero"] {
+              padding: 96px 5vw 36px !important;
+              min-height: 100vh !important;
+              min-height: 100svh !important;
+            }
+            [data-m="exp-card"] {
+              flex-basis: 85vw !important;
+            }
+            [data-m="hero-photo"] {
+              width: 100% !important;
+              -webkit-mask-image: none !important;
+              mask-image: none !important;
+            }
+            [data-m="hero-shade"] {
+              background: linear-gradient(
+                0deg,
+                #141414 0%,
+                rgba(20, 20, 20, 0.85) 22%,
+                rgba(20, 20, 20, 0.15) 50%,
+                rgba(20, 20, 20, 0.5) 100%
+              ) !important;
+            }
+            [data-m="hero-text"] {
+              align-items: flex-start !important;
+              text-align: left;
+              max-width: 100% !important;
+            }
+            [data-m="hero-text"] p {
+              max-width: 100% !important;
+              font-size: 14px !important;
+            }
+            [data-m="btns"] {
+              width: 100%;
+              margin-top: 16px !important;
+            }
+            [data-m="btns"] a {
+              flex: 1 1 0;
+              justify-content: center;
+              padding: 13px 16px !important;
+            }
+            [data-m="badge"] {
+              top: 70px !important;
+              right: 5vw !important;
+              font-size: 10px !important;
+              padding: 6px 10px !important;
+            }
+            [data-m="collection"] {
+              grid-template-columns: 1fr !important;
+              gap: 18px;
+              padding: 28px 0 !important;
+            }
+            [data-m="job-poster"] {
+              flex-basis: 40vw !important;
+            }
+            [data-row="4"] {
+              padding-left: 5vw !important;
+              scroll-padding-left: 5vw;
+            }
+            [data-m="arrow"],
+            [data-m="nav-link"] {
+              display: none !important;
+            }
+            [data-m="row-title"] {
+              font-size: 17px !important;
+            }
+            [data-row="2"] {
+              --w: 34vw !important;
+            }
+            [data-m="pep-grid"] {
+              grid-template-columns: repeat(2, 1fr) !important;
+              gap: 10px !important;
+            }
+            [data-m="flag"] {
+              width: 72px !important;
+              height: 72px !important;
+              font-size: 40px !important;
+            }
+            [data-m="tabs"] {
+              gap: 20px !important;
+              overflow-x: auto;
+              scrollbar-width: none;
+            }
+          }
+        </style>
+      </helmet>
 
-<!-- ============ INTRO (overlay animé + sting sonore) : construit dans le code logique ============ -->
-{{ intro }}
+      <!-- ============ INTRO (overlay animé + sting sonore) : construit dans le code logique ============ -->
+      {{ intro }}
 
-<!-- ============ HEADER ============ -->
-<div style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:28px;padding:14px 4vw;transition:background .4s;background:{{ headerBg }}">
-  <a href="#top" style="font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:.06em;color:#E50914;line-height:1;text-shadow:0 0 18px rgba(229,9,20,.35)">CVFLIX</a>
-  <a data-m="nav-link" href="#parcourir" style="font-size:14px;color:#e5e5e5">Parcourir</a>
-  <div style="margin-left:auto;display:flex;align-items:center;gap:18px">
-    <!-- LIEN LINKEDIN : remplacer le href -->
-    <a href="https://linkedin.com" target="_blank" style="font-size:13px;font-weight:700;letter-spacing:.02em;border:1.5px solid #fff;border-radius:3px;padding:2px 5px;line-height:1">in</a>
-    <div style="width:32px;height:32px;border-radius:4px;background:linear-gradient(135deg,#E50914,#7a0409)" title="Profil"></div>
-  </div>
-</div>
+      <!-- ============ HEADER ============ -->
+      <div
+        style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:28px;padding:14px 4vw;transition:background .4s;background:{{ headerBg }}"
+      >
+        <a
+          href="#top"
+          style="
+            font-family: &quot;Bebas Neue&quot;, sans-serif;
+            font-size: 34px;
+            letter-spacing: 0.06em;
+            color: #e50914;
+            line-height: 1;
+            text-shadow: 0 0 18px rgba(229, 9, 20, 0.35);
+          "
+          >CVFLIX</a
+        >
+        <a
+          data-m="nav-link"
+          href="#parcourir"
+          style="font-size: 14px; color: #e5e5e5"
+          >Parcourir</a
+        >
+        <div
+          style="
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+          "
+        >
+          <!-- LIEN LINKEDIN : remplacer le href -->
+          <a
+            href="https://www.linkedin.com/in/omar-errachid/"
+            target="_blank"
+            style="
+              font-size: 13px;
+              font-weight: 700;
+              letter-spacing: 0.02em;
+              border: 1.5px solid #fff;
+              border-radius: 3px;
+              padding: 2px 5px;
+              line-height: 1;
+            "
+            >in</a
+          >
+          <div
+            style="
+              width: 32px;
+              height: 32px;
+              border-radius: 4px;
+              background: linear-gradient(135deg, #e50914, #7a0409);
+            "
+            title="Profil"
+          ></div>
+        </div>
+      </div>
 
-<!-- ============ HERO ============ -->
-<!-- PHOTO DE FOND : remplacer le background du bloc data-m="hero-photo" par url('photo.jpg') -->
-<section id="top" data-m="hero" style="position:relative;min-height:92vh;display:flex;align-items:flex-end;padding:120px 4vw 60px;background:radial-gradient(ellipse 60% 70% at 78% 40%,#3a3a3a 0%,#1c1c1c 55%,#141414 100%);overflow:hidden">
-  <div data-m="hero-photo" style="position:absolute;right:0;top:0;width:58%;height:100%;background:repeating-linear-gradient(135deg,#242424 0 14px,#1e1e1e 14px 28px);display:flex;align-items:flex-start;justify-content:center;padding-top:120px;font-family:monospace;font-size:13px;color:#666;letter-spacing:.05em;transform:scale(1.04);transition:transform 6s ease-out" ref="{{ heroPhoto }}">photo / visuel de fond</div>
-  <div data-m="hero-shade" style="position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(20,20,20,.95) 0%,rgba(20,20,20,.55) 55%,rgba(20,20,20,0) 100%),linear-gradient(0deg,#141414 0%,rgba(20,20,20,0) 35%)"></div>
+      <!-- ============ HERO ============ -->
+      <!-- PHOTO DE FOND : url('images/hero.png') dans le background du bloc data-m="hero-photo" -->
+      <section
+        id="top"
+        data-m="hero"
+        style="
+          position: relative;
+          min-height: 92vh;
+          display: flex;
+          align-items: flex-end;
+          padding: 120px 4vw 60px;
+          background: radial-gradient(
+            ellipse 60% 70% at 78% 40%,
+            #3a3a3a 0%,
+            #1c1c1c 55%,
+            #141414 100%
+          );
+          overflow: hidden;
+        "
+      >
+        <div
+          data-m="hero-photo"
+          style="
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 58%;
+            height: 100%;
+            background: #1c1c1c url(&quot;images/hero.png&quot;) center top /
+              cover no-repeat;
+            -webkit-mask-image: linear-gradient(
+              90deg,
+              transparent 0%,
+              #000 55%
+            );
+            mask-image: linear-gradient(90deg, transparent 0%, #000 55%);
+            transform: scale(1.04);
+            transition: transform 6s ease-out;
+          "
+          ref="{{ heroPhoto }}"
+        ></div>
+        <div
+          data-m="hero-shade"
+          style="
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+              linear-gradient(
+                90deg,
+                rgba(20, 20, 20, 0.95) 0%,
+                rgba(20, 20, 20, 0.55) 55%,
+                rgba(20, 20, 20, 0) 100%
+              ),
+              linear-gradient(0deg, #141414 0%, rgba(20, 20, 20, 0) 35%);
+          "
+        ></div>
 
-  <sc-if value="{{ showBadge }}" hint-placeholder-val="{{ true }}">
-    <div data-m="badge" data-reveal="right" style="position:absolute;z-index:2;top:90px;right:4vw;display:flex;align-items:center;gap:8px;background:#E50914;color:#fff;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:3px;box-shadow:0 6px 20px rgba(229,9,20,.4);opacity:0;transform:translateX(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)">
-      <span style="width:8px;height:8px;border-radius:50%;background:#fff;animation:badgeDot 1.6s ease-in-out infinite"></span>Disponible dès maintenant
-    </div>
-  </sc-if>
+        <sc-if value="{{ showBadge }}" hint-placeholder-val="{{ true }}">
+          <div
+            data-m="badge"
+            data-reveal="right"
+            style="
+              position: absolute;
+              z-index: 2;
+              top: 90px;
+              right: 4vw;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              background: #e50914;
+              color: #fff;
+              font-size: 12px;
+              font-weight: 700;
+              letter-spacing: 0.06em;
+              text-transform: uppercase;
+              padding: 7px 12px;
+              border-radius: 3px;
+              box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4);
+              opacity: 0;
+              transform: translateX(30px);
+              transition:
+                opacity 0.8s ease,
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            <span
+              style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #fff;
+                animation: badgeDot 1.6s ease-in-out infinite;
+              "
+            ></span
+            >Disponible dès maintenant
+          </div>
+        </sc-if>
 
-  <div data-m="hero-text" style="position:relative;z-index:2;max-width:640px;display:flex;flex-direction:column;gap:16px">
-    <!-- NOM / PRÉNOM -->
-    <div data-reveal="up" data-delay="0" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.12em;color:#F5B400;opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)">Omar</div>
-    <h1 data-reveal="up" data-delay="120" style="margin:0;font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,9vw,112px);line-height:.92;letter-spacing:.02em;color:#fff;text-wrap:balance;opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">Errachid Zine</h1>
-    <!-- POSTE RECHERCHÉ -->
-    <div data-reveal="up" data-delay="240" style="align-self:flex-start;background:#E50914;color:#fff;font-size:14px;font-weight:700;letter-spacing:.04em;padding:6px 14px;border-radius:2px;opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)">Chargé de Production / Développement</div>
-    <!-- ACCROCHE -->
-    <p data-reveal="up" data-delay="360" style="margin:0;max-width:520px;font-size:16px;line-height:1.55;color:#B3B3B3;text-wrap:pretty;opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)">Profil hybride combinant flair éditorial et rigueur de production. Ma mission : dénicher et faire émerger les futurs projets phares du studio. Début du tournage : immédiatement.</p>
-    <div data-m="btns" data-reveal="up" data-delay="480" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)">
-      <!-- BOUTONS : remplacer mailto et href -->
-      <a href="mailto:contact@exemple.com" style="display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:700;font-size:16px;padding:12px 28px;border-radius:4px;transition:transform .2s,background .2s" style-hover="{{ btnWhiteHover }}" style-active="{{ press }}">
-        <span style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:14px solid #000"></span>Collaborer
-      </a>
-      <a href="#contact" onClick="{{ openContact }}" style="display:inline-flex;align-items:center;gap:10px;background:rgba(109,109,110,.7);color:#fff;font-weight:700;font-size:16px;padding:12px 28px;border-radius:4px;backdrop-filter:blur(6px);transition:transform .2s,background .2s" style-hover="{{ btnGreyHover }}" style-active="{{ press }}">Fiche contact</a>
-    </div>
-  </div>
-</section>
-
-<div id="parcourir" style="position:relative;z-index:2;display:flex;flex-direction:column;gap:44px;padding:0 0 80px;margin-top:-20px">
-
-  <!-- ============ RANGÉE 1 : EXPÉRIENCES ============ -->
-  <!-- DONNÉES : modifier le tableau `experiences` dans le code (logic) -->
-  <div data-reveal="up" style="position:relative;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">
-    <h2 data-m="row-title" style="margin:0 4vw 12px;font-size:20px;font-weight:700;letter-spacing:.01em">Dernières nouveautés</h2>
-    <div data-row="1" ref="{{ rowExp }}" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:4vw;scrollbar-width:none;padding:14px 4vw 22px;-webkit-overflow-scrolling:touch">
-      <sc-for list="{{ experiences }}" as="e" hint-placeholder-count="4">
-        <div style="flex:0 0 clamp(240px,28vw,320px);aspect-ratio:16/9;scroll-snap-align:start;border-radius:6px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.5);transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;background:{{ e.bg }}" style-hover="{{ cardHover }}" style-active="{{ press }}">
-          <!-- IMAGE DE FOND : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé) -->
-          <sc-if value="{{ e.hasImage }}" hint-placeholder-val="{{ false }}">
-            <img src="{{ e.image }}" alt="{{ e.company }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center" />
-          </sc-if>
-          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 22%,rgba(0,0,0,0) 40%)"></div>
-          <!-- LOGO : champ `logo` (image) sinon le nom `company` s'affiche en texte -->
-          <sc-if value="{{ e.hasLogo }}" hint-placeholder-val="{{ false }}">
-            <img src="{{ e.logo }}" alt="{{ e.company }}" style="position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:64%;max-height:42%;object-fit:contain" />
-          </sc-if>
-
-          <div style="position:absolute;left:14px;right:14px;bottom:12px;display:flex;flex-direction:column;gap:2px">
-            <div style="font-size:13px;font-weight:700;color:#fff">{{ e.role }}</div>
-            <div style="font-size:11px;color:#B3B3B3">{{ e.dates }} · {{ e.city }}</div>
+        <div
+          data-m="hero-text"
+          style="
+            position: relative;
+            z-index: 2;
+            max-width: 640px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          "
+        >
+          <!-- NOM / PRÉNOM -->
+          <div
+            data-reveal="up"
+            data-delay="0"
+            style="
+              font-family: &quot;Bebas Neue&quot;, sans-serif;
+              font-size: 70px;
+              line-height: 0.9;
+              margin-bottom: -12px;
+              letter-spacing: 0.06em;
+              color: #f5b400;
+              opacity: 0;
+              transform: translateY(10px);
+              transition:
+                opacity 0.8s ease,
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            Omar
+          </div>
+          <h1
+            data-reveal="up"
+            data-delay="120"
+            style="
+              margin: 0;
+              font-family: &quot;Bebas Neue&quot;, sans-serif;
+              font-size: clamp(56px, 9vw, 112px);
+              line-height: 0.92;
+              letter-spacing: 0.02em;
+              color: #fff;
+              text-wrap: balance;
+              opacity: 0;
+              transform: translateY(30px);
+              transition:
+                opacity 0.9s ease,
+                transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            Errachid Zine
+          </h1>
+          <!-- POSTE RECHERCHÉ -->
+          <div
+            data-reveal="up"
+            data-delay="240"
+            style="
+              align-self: flex-start;
+              background: #e50914;
+              color: #fff;
+              font-size: 14px;
+              font-weight: 700;
+              letter-spacing: 0.04em;
+              padding: 6px 14px;
+              border-radius: 2px;
+              opacity: 0;
+              transform: translateY(30px);
+              transition:
+                opacity 0.8s ease,
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            Chargé de Production / Développement
+          </div>
+          <!-- ACCROCHE -->
+          <p
+            data-reveal="up"
+            data-delay="360"
+            style="
+              margin: 0;
+              max-width: 520px;
+              font-size: 16px;
+              line-height: 1.55;
+              color: #b3b3b3;
+              text-wrap: pretty;
+              opacity: 0;
+              transform: translateY(30px);
+              transition:
+                opacity 0.8s ease,
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            Profil hybride combinant flair éditorial et rigueur de production.
+            Ma mission : dénicher et faire émerger les futurs projets phares du
+            studio. Début du tournage : immédiatement.
+          </p>
+          <div
+            data-m="btns"
+            data-reveal="up"
+            data-delay="480"
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 12px;
+              margin-top: 8px;
+              opacity: 0;
+              transform: translateY(30px);
+              transition:
+                opacity 0.8s ease,
+                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            "
+          >
+            <!-- BOUTONS : liens mailto vers omar.errachid@icloud.com -->
+            <a
+              href="mailto:omar.errachid@icloud.com"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: #fff;
+                color: #000;
+                font-weight: 700;
+                font-size: 16px;
+                padding: 12px 28px;
+                border-radius: 4px;
+                transition:
+                  transform 0.2s,
+                  background 0.2s;
+              "
+              style-hover="{{ btnWhiteHover }}"
+              style-active="{{ press }}"
+            >
+              <span
+                style="
+                  width: 0;
+                  height: 0;
+                  border-top: 8px solid transparent;
+                  border-bottom: 8px solid transparent;
+                  border-left: 14px solid #000;
+                "
+              ></span
+              >Collaborer
+            </a>
+            <a
+              href="contact.vcf"
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(109, 109, 110, 0.7);
+                color: #fff;
+                font-weight: 700;
+                font-size: 16px;
+                padding: 12px 28px;
+                border-radius: 4px;
+                backdrop-filter: blur(6px);
+                transition:
+                  transform 0.2s,
+                  background 0.2s;
+              "
+              style-hover="{{ btnGreyHover }}"
+              style-active="{{ press }}"
+              >Fiche contact</a
+            >
           </div>
         </div>
-      </sc-for>
-    </div>
-    <button data-m="arrow" onClick="{{ nextExp }}" aria-label="Suivant" style="position:absolute;right:0;top:44px;bottom:22px;width:4vw;min-width:40px;border:0;background:rgba(20,20,20,.6);color:#fff;font-size:34px;cursor:pointer;opacity:.35;transition:opacity .2s" style-hover="{{ arrowHover }}">›</button>
-  </div>
+      </section>
 
-  <!-- ============ RANGÉE 2 : TOP 5 FORMATIONS ============ -->
-  <!-- DONNÉES : modifier le tableau `formations` -->
-  <div data-reveal="up" style="position:relative;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">
-    <h2 data-m="row-title" style="margin:0 4vw 12px;font-size:20px;font-weight:700">Top 5 des formations</h2>
-    <div data-row="2" ref="{{ rowForm }}" style="display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:4vw;scrollbar-width:none;padding:14px 4vw 22px">
-      <sc-for list="{{ formations }}" as="f" hint-placeholder-count="5">
-        <div style="flex:0 0 auto;display:flex;align-items:flex-end;scroll-snap-align:start;transition:transform .3s ease;cursor:pointer" style-hover="{{ cardHover }}" style-active="{{ press }}">
-          <div data-m="rank" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(120px,15vw,190px);line-height:.8;color:#141414;-webkit-text-stroke:4px #cfcfcf;margin-right:-10px;padding-right:2px;position:relative;z-index:1;user-select:none">{{ f.rank }}</div>
-          <div style="width:clamp(130px,15vw,180px);aspect-ratio:1;border-radius:6px;background:{{ f.bg }};color:{{ f.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 14px 12px;text-align:center;position:relative;z-index:2;overflow:hidden">
-            <sc-if value="{{ f.hasLogo }}" hint-placeholder-val="{{ false }}">
-              <img src="{{ f.logo }}" alt="{{ f.school }}" style="width:100%;flex:1 1 0;min-height:0;object-fit:contain" />
-            </sc-if>
-            <sc-if value="{{ f.noLogo }}" hint-placeholder-val="{{ true }}">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,36px);letter-spacing:.05em;line-height:1">{{ f.school }}</div>
-            </sc-if>
-            <div style="font-size:10px;font-weight:700;opacity:.85;line-height:1.25">{{ f.degree }} · {{ f.year }}</div>
+      <div
+        id="parcourir"
+        style="
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          gap: 44px;
+          padding: 0 0 80px;
+          margin-top: -20px;
+        "
+      >
+        <!-- ============ RANGÉE 1 : EXPÉRIENCES ============ -->
+        <!-- DONNÉES : modifier le tableau `experiences` dans le code (logic) -->
+        <div
+          data-reveal="up"
+          style="
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition:
+              opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+          "
+        >
+          <h2
+            data-m="row-title"
+            style="
+              margin: 0 4vw 12px;
+              font-size: 20px;
+              font-weight: 700;
+              letter-spacing: 0.01em;
+            "
+          >
+            Dernières nouveautés
+          </h2>
+          <div
+            data-row="1"
+            ref="{{ rowExp }}"
+            style="
+              display: flex;
+              gap: 14px;
+              overflow-x: auto;
+              scroll-snap-type: x mandatory;
+              scroll-padding-left: 4vw;
+              scrollbar-width: none;
+              padding: 14px 4vw 22px;
+              -webkit-overflow-scrolling: touch;
+            "
+          >
+            <sc-for list="{{ experiences }}" as="e" hint-placeholder-count="4">
+              <div
+                data-m="exp-card"
+                style="flex:0 0 46vw;aspect-ratio:16/9;scroll-snap-align:start;border-radius:6px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.5);transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;background:{{ e.bg }}"
+                style-hover="{{ cardHover }}"
+                style-active="{{ press }}"
+              >
+                <!-- IMAGE DE FOND : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé) -->
+                <sc-if
+                  value="{{ e.hasImage }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <img
+                    src="{{ e.image }}"
+                    alt="{{ e.company }}"
+                    style="
+                      position: absolute;
+                      inset: -3px;
+                      width: calc(100% + 6px);
+                      height: calc(100% + 6px);
+                      object-fit: cover;
+                      object-position: center;
+                    "
+                  />
+                </sc-if>
+                <div
+                  style="
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(
+                      0deg,
+                      rgba(0, 0, 0, 0.9) 0%,
+                      rgba(0, 0, 0, 0.5) 22%,
+                      rgba(0, 0, 0, 0) 40%
+                    );
+                  "
+                ></div>
+                <!-- LOGO : champ `logo` (image) affiché pleine largeur, collé en haut (centré verticalement si `logoCenter: true`) ; sinon le nom `company` s'affiche en texte -->
+                <sc-if
+                  value="{{ e.hasLogo }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <img
+                    src="{{ e.logo }}"
+                    alt="{{ e.company }}"
+                    style="position:absolute;left:0;top:{{ e.logoTop }};transform:translateY({{ e.logoShift }});width:100%;height:auto"
+                  />
+                </sc-if>
+
+                <div
+                  style="
+                    position: absolute;
+                    left: 14px;
+                    right: 14px;
+                    bottom: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                  "
+                >
+                  <div style="font-size: 13px; font-weight: 700; color: #fff">
+                    {{ e.role }}
+                  </div>
+                  <div style="font-size: 11px; color: #b3b3b3">
+                    {{ e.dates }} · {{ e.city }}
+                  </div>
+                </div>
+              </div>
+            </sc-for>
           </div>
-        </div>
-      </sc-for>
-    </div>
-    <button data-m="arrow" onClick="{{ nextForm }}" aria-label="Suivant" style="position:absolute;right:0;top:44px;bottom:22px;width:4vw;min-width:40px;border:0;background:rgba(20,20,20,.6);color:#fff;font-size:34px;cursor:pointer;opacity:.35;transition:opacity .2s" style-hover="{{ arrowHover }}">›</button>
-  </div>
-
-  <!-- ============ RANGÉE 3 : PÉPITES ============ -->
-  <!-- DONNÉES : modifier le tableau `pepites` -->
-  <div data-reveal="up" style="position:relative;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">
-    <h2 data-m="row-title" style="margin:0 4vw 12px;font-size:20px;font-weight:700">Des pépites pour vous</h2>
-    <div data-row="3" ref="{{ rowPep }}" style="display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:4vw;scrollbar-width:none;padding:14px 4vw 22px">
-      <sc-for list="{{ pepites }}" as="p" hint-placeholder-count="5">
-        <div style="flex:0 0 clamp(170px,20vw,230px);height:120px;scroll-snap-align:start;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px;transition:transform .3s ease;cursor:pointer" style-hover="{{ cardHover }}" style-active="{{ press }}">
-          <sc-if value="{{ p.hasLogo }}" hint-placeholder-val="{{ false }}">
-            <img src="{{ p.logo }}" alt="{{ p.name }}" style="width:88%;height:72px;object-fit:contain" />
-          </sc-if>
-          <sc-if value="{{ p.noLogo }}" hint-placeholder-val="{{ true }}">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.04em;line-height:1">{{ p.name }}</div>
-          </sc-if>
-          <div style="font-size:11px;opacity:.75">{{ p.tag }}</div>
-        </div>
-      </sc-for>
-    </div>
-    <button data-m="arrow" onClick="{{ nextPep }}" aria-label="Suivant" style="position:absolute;right:0;top:44px;bottom:22px;width:4vw;min-width:40px;border:0;background:rgba(20,20,20,.6);color:#fff;font-size:34px;cursor:pointer;opacity:.35;transition:opacity .2s" style-hover="{{ arrowHover }}">›</button>
-  </div>
-
-  <!-- ============ BANNIÈRE COLLECTION ============ -->
-  <!-- IMAGE DE FOND : remplacer le dégradé par url('...') ; DONNÉES : tableau `collection` -->
-  <div data-m="collection" data-reveal="scale" style="margin:0 4vw;border-radius:8px;overflow:hidden;position:relative;background:linear-gradient(90deg,#3b0a3d 0%,#7a1a6b 50%,#a3266f 100%);box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;grid-template-columns:minmax(200px,1fr) 2fr;min-height:220px;opacity:0;transform:scale(.94);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">
-    <div style="display:flex;flex-direction:column;justify-content:center;padding:32px 28px;gap:6px">
-      <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#f3c6e6">Ma collection</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,4.5vw,56px);line-height:.95;letter-spacing:.03em">Jobs étudiants</div>
-    </div>
-    <div data-m="collection-tiles" style="display:flex;align-items:stretch;justify-content:flex-end;overflow:hidden">
-      <sc-for list="{{ collection }}" as="c" hint-placeholder-count="3">
-        <div style="flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;background:{{ c.bg }};color:{{ c.fg }};font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3vw,40px);letter-spacing:.05em;padding:12px;text-align:center;transform:skewX(-6deg);margin-left:-6px;transition:flex .3s" style-hover="{{ collHover }}">
-          <sc-if value="{{ c.hasLogo }}" hint-placeholder-val="{{ false }}">
-            <img src="{{ c.logo }}" alt="{{ c.name }}" style="transform:skewX(6deg);width:72%;height:55%;object-fit:contain" />
-          </sc-if>
-          <sc-if value="{{ c.noLogo }}" hint-placeholder-val="{{ true }}">
-            <span style="transform:skewX(6deg)">{{ c.name }}</span>
-          </sc-if>
-        </div>
-      </sc-for>
-    </div>
-  </div>
-
-  <!-- ============ BONUS ============ -->
-  <!-- DONNÉES : objets `langues`, `competences`, `autres` -->
-  <div id="contact" data-reveal="up" style="padding:0 4vw;opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)">
-    <h2 data-m="row-title" style="margin:0 0 16px;font-size:20px;font-weight:700">Bonus</h2>
-    <div data-m="tabs" style="display:flex;gap:32px;border-bottom:1px solid #333;margin-bottom:28px">
-      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
-        <button onClick="{{ t.select }}" style="background:none;border:0;padding:10px 4px;font-size:14px;font-weight:700;letter-spacing:.02em;cursor:pointer;white-space:nowrap;color:{{ t.color }};border-bottom:3px solid {{ t.border }};margin-bottom:-1px;transition:color .2s,border-color .2s">{{ t.label }}</button>
-      </sc-for>
-    </div>
-
-    <sc-if value="{{ isLangues }}" hint-placeholder-val="{{ true }}">
-      <div style="display:flex;flex-wrap:wrap;gap:22px">
-        <sc-for list="{{ langues }}" as="l" hint-placeholder-count="5">
-          <button onClick="{{ l.toggle }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;background:none;border:0;cursor:pointer;color:#fff;padding:0;transition:transform .25s" style-hover="{{ flagHover }}" style-active="{{ press }}">
-            <div data-m="flag" style="width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;background:#1f1f1f;box-shadow:0 8px 20px rgba(0,0,0,.5);border:3px solid {{ l.ring }};transition:border-color .25s,box-shadow .25s">{{ l.flag }}</div>
-            <div style="font-size:13px;font-weight:700">{{ l.name }}</div>
-            <div style="font-size:12px;color:#F5B400;height:16px">{{ l.shownLevel }}</div>
+          <button
+            data-m="arrow"
+            onClick="{{ nextExp }}"
+            aria-label="Suivant"
+            style="
+              position: absolute;
+              right: 0;
+              top: 44px;
+              bottom: 22px;
+              width: 4vw;
+              min-width: 40px;
+              border: 0;
+              background: rgba(20, 20, 20, 0.6);
+              color: #fff;
+              font-size: 34px;
+              cursor: pointer;
+              opacity: 0.35;
+              transition: opacity 0.2s;
+            "
+            style-hover="{{ arrowHover }}"
+          >
+            ›
           </button>
-        </sc-for>
+        </div>
+
+        <!-- ============ RANGÉE 2 : TOP 5 FORMATIONS ============ -->
+        <!-- DONNÉES : modifier le tableau `formations` -->
+        <div
+          data-reveal="up"
+          style="
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition:
+              opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+          "
+        >
+          <h2
+            data-m="row-title"
+            style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
+          >
+            Top 5 des formations
+          </h2>
+          <div
+            data-row="2"
+            ref="{{ rowForm }}"
+            style="
+              --w: clamp(150px, 13vw, 232px);
+              display: flex;
+              gap: clamp(20px, 3.4vw, 64px);
+              overflow-x: auto;
+              overflow-y: hidden;
+              scroll-snap-type: x mandatory;
+              scroll-padding-left: 4vw;
+              scrollbar-width: none;
+              padding: 14px 4vw 22px;
+            "
+          >
+            <sc-for list="{{ formations }}" as="f" hint-placeholder-count="5">
+              <div
+                style="
+                  flex: 0 0 auto;
+                  display: flex;
+                  align-items: flex-end;
+                  scroll-snap-align: start;
+                "
+              >
+                <!-- CHIFFRE façon Top 10 Netflix : contour gris dégradé (1er span) recouvert par le fond (2e span) -->
+                <div
+                  data-m="rank"
+                  aria-hidden="true"
+                  style="
+                    position: relative;
+                    z-index: 1;
+                    font-family: &quot;Helvetica Neue&quot;, Arial, sans-serif;
+                    font-weight: 800;
+                    font-size: calc(var(--w) * 2.28);
+                    line-height: 1;
+                    margin: -0.15em 0 -0.13em;
+                    letter-spacing: -0.04em;
+                    user-select: none;
+                  "
+                >
+                  <span
+                    style="
+                      display: block;
+                      background: linear-gradient(180deg, #8c8c8c 0%, #4a4a4a 100%);
+                      -webkit-background-clip: text;
+                      background-clip: text;
+                      color: transparent;
+                      -webkit-text-stroke: 6px transparent;
+                    "
+                    >{{ f.rank }}</span
+                  >
+                  <span
+                    style="position: absolute; left: 0; top: 0; color: #141414"
+                    >{{ f.rank }}</span
+                  >
+                </div>
+                <!-- AFFICHE : fond `bg` de la même couleur que le logo, logo mis à l'échelle au centre -->
+                <div
+                  style="position:relative;z-index:2;width:var(--w);aspect-ratio:232/330;margin-left:calc(var(--w) * -0.08);border-radius:6px;background:{{ f.bg }};color:{{ f.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px 14px;text-align:center;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer"
+                  style-hover="{{ cardHover }}"
+                  style-active="{{ press }}"
+                >
+                  <sc-if
+                    value="{{ f.hasLogo }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <img
+                      src="{{ f.logo }}"
+                      alt="{{ f.school }}"
+                      style="width: 100%; height: 100%; object-fit: contain"
+                    />
+                  </sc-if>
+                  <sc-if
+                    value="{{ f.noLogo }}"
+                    hint-placeholder-val="{{ true }}"
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Bebas Neue&quot;, sans-serif;
+                        font-size: clamp(24px, 3vw, 36px);
+                        letter-spacing: 0.05em;
+                        line-height: 1;
+                      "
+                    >
+                      {{ f.school }}
+                    </div>
+                  </sc-if>
+                  <!-- BANDEAU ROUGE : champ `badge` ('' = pas de bandeau) -->
+                  <sc-if
+                    value="{{ f.hasBadge }}"
+                    hint-placeholder-val="{{ false }}"
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        left: 50%;
+                        bottom: 0;
+                        transform: translateX(-50%);
+                        padding: 5px 12px 4px;
+                        border-radius: 4px 4px 0 0;
+                        background: #e50914;
+                        color: #fff;
+                        font-size: 14px;
+                        font-weight: 700;
+                        white-space: nowrap;
+                      "
+                    >
+                      {{ f.badge }}
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button
+            data-m="arrow"
+            onClick="{{ nextForm }}"
+            aria-label="Suivant"
+            style="
+              position: absolute;
+              right: 0;
+              top: 44px;
+              bottom: 22px;
+              width: 4vw;
+              min-width: 40px;
+              border: 0;
+              background: rgba(20, 20, 20, 0.6);
+              color: #fff;
+              font-size: 34px;
+              cursor: pointer;
+              opacity: 0.35;
+              transition: opacity 0.2s;
+            "
+            style-hover="{{ arrowHover }}"
+          >
+            ›
+          </button>
+        </div>
+
+        <!-- ============ RANGÉE 3 : PÉPITES ============ -->
+        <!-- DONNÉES : modifier le tableau `pepites` -->
+        <div
+          data-reveal="up"
+          style="
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition:
+              opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+          "
+        >
+          <h2
+            data-m="row-title"
+            style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
+          >
+            Des pépites pour vous
+          </h2>
+          <div
+            data-m="pep-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 14px;
+              padding: 14px 4vw 22px;
+            "
+          >
+            <sc-for list="{{ pepites }}" as="p" hint-placeholder-count="5">
+              <div
+                style="aspect-ratio:16/9;min-width:0;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;overflow:hidden;transition:transform .3s ease;cursor:pointer"
+                style-hover="{{ cardHover }}"
+                style-active="{{ press }}"
+              >
+                <sc-if
+                  value="{{ p.hasLogo }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <img
+                    src="{{ p.logo }}"
+                    alt="{{ p.name }}"
+                    style="width: 100%; height: 100%; object-fit: contain"
+                  />
+                </sc-if>
+                <sc-if value="{{ p.noLogo }}" hint-placeholder-val="{{ true }}">
+                  <div
+                    style="
+                      font-family: &quot;Bebas Neue&quot;, sans-serif;
+                      font-size: 64px;
+                      letter-spacing: 0.04em;
+                      line-height: 1;
+                    "
+                  >
+                    {{ p.name }}
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- ============ JOBS ÉTUDIANTS (rangée façon Disney+) ============ -->
+        <!-- DONNÉES : tableau `collection` (6 affiches) -->
+        <div
+          data-m="collection"
+          data-reveal="up"
+          style="
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(220px, 26%) 1fr;
+            align-items: center;
+            padding: 36px 0;
+            background:
+              radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.55), transparent),
+              radial-gradient(1px 1px at 34% 78%, rgba(255, 255, 255, 0.4), transparent),
+              radial-gradient(1.5px 1.5px at 58% 14%, rgba(255, 255, 255, 0.5), transparent),
+              radial-gradient(1px 1px at 72% 88%, rgba(255, 255, 255, 0.35), transparent),
+              radial-gradient(1px 1px at 88% 30%, rgba(255, 255, 255, 0.45), transparent),
+              radial-gradient(1.5px 1.5px at 22% 60%, rgba(255, 255, 255, 0.3), transparent),
+              radial-gradient(ellipse 70% 90% at 15% 50%, #5a1450 0%, transparent 70%),
+              radial-gradient(ellipse 80% 120% at 85% 0%, #2a0f4a 0%, transparent 65%),
+              linear-gradient(180deg, #180a24 0%, #120818 100%);
+            opacity: 0;
+            transform: translateY(40px);
+            transition:
+              opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+          "
+        >
+          <div
+            data-m="collection-intro"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+              gap: 14px;
+              padding: 0 4vw;
+            "
+          >
+            <div
+              style="
+                font-family: &quot;Bebas Neue&quot;, sans-serif;
+                font-size: clamp(44px, 5vw, 72px);
+                line-height: 0.9;
+                letter-spacing: 0.03em;
+                color: #fff;
+                text-shadow: 0 0 24px rgba(255, 120, 220, 0.35);
+              "
+            >
+              Jobs étudiants
+            </div>
+            <div style="font-size: 17px; font-weight: 600; color: #f1e6f3">
+              Vivez l'expérience terrain
+            </div>
+          </div>
+          <div
+            data-row="4"
+            style="
+              display: flex;
+              gap: 18px;
+              overflow-x: auto;
+              overflow-y: hidden;
+              scroll-snap-type: x mandatory;
+              scrollbar-width: none;
+              padding: 14px 4vw 14px 0;
+            "
+          >
+            <sc-for list="{{ collection }}" as="c" hint-placeholder-count="6">
+              <div
+                data-m="job-poster"
+                style="flex:0 0 clamp(150px,15vw,230px);aspect-ratio:2/3;scroll-snap-align:start;border-radius:8px;position:relative;overflow:hidden;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 10px 28px rgba(0,0,0,.55);outline:1px solid rgba(255,255,255,.08);outline-offset:-1px;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer"
+                style-hover="{{ cardHover }}"
+                style-active="{{ press }}"
+              >
+                <!-- IMAGE : champ `image` (photo verticale, remplit toute l'affiche) -->
+                <sc-if value="{{ c.hasImage }}" hint-placeholder-val="{{ false }}">
+                  <img
+                    src="{{ c.image }}"
+                    alt="{{ c.name }}"
+                    style="
+                      position: absolute;
+                      inset: 0;
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                    "
+                  />
+                </sc-if>
+                <!-- LOGO : champ `logo`, en haut de l'affiche s'il y a une image, sinon centré -->
+                <sc-if value="{{ c.hasLogo }}" hint-placeholder-val="{{ false }}">
+                  <img
+                    src="{{ c.logo }}"
+                    alt="{{ c.name }}"
+                    style="position:absolute;left:12%;top:{{ c.titleTop }};width:76%;height:22%;object-fit:contain"
+                  />
+                </sc-if>
+                <!-- SANS LOGO : le nom s'affiche en titre -->
+                <sc-if value="{{ c.noLogo }}" hint-placeholder-val="{{ true }}">
+                  <div
+                    style="position:absolute;left:10px;right:10px;top:{{ c.titleTop }};text-align:center;font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,2.6vw,38px);line-height:.95;letter-spacing:.04em"
+                  >
+                    {{ c.name }}
+                  </div>
+                </sc-if>
+                <!-- POSTE : champ `role`, en bas de l'affiche -->
+                <sc-if value="{{ c.hasRole }}" hint-placeholder-val="{{ true }}">
+                  <div
+                    style="
+                      position: absolute;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                      padding: 36px 12px 12px;
+                      background: linear-gradient(
+                        0deg,
+                        rgba(0, 0, 0, 0.85) 0%,
+                        rgba(0, 0, 0, 0) 100%
+                      );
+                      color: #fff;
+                      font-size: 11px;
+                      font-weight: 700;
+                      letter-spacing: 0.12em;
+                      text-transform: uppercase;
+                      text-align: right;
+                    "
+                  >
+                    {{ c.role }}
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- ============ BONUS ============ -->
+        <!-- DONNÉES : objets `langues`, `competences`, `autres` -->
+        <div
+          id="contact"
+          data-reveal="up"
+          style="
+            padding: 0 4vw;
+            opacity: 0;
+            transform: translateY(40px);
+            transition:
+              opacity 0.9s ease,
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+          "
+        >
+          <h2
+            data-m="row-title"
+            style="margin: 0 0 16px; font-size: 20px; font-weight: 700"
+          >
+            Bonus
+          </h2>
+          <div
+            data-m="tabs"
+            style="
+              display: flex;
+              gap: 32px;
+              border-bottom: 1px solid #333;
+              margin-bottom: 28px;
+            "
+          >
+            <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+              <button
+                onClick="{{ t.select }}"
+                style="background:none;border:0;padding:10px 4px;font-size:14px;font-weight:700;letter-spacing:.02em;cursor:pointer;white-space:nowrap;color:{{ t.color }};border-bottom:3px solid {{ t.border }};margin-bottom:-1px;transition:color .2s,border-color .2s"
+              >
+                {{ t.label }}
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ isLangues }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 22px">
+              <sc-for list="{{ langues }}" as="l" hint-placeholder-count="5">
+                <button
+                  onClick="{{ l.toggle }}"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                    background: none;
+                    border: 0;
+                    cursor: pointer;
+                    color: #fff;
+                    padding: 0;
+                    transition: transform 0.25s;
+                  "
+                  style-hover="{{ flagHover }}"
+                  style-active="{{ press }}"
+                >
+                  <div
+                    data-m="flag"
+                    style="width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;background:#1f1f1f;box-shadow:0 8px 20px rgba(0,0,0,.5);border:3px solid {{ l.ring }};transition:border-color .25s,box-shadow .25s"
+                  >
+                    {{ l.flag }}
+                  </div>
+                  <div style="font-size: 13px; font-weight: 700">
+                    {{ l.name }}
+                  </div>
+                  <div style="font-size: 12px; color: #f5b400; height: 16px">
+                    {{ l.shownLevel }}
+                  </div>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isCompetences }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <sc-for
+                list="{{ competences }}"
+                as="s"
+                hint-placeholder-count="8"
+              >
+                <div
+                  style="
+                    padding: 10px 18px;
+                    border-radius: 999px;
+                    background: #242424;
+                    border: 1px solid #333;
+                    font-size: 14px;
+                    color: #e5e5e5;
+                    transition:
+                      transform 0.2s,
+                      background 0.2s;
+                  "
+                  style-hover="{{ pillHover }}"
+                >
+                  {{ s }}
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isAutres }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <sc-for list="{{ autres }}" as="s" hint-placeholder-count="5">
+                <div
+                  style="
+                    padding: 10px 18px;
+                    border-radius: 999px;
+                    background: #242424;
+                    border: 1px solid #333;
+                    font-size: 14px;
+                    color: #e5e5e5;
+                    transition:
+                      transform 0.2s,
+                      background 0.2s;
+                  "
+                  style-hover="{{ pillHover }}"
+                >
+                  {{ s }}
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- FOOTER -->
+        <div
+          style="
+            padding: 20px 4vw 0;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+          "
+        >
+          <span
+            style="
+              font-family: &quot;Bebas Neue&quot;, sans-serif;
+              font-size: 18px;
+              color: #e50914;
+              letter-spacing: 0.06em;
+            "
+            >CVFLIX</span
+          >
+          <a href="mailto:omar.errachid@icloud.com" style="color: inherit"
+            >omar.errachid@icloud.com</a
+          >
+          <span>Paris, France</span>
+        </div>
       </div>
-    </sc-if>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"intro":{"editor":"boolean","default":true,"tsType":"boolean","section":"Intro"},"showBadge":{"editor":"boolean","default":true,"tsType":"boolean","section":"Hero"},"hoverZoom":{"editor":"range","default":1.05,"min":1,"max":1.2,"step":0.01,"tsType":"number","section":"Cartes"}}'
+    >
+      class Component extends DCLogic {
+        // intro : 'idle' (attente d'un tap pour autoriser le son) → 'playing' → 'done'
+        state = { tab: 'langues', openLang: null, intro: 'idle', scrolled: false };
+        rowExp = React.createRef();
+        rowForm = React.createRef();
+        heroPhoto = React.createRef();
 
-    <sc-if value="{{ isCompetences }}" hint-placeholder-val="{{ false }}">
-      <div style="display:flex;flex-wrap:wrap;gap:10px">
-        <sc-for list="{{ competences }}" as="s" hint-placeholder-count="8">
-          <div style="padding:10px 18px;border-radius:999px;background:#242424;border:1px solid #333;font-size:14px;color:#e5e5e5;transition:transform .2s,background .2s" style-hover="{{ pillHover }}">{{ s }}</div>
-        </sc-for>
-      </div>
-    </sc-if>
+        // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
+        // EXPÉRIENCES — pour chaque carte :
+        //   image : chemin de l'image de fond (ex: 'images/tf1.jpg'). '' = garde le dégradé `bg`.
+        //   logo  : chemin d'un logo à superposer (ex: 'images/tf1-logo.png'). '' = le nom `company` s'affiche en texte.
+        //   Déposez vos fichiers dans un dossier `images/` du projet.
+        experiences = [
+          { company: 'Marathon Studio', role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris', image: '', logo: 'images/marathon.webp', logoCenter: true, bg: '#ffffff' },
+          { company: 'Banijay', role: 'Assistant IP et adaptations littéraires', dates: 'Mai 2025 – Déc. 2025', city: 'Paris', image: 'images/banijay.png', logo: '', bg: '#5a0033' },
+          { company: 'TF1', role: 'Chef de projet digital', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'images/tf1.webp', bg: 'linear-gradient(90deg,#01168c,#500b64 50%,#9b0003)' },
+        ];
+        // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
+        //   badge : texte du bandeau rouge en bas de l'affiche (ex. 'Master 2', '2024'), '' = pas de bandeau
+        formations = [
+          { rank: 1, school: 'ESCP', logo: 'images/escp-logo.png', bg: '#280092', fg: '#fff' },
+          { rank: 2, school: 'EM Lyon', logo: 'images/emlyon.png', bg: '#e2001a', fg: '#fff' },
+          { rank: 3, school: 'Cours Florent', logo: 'images/cours-florent.png', bg: '#0a0a0a', fg: '#fff' },
+          { rank: 4, school: 'LBU', logo: 'images/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
+          { rank: 5, school: 'IUT Lyon 1', logo: 'images/iut-logo.png', bg: '#e2007d', fg: '#fff' },
+        ];
+        // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
+        pepites = [
+          { name: 'Alptis', logo: 'images/alptis.png', bg: '#fff', fg: '#0a6a3a' },
+          { name: 'Oppizi', logo: 'images/oppizi-logo.jpeg', bg: '#fff', fg: '#e5231a' },
+          { name: 'Equancy', logo: 'images/equancy-logo.svg', bg: '#fff', fg: '#222' },
+          { name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
 
-    <sc-if value="{{ isAutres }}" hint-placeholder-val="{{ false }}">
-      <div style="display:flex;flex-wrap:wrap;gap:10px">
-        <sc-for list="{{ autres }}" as="s" hint-placeholder-count="5">
-          <div style="padding:10px 18px;border-radius:999px;background:#242424;border:1px solid #333;font-size:14px;color:#e5e5e5;transition:transform .2s,background .2s" style-hover="{{ pillHover }}">{{ s }}</div>
-        </sc-for>
-      </div>
-    </sc-if>
-  </div>
+          ];
+        // JOBS ÉTUDIANTS — 6 affiches verticales (format 2:3, ex. 600×900 px) :
+        //   image : photo de fond qui remplit l'affiche ('' = couleur `bg` seule)
+        //   logo  : logo affiché en haut ('' = le nom `name` s'affiche en titre)
+        //   role  : poste affiché en bas ('' = rien)
+        collection = [
+          { name: 'Zara', role: '', image: '', logo: 'images/zara.svg', bg: '#fff', fg: '#111' },
+          { name: 'Confluence', role: '', image: '', logo: 'images/confluence.png', bg: '#fff', fg: '#1a2a7a' },
+          { name: 'Häagen-Dazs', role: '', image: '', logo: 'uploads/Ha%CC%88agen-Dazs_Logo.svg.webp', bg: '#fff', fg: '#6a0a2a' },
+          { name: 'Action', role: '', image: '', logo: 'images/action.png', bg: '#fff', fg: '#111' },
+          { name: 'Primark', role: '', image: '', logo: 'images/primark.png', bg: '#fff', fg: '#111' },
+          { name: 'Laboratoire Eurofins Biomnis', role: '', image: '', logo: '', bg: 'linear-gradient(160deg,#0f3a7a,#061a3a)', fg: '#fff' },
+        ];
+        langues = [
+          { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
+          { name: 'Espagnol', flag: '🇪🇸', level: 'Courant · C1' },
+          { name: 'Arabe', flag: '🇲🇦', level: 'Bilingue' },
+          { name: 'Anglais', flag: '🇬🇧', level: 'Professionnel · B2' },
+          { name: 'Italien', flag: '🇮🇹', level: 'Intermédiaire · B1' },
+          { name: 'Portugais', flag: '🇵🇹', level: 'Notions · A2' },
+        ];
+        competences = ['Développement de projets', 'Lecture de scénarios', 'Pitch & note d’intention', 'Budget prévisionnel', 'Casting', 'Suite Adobe', 'Final Cut Pro', 'Notion / Trello', 'Veille éditoriale'];
+        autres = ['Permis B', 'Musique · guitare', 'Photographie', 'Bénévolat festival', 'Course à pied'];
+        // ====== FIN DES DONNÉES ======
 
-  <!-- FOOTER -->
-  <div style="padding:20px 4vw 0;font-size:12px;color:#666;display:flex;flex-wrap:wrap;gap:16px">
-    <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#E50914;letter-spacing:.06em">CVFLIX</span>
-    <span>contact@exemple.com</span>
-    <span>Paris, France</span>
-  </div>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;intro&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intro&quot;},&quot;showBadge&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;hoverZoom&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1.05,&quot;min&quot;:1,&quot;max&quot;:1.2,&quot;step&quot;:0.01,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Cartes&quot;}}">
-class Component extends DCLogic {
-  // intro : 'idle' (attente d'un tap pour autoriser le son) → 'playing' → 'done'
-  state = { tab: 'langues', openLang: null, intro: 'idle', scrolled: false };
-  rowExp = React.createRef();
-  rowForm = React.createRef();
-  rowPep = React.createRef();
-  heroPhoto = React.createRef();
+        componentDidMount() {
+          this.onScroll = () => {
+            const y = Math.max(window.scrollY || 0, document.body.scrollTop || 0, document.documentElement.scrollTop || 0);
+            const s = y > 40; if (s !== this.state.scrolled) this.setState({ scrolled: s });
+            if (this.revealOn) this.checkReveal();
+          };
+          window.addEventListener('scroll', this.onScroll, { passive: true });
+          document.body.addEventListener('scroll', this.onScroll, { passive: true });
+          if (this.props.intro === false) this.finishIntro();
+        }
+        componentWillUnmount() {
+          window.removeEventListener('scroll', this.onScroll); document.body.removeEventListener('scroll', this.onScroll);
+          clearInterval(this.revealTimer);
+        }
 
-  // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
-  // EXPÉRIENCES — pour chaque carte :
-  //   image : chemin de l'image de fond (ex: 'images/tf1.jpg'). '' = garde le dégradé `bg`.
-  //   logo  : chemin d'un logo à superposer (ex: 'images/tf1-logo.png'). '' = le nom `company` s'affiche en texte.
-  //   Déposez vos fichiers dans un dossier `images/` du projet.
-  experiences = [
-    { company: 'Marathon Studio', role: 'Assistant de production', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris', image: '', logo: 'images/marathon.webp', bg: '#ffffff' },
-    { company: 'Banijay', role: 'Stagiaire développement', dates: 'Mai 2025 – Déc. 2025', city: 'Paris', image: 'images/banijay.png', logo: '', bg: '#5a0033' },
-    { company: 'TF1', role: 'Assistant éditorial', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'images/tf1.webp', bg: 'linear-gradient(135deg,#0a2a8a,#8a1050)' },
-    { company: 'Canal+', role: 'Chargé de casting junior', dates: 'Juin 2024 – Sept. 2024', city: 'Issy', image: '', logo: 'images/canal.webp', bg: '#000' },
-    { company: 'Mediawan', role: 'Assistant chargé de programmes', dates: 'Janv. 2024 – Mai 2024', city: 'Paris', image: '', logo: 'images/mediawan.webp', bg: '#ffffff' },
-  ];
-  // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
-  formations = [
-    { rank: 1, school: 'ESCP', degree: 'Master Médias & Production', year: '2026', logo: 'images/escp.png', bg: '#fff', fg: '#3a1a8a' },
-    { rank: 2, school: 'EM Lyon', degree: 'Bachelor Business', year: '2024', logo: 'images/emlyon.png', bg: '#e2001a', fg: '#fff' },
-    { rank: 3, school: 'Cours Florent', degree: 'Formation Musique & Scène', year: '2023', logo: 'images/cours-florent.png', bg: '#0a0a0a', fg: '#fff' },
-    { rank: 4, school: 'Louis Lumière', degree: 'Certificat Écriture audiovisuelle', year: '2022', logo: 'uploads/louis%20lumie%CC%80re.png', bg: '#fff', fg: '#0a7aff' },
-    { rank: 5, school: 'IUT Lyon 1', degree: 'DUT Information-Communication', year: '2021', logo: 'images/iut.png', bg: '#fff', fg: '#333' },
-  ];
-  // PÉPITES — logo : '' = nom en texte
-  pepites = [
-    { name: 'Alptis', tag: 'Recommandation · DRH', logo: 'images/alptis.png', bg: '#fff', fg: '#0a6a3a' },
-    { name: 'Oppizi', tag: 'Projet · Campagne terrain', logo: 'images/oppizi.jpeg', bg: '#fff', fg: '#e5231a' },
-    { name: 'Equancy', tag: 'Mission · Étude d’audience', logo: 'images/equancy.svg', bg: '#fff', fg: '#222' },
-    { name: 'Podcast Studio', tag: 'Projet perso · 12 épisodes', logo: '', bg: '#F5B400', fg: '#111' },
-    { name: 'Court-métrage', tag: 'Production · Festival 2025', logo: '', bg: '#E50914', fg: '#fff' },
-  ];
-  // COLLECTION — logo : '' = nom en texte
-  collection = [
-    { name: 'Zara', logo: 'images/zara.svg', bg: '#fff', fg: '#111' },
-    { name: 'Confluence', logo: 'images/confluence.png', bg: '#fff', fg: '#1a2a7a' },
-    { name: 'Häagen-Dazs', logo: 'uploads/Ha%CC%88agen-Dazs_Logo.svg.webp', bg: '#fff', fg: '#6a0a2a' },
-  ];
-  langues = [
-    { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
-    { name: 'Espagnol', flag: '🇪🇸', level: 'Courant · C1' },
-    { name: 'Arabe', flag: '🇲🇦', level: 'Bilingue' },
-    { name: 'Anglais', flag: '🇬🇧', level: 'Professionnel · B2' },
-    { name: 'Italien', flag: '🇮🇹', level: 'Intermédiaire · B1' },
-    { name: 'Portugais', flag: '🇵🇹', level: 'Notions · A2' },
-  ];
-  competences = ['Développement de projets', 'Lecture de scénarios', 'Pitch & note d’intention', 'Budget prévisionnel', 'Casting', 'Suite Adobe', 'Final Cut Pro', 'Notion / Trello', 'Veille éditoriale'];
-  autres = ['Permis B', 'Musique · guitare', 'Photographie', 'Bénévolat festival', 'Course à pied'];
-  // ====== FIN DES DONNÉES ======
+        // --- Animations au scroll : tout élément [data-reveal] apparaît quand il entre dans l'écran ---
+        show(el) {
+          if (el.dataset.shown) return; el.dataset.shown = '1';
+          const d = +el.dataset.delay || 0;
+          setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, d);
+        }
+        checkReveal() {
+          const vh = window.innerHeight || 800;
+          document.querySelectorAll('[data-reveal]:not([data-shown])').forEach(el => {
+            const r = el.getBoundingClientRect();
+            if (r.top < vh * 0.92 && r.bottom > 0) this.show(el);
+          });
+        }
+        setupReveal() {
+          if (this.revealOn) return; this.revealOn = true;
+          // le hero apparaît toujours, en cascade, sans dépendre de la position de scroll
+          document.querySelectorAll('#top [data-reveal]').forEach(el => this.show(el));
+          if (this.heroPhoto.current) this.heroPhoto.current.style.transform = 'scale(1)';
+          this.checkReveal();
+          // re-vérification périodique (contenu qui arrive après coup, changements d'onglet, resize)
+          this.revealTimer = setInterval(() => this.checkReveal(), 400);
+          window.addEventListener('resize', () => this.checkReveal());
+        }
+        componentDidUpdate() { if (this.revealOn) this.checkReveal(); }
 
-  componentDidMount() {
-    this.onScroll = () => {
-      const y = Math.max(window.scrollY || 0, document.body.scrollTop || 0, document.documentElement.scrollTop || 0);
-      const s = y > 40; if (s !== this.state.scrolled) this.setState({ scrolled: s });
-      if (this.revealOn) this.checkReveal();
-    };
-    window.addEventListener('scroll', this.onScroll, { passive: true });
-    document.body.addEventListener('scroll', this.onScroll, { passive: true });
-    if (this.props.intro === false) this.finishIntro();
-  }
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll); document.body.removeEventListener('scroll', this.onScroll);
-    clearInterval(this.revealTimer);
-  }
+        finishIntro() { this.setState({ intro: 'done' }, () => this.setupReveal()); }
 
-  // --- Animations au scroll : tout élément [data-reveal] apparaît quand il entre dans l'écran ---
-  show(el) {
-    if (el.dataset.shown) return; el.dataset.shown = '1';
-    const d = +el.dataset.delay || 0;
-    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, d);
-  }
-  checkReveal() {
-    const vh = window.innerHeight || 800;
-    document.querySelectorAll('[data-reveal]:not([data-shown])').forEach(el => {
-      const r = el.getBoundingClientRect();
-      if (r.top < vh * 0.92 && r.bottom > 0) this.show(el);
-    });
-  }
-  setupReveal() {
-    if (this.revealOn) return; this.revealOn = true;
-    // le hero apparaît toujours, en cascade, sans dépendre de la position de scroll
-    document.querySelectorAll('#top [data-reveal]').forEach(el => this.show(el));
-    if (this.heroPhoto.current) this.heroPhoto.current.style.transform = 'scale(1)';
-    this.checkReveal();
-    // re-vérification périodique (contenu qui arrive après coup, changements d'onglet, resize)
-    this.revealTimer = setInterval(() => this.checkReveal(), 400);
-    window.addEventListener('resize', () => this.checkReveal());
-  }
-  componentDidUpdate() { if (this.revealOn) this.checkReveal(); }
+        // --- AUDIO D'INTRO ---
+        // Déposez votre fichier dans le projet (ex: 'audio/intro.mp3') et indiquez le chemin ici.
+        // '' = utilise le sting synthétisé ci-dessous.
+        introAudio = 'audio/intro.mp3';
 
-  finishIntro() { this.setState({ intro: 'done' }, () => this.setupReveal()); }
+        playSting() {
+          if (this.introAudio) {
+            try { const a = new Audio(this.introAudio); a.volume = 0.9; a.play().catch(() => this.playSynth()); } catch (e) { this.playSynth(); }
+            return;
+          }
+          this.playSynth();
+        }
+        // Sting synthétisé de secours (Web Audio, pas de fichier externe)
+        playSynth() {
+          try {
+            const C = new (window.AudioContext || window.webkitAudioContext)();
+            const t = C.currentTime, master = C.createGain(), lp = C.createBiquadFilter();
+            lp.type = 'lowpass'; lp.frequency.value = 1400; master.gain.value = .7;
+            master.connect(lp); lp.connect(C.destination);
+            const note = (f, type, t0, dur, vol) => {
+              const o = C.createOscillator(), g = C.createGain();
+              o.type = type; o.frequency.setValueAtTime(f, t0);
+              g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .05); g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+              o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur);
+            };
+            // impact grave
+            note(36.7, 'sine', t, 1.4, .8); note(73.4, 'sawtooth', t, 1.2, .35);
+            // accord qui s'ouvre (Ré – La – Ré – Fa#)
+            note(110, 'sawtooth', t + .38, 2.4, .28); note(146.8, 'triangle', t + .38, 2.6, .3); note(185, 'triangle', t + .5, 2.4, .18); note(220, 'sine', t + .55, 2.2, .15);
+          } catch (e) { /* audio indisponible : l'animation joue quand même */ }
+        }
 
-  // --- AUDIO D'INTRO ---
-  // Déposez votre fichier dans le projet (ex: 'audio/intro.mp3') et indiquez le chemin ici.
-  // '' = utilise le sting synthétisé ci-dessous.
-  introAudio = 'audio/intro.mp3';
+        startIntro() {
+          if (this.state.intro !== 'idle') return;
+          this.playSting();
+          this.setState({ intro: 'playing' });
+          setTimeout(() => this.finishIntro(), 3400);
+        }
 
-  playSting() {
-    if (this.introAudio) {
-      try { const a = new Audio(this.introAudio); a.volume = 0.9; a.play().catch(() => this.playSynth()); } catch (e) { this.playSynth(); }
-      return;
-    }
-    this.playSynth();
-  }
-  // Sting synthétisé de secours (Web Audio, pas de fichier externe)
-  playSynth() {
-    try {
-      const C = new (window.AudioContext || window.webkitAudioContext)();
-      const t = C.currentTime, master = C.createGain(), lp = C.createBiquadFilter();
-      lp.type = 'lowpass'; lp.frequency.value = 1400; master.gain.value = .7;
-      master.connect(lp); lp.connect(C.destination);
-      const note = (f, type, t0, dur, vol) => {
-        const o = C.createOscillator(), g = C.createGain();
-        o.type = type; o.frequency.setValueAtTime(f, t0);
-        g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .05); g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
-        o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur);
-      };
-      // impact grave
-      note(36.7, 'sine', t, 1.4, .8); note(73.4, 'sawtooth', t, 1.2, .35);
-      // accord qui s'ouvre (Ré – La – Ré – Fa#)
-      note(110, 'sawtooth', t + .38, 2.4, .28); note(146.8, 'triangle', t + .38, 2.6, .3); note(185, 'triangle', t + .5, 2.4, .18); note(220, 'sine', t + .55, 2.2, .15);
-    } catch (e) { /* audio indisponible : l'animation joue quand même */ }
-  }
+        // Overlay d'intro (construit ici pour que l'animation ne soit pas réinitialisée par les re-rendus)
+        buildIntro() {
+          const h = React.createElement, st = this.state.intro;
+          if (st === 'done') return null;
+          const base = { position: 'fixed', inset: 0, zIndex: 100, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: st === 'idle' ? 'pointer' : 'default' };
+          if (st === 'idle') {
+            return h('div', { style: base, onClick: () => this.startIntro() },
+              h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 } },
+                h('div', { style: { fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(64px,14vw,150px)', letterSpacing: '.06em', color: '#E50914', lineHeight: 1, textShadow: '0 0 40px rgba(229,9,20,.5)' } }, 'CVFLIX'),
+                h('div', { style: { fontSize: 13, letterSpacing: '.2em', textTransform: 'uppercase', color: '#B3B3B3', animation: 'pulse 1.8s ease-in-out infinite' } }, 'Appuyer pour lancer'),
+                h('button', { onClick: (e) => { e.stopPropagation(); this.finishIntro(); }, style: { marginTop: 30, background: 'none', border: '1px solid #333', color: '#777', fontSize: 12, padding: '8px 18px', borderRadius: 3, cursor: 'pointer' } }, 'Passer')));
+          }
+          // 'playing' : lettres qui s'impriment puis éclatent en rubans de lumière
+          const N = 34, ribbons = [];
+          for (let i = 0; i < N; i++) {
+            const hue = 345 + (i % 7) * 4, l = 42 + (i % 5) * 8;
+            ribbons.push(h('div', { key: i, style: { position: 'absolute', left: (i / N * 100) + '%', width: (100 / N * .55) + '%', top: 0, bottom: 0, transformOrigin: '50% 100%', background: `linear-gradient(180deg, hsla(${hue},95%,${l}%,0) 0%, hsl(${hue},95%,${l}%) 50%, hsla(${hue},95%,${l}%,0) 100%)`, animation: `introRibbon 1.6s cubic-bezier(.5,0,.3,1) ${1.25 + Math.abs(i - N / 2) * .022}s both` } }));
+          }
+          const letters = 'CVFLIX'.split('').map((ch, i) => h('span', { key: i, style: { display: 'inline-block', animation: `introLetter 2.6s cubic-bezier(.2,.8,.2,1) ${i * .06}s both` } }, ch));
+          return h('div', { style: { ...base, animation: 'introOut .6s ease 2.8s both' } },
+            h('div', { style: { position: 'absolute', inset: 0 } }, ribbons),
+            h('div', { style: { position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, rgba(255,120,120,.9), rgba(229,9,20,.4) 40%, transparent 70%)', animation: 'introFlash 1.4s ease-out 1.15s both' } }),
+            h('div', { style: { position: 'relative', fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(72px,16vw,180px)', letterSpacing: '.06em', color: '#E50914', lineHeight: 1, textShadow: '0 0 40px rgba(229,9,20,.6)' } }, letters));
+        }
 
-  startIntro() {
-    if (this.state.intro !== 'idle') return;
-    this.playSting();
-    this.setState({ intro: 'playing' });
-    setTimeout(() => this.finishIntro(), 3400);
-  }
+        scroll(ref, dir) {
+          const el = ref.current; if (!el) return;
+          el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
+        }
 
-  // Overlay d'intro (construit ici pour que l'animation ne soit pas réinitialisée par les re-rendus)
-  buildIntro() {
-    const h = React.createElement, st = this.state.intro;
-    if (st === 'done') return null;
-    const base = { position: 'fixed', inset: 0, zIndex: 100, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: st === 'idle' ? 'pointer' : 'default' };
-    if (st === 'idle') {
-      return h('div', { style: base, onClick: () => this.startIntro() },
-        h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 } },
-          h('div', { style: { fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(64px,14vw,150px)', letterSpacing: '.06em', color: '#E50914', lineHeight: 1, textShadow: '0 0 40px rgba(229,9,20,.5)' } }, 'CVFLIX'),
-          h('div', { style: { fontSize: 13, letterSpacing: '.2em', textTransform: 'uppercase', color: '#B3B3B3', animation: 'pulse 1.8s ease-in-out infinite' } }, 'Appuyer pour lancer'),
-          h('button', { onClick: (e) => { e.stopPropagation(); this.finishIntro(); }, style: { marginTop: 30, background: 'none', border: '1px solid #333', color: '#777', fontSize: 12, padding: '8px 18px', borderRadius: 3, cursor: 'pointer' } }, 'Passer')));
-    }
-    // 'playing' : lettres qui s'impriment puis éclatent en rubans de lumière
-    const N = 34, ribbons = [];
-    for (let i = 0; i < N; i++) {
-      const hue = 345 + (i % 7) * 4, l = 42 + (i % 5) * 8;
-      ribbons.push(h('div', { key: i, style: { position: 'absolute', left: (i / N * 100) + '%', width: (100 / N * .55) + '%', top: 0, bottom: 0, transformOrigin: '50% 100%', background: `linear-gradient(180deg, hsla(${hue},95%,${l}%,0) 0%, hsl(${hue},95%,${l}%) 50%, hsla(${hue},95%,${l}%,0) 100%)`, animation: `introRibbon 1.6s cubic-bezier(.5,0,.3,1) ${1.25 + Math.abs(i - N / 2) * .022}s both` } }));
-    }
-    const letters = 'CVFLIX'.split('').map((ch, i) => h('span', { key: i, style: { display: 'inline-block', animation: `introLetter 2.6s cubic-bezier(.2,.8,.2,1) ${i * .06}s both` } }, ch));
-    return h('div', { style: { ...base, animation: 'introOut .6s ease 2.8s both' } },
-      h('div', { style: { position: 'absolute', inset: 0 } }, ribbons),
-      h('div', { style: { position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 50%, rgba(255,120,120,.9), rgba(229,9,20,.4) 40%, transparent 70%)', animation: 'introFlash 1.4s ease-out 1.15s both' } }),
-      h('div', { style: { position: 'relative', fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(72px,16vw,180px)', letterSpacing: '.06em', color: '#E50914', lineHeight: 1, textShadow: '0 0 40px rgba(229,9,20,.6)' } }, letters));
-  }
-
-  scroll(ref, dir) {
-    const el = ref.current; if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
-  }
-
-  renderVals() {
-    const { tab, openLang, scrolled } = this.state;
-    const tabDefs = [['langues', 'Langues'], ['competences', 'Compétences'], ['autres', 'Autres']];
-    return {
-      intro: this.buildIntro(),
-      headerBg: scrolled ? '#141414' : 'linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,0) 100%)',
-      showBadge: this.props.showBadge ?? true,
-      rowExp: this.rowExp, rowForm: this.rowForm, rowPep: this.rowPep, heroPhoto: this.heroPhoto,
-      nextExp: () => this.scroll(this.rowExp, 1),
-      nextForm: () => this.scroll(this.rowForm, 1),
-      nextPep: () => this.scroll(this.rowPep, 1),
-      openContact: () => this.setState({ tab: 'autres' }),
-      experiences: this.experiences.map(e => ({ ...e, hasImage: !!e.image, hasLogo: !!e.logo, showName: !e.logo && !e.image })),
-      formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo })),
-      pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo })),
-      collection: this.collection.map(c => ({ ...c, hasLogo: !!c.logo, noLogo: !c.logo })),
-      competences: this.competences, autres: this.autres,
-      langues: this.langues.map((l, i) => ({
-        ...l,
-        toggle: () => this.setState(s => ({ openLang: s.openLang === i ? null : i })),
-        shownLevel: openLang === i ? l.level : '',
-        ring: openLang === i ? '#E50914' : '#2a2a2a',
-      })),
-      tabs: tabDefs.map(([id, label]) => ({
-        label, select: () => this.setState({ tab: id }),
-        color: tab === id ? '#fff' : '#B3B3B3', border: tab === id ? '#E50914' : 'transparent',
-      })),
-      isLangues: tab === 'langues', isCompetences: tab === 'competences', isAutres: tab === 'autres',
-      cardHover: { transform: `scale(${this.props.hoverZoom ?? 1.05})`, boxShadow: '0 16px 40px rgba(0,0,0,.8)', zIndex: 5 },
-      press: { transform: 'scale(.96)' },
-      arrowHover: { opacity: 1 },
-      btnWhiteHover: { background: '#e6e6e6', transform: 'scale(1.03)' },
-      btnGreyHover: { background: 'rgba(109,109,110,.45)', transform: 'scale(1.03)' },
-      collHover: { flex: '2 1 0' },
-      flagHover: { transform: 'scale(1.08)' },
-      pillHover: { background: '#333', transform: 'scale(1.04)' },
-    };
-  }
-}
-</script>
-</body>
+        renderVals() {
+          const { tab, openLang, scrolled } = this.state;
+          const tabDefs = [['langues', 'Langues'], ['competences', 'Compétences'], ['autres', 'Autres']];
+          return {
+            intro: this.buildIntro(),
+            headerBg: scrolled ? '#141414' : 'linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,0) 100%)',
+            showBadge: this.props.showBadge ?? true,
+            rowExp: this.rowExp, rowForm: this.rowForm, heroPhoto: this.heroPhoto,
+            nextExp: () => this.scroll(this.rowExp, 1),
+            nextForm: () => this.scroll(this.rowForm, 1),
+            experiences: this.experiences.map(e => ({ ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? '50%' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
+            formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo, hasBadge: !!f.badge })),
+            pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo })),
+            collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
+            competences: this.competences, autres: this.autres,
+            langues: this.langues.map((l, i) => ({
+              ...l,
+              toggle: () => this.setState(s => ({ openLang: s.openLang === i ? null : i })),
+              shownLevel: openLang === i ? l.level : '',
+              ring: openLang === i ? '#E50914' : '#2a2a2a',
+            })),
+            tabs: tabDefs.map(([id, label]) => ({
+              label, select: () => this.setState({ tab: id }),
+              color: tab === id ? '#fff' : '#B3B3B3', border: tab === id ? '#E50914' : 'transparent',
+            })),
+            isLangues: tab === 'langues', isCompetences: tab === 'competences', isAutres: tab === 'autres',
+            cardHover: { transform: `scale(${this.props.hoverZoom ?? 1.05})`, boxShadow: '0 16px 40px rgba(0,0,0,.8)', zIndex: 5 },
+            press: { transform: 'scale(.96)' },
+            arrowHover: { opacity: 1 },
+            btnWhiteHover: { background: '#e6e6e6', transform: 'scale(1.03)' },
+            btnGreyHover: { background: 'rgba(109,109,110,.45)', transform: 'scale(1.03)' },
+            flagHover: { transform: 'scale(1.08)' },
+            pillHover: { background: '#333', transform: 'scale(1.04)' },
+          };
+        }
+      }
+    </script>
+  </body>
 </html>
