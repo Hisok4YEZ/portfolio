@@ -176,12 +176,27 @@
             [data-m="row-title"] {
               font-size: 17px !important;
             }
-            [data-row="2"] {
-              --w: 34vw !important;
+            [data-m="rank"] {
+              font-size: 96px !important;
+              margin-right: -8px !important;
+              -webkit-text-stroke-width: 3px !important;
             }
             [data-m="pep-grid"] {
-              grid-template-columns: repeat(2, 1fr) !important;
+              display: flex !important;
               gap: 10px !important;
+              overflow-x: auto;
+              overflow-y: hidden;
+              scroll-snap-type: x mandatory;
+              scroll-padding-left: 4vw;
+              scrollbar-width: none;
+            }
+            [data-m="pep-grid"]::-webkit-scrollbar {
+              display: none;
+            }
+            [data-m="pep-card"] {
+              flex: 0 0 calc((96vw - 10px) / 1.75);
+              box-sizing: border-box;
+              scroll-snap-align: start;
             }
             [data-m="flag"] {
               width: 72px !important;
@@ -245,15 +260,6 @@
             "
             >in</a
           >
-          <div
-            style="
-              width: 32px;
-              height: 32px;
-              border-radius: 4px;
-              background: linear-gradient(135deg, #e50914, #7a0409);
-            "
-            title="Profil"
-          ></div>
         </div>
       </div>
 
@@ -685,15 +691,14 @@
             data-m="row-title"
             style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
           >
-            Top 5 des formations
+            Top 5 des formations suivies
           </h2>
           <div
             data-row="2"
             ref="{{ rowForm }}"
             style="
-              --w: clamp(150px, 13vw, 232px);
               display: flex;
-              gap: clamp(20px, 3.4vw, 64px);
+              gap: 6px;
               overflow-x: auto;
               overflow-y: hidden;
               scroll-snap-type: x mandatory;
@@ -709,45 +714,31 @@
                   display: flex;
                   align-items: flex-end;
                   scroll-snap-align: start;
+                  transition: transform 0.3s ease;
+                  cursor: pointer;
                 "
+                style-hover="{{ cardHover }}"
+                style-active="{{ press }}"
               >
-                <!-- CHIFFRE façon Top 10 Netflix : contour gris dégradé (1er span) recouvert par le fond (2e span) -->
                 <div
                   data-m="rank"
-                  aria-hidden="true"
                   style="
+                    font-family: &quot;Bebas Neue&quot;, sans-serif;
+                    font-size: clamp(120px, 15vw, 190px);
+                    line-height: 0.8;
+                    color: #141414;
+                    -webkit-text-stroke: 4px #cfcfcf;
+                    margin-right: -10px;
+                    padding-right: 2px;
                     position: relative;
                     z-index: 1;
-                    font-family: &quot;Helvetica Neue&quot;, Arial, sans-serif;
-                    font-weight: 800;
-                    font-size: calc(var(--w) * 2.28);
-                    line-height: 1;
-                    margin: -0.15em 0 -0.13em;
-                    letter-spacing: -0.04em;
                     user-select: none;
                   "
                 >
-                  <span
-                    style="
-                      display: block;
-                      background: linear-gradient(180deg, #8c8c8c 0%, #4a4a4a 100%);
-                      -webkit-background-clip: text;
-                      background-clip: text;
-                      color: transparent;
-                      -webkit-text-stroke: 6px transparent;
-                    "
-                    >{{ f.rank }}</span
-                  >
-                  <span
-                    style="position: absolute; left: 0; top: 0; color: #141414"
-                    >{{ f.rank }}</span
-                  >
+                  {{ f.rank }}
                 </div>
-                <!-- AFFICHE : fond `bg` de la même couleur que le logo, logo mis à l'échelle au centre -->
                 <div
-                  style="position:relative;z-index:2;width:var(--w);aspect-ratio:232/330;margin-left:calc(var(--w) * -0.08);border-radius:6px;background:{{ f.bg }};color:{{ f.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px 14px;text-align:center;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer"
-                  style-hover="{{ cardHover }}"
-                  style-active="{{ press }}"
+                  style="width:clamp(130px,15vw,180px);aspect-ratio:1;border-radius:6px;background:{{ f.bg }};color:{{ f.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 14px 12px;text-align:center;position:relative;z-index:2;overflow:hidden"
                 >
                   <sc-if
                     value="{{ f.hasLogo }}"
@@ -756,7 +747,12 @@
                     <img
                       src="{{ f.logo }}"
                       alt="{{ f.school }}"
-                      style="width: 100%; height: 100%; object-fit: contain"
+                      style="
+                        width: 100%;
+                        flex: 1 1 0;
+                        min-height: 0;
+                        object-fit: contain;
+                      "
                     />
                   </sc-if>
                   <sc-if
@@ -772,29 +768,6 @@
                       "
                     >
                       {{ f.school }}
-                    </div>
-                  </sc-if>
-                  <!-- BANDEAU ROUGE : champ `badge` ('' = pas de bandeau) -->
-                  <sc-if
-                    value="{{ f.hasBadge }}"
-                    hint-placeholder-val="{{ false }}"
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        left: 50%;
-                        bottom: 0;
-                        transform: translateX(-50%);
-                        padding: 5px 12px 4px;
-                        border-radius: 4px 4px 0 0;
-                        background: #e50914;
-                        color: #fff;
-                        font-size: 14px;
-                        font-weight: 700;
-                        white-space: nowrap;
-                      "
-                    >
-                      {{ f.badge }}
                     </div>
                   </sc-if>
                 </div>
@@ -856,6 +829,7 @@
           >
             <sc-for list="{{ pepites }}" as="p" hint-placeholder-count="5">
               <div
+                data-m="pep-card"
                 style="aspect-ratio:16/9;min-width:0;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;overflow:hidden;transition:transform .3s ease;cursor:pointer"
                 style-hover="{{ cardHover }}"
                 style-active="{{ press }}"
@@ -899,14 +873,46 @@
             align-items: center;
             padding: 36px 0;
             background:
-              radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.55), transparent),
-              radial-gradient(1px 1px at 34% 78%, rgba(255, 255, 255, 0.4), transparent),
-              radial-gradient(1.5px 1.5px at 58% 14%, rgba(255, 255, 255, 0.5), transparent),
-              radial-gradient(1px 1px at 72% 88%, rgba(255, 255, 255, 0.35), transparent),
-              radial-gradient(1px 1px at 88% 30%, rgba(255, 255, 255, 0.45), transparent),
-              radial-gradient(1.5px 1.5px at 22% 60%, rgba(255, 255, 255, 0.3), transparent),
-              radial-gradient(ellipse 70% 90% at 15% 50%, #5a1450 0%, transparent 70%),
-              radial-gradient(ellipse 80% 120% at 85% 0%, #2a0f4a 0%, transparent 65%),
+              radial-gradient(
+                1px 1px at 12% 22%,
+                rgba(255, 255, 255, 0.55),
+                transparent
+              ),
+              radial-gradient(
+                1px 1px at 34% 78%,
+                rgba(255, 255, 255, 0.4),
+                transparent
+              ),
+              radial-gradient(
+                1.5px 1.5px at 58% 14%,
+                rgba(255, 255, 255, 0.5),
+                transparent
+              ),
+              radial-gradient(
+                1px 1px at 72% 88%,
+                rgba(255, 255, 255, 0.35),
+                transparent
+              ),
+              radial-gradient(
+                1px 1px at 88% 30%,
+                rgba(255, 255, 255, 0.45),
+                transparent
+              ),
+              radial-gradient(
+                1.5px 1.5px at 22% 60%,
+                rgba(255, 255, 255, 0.3),
+                transparent
+              ),
+              radial-gradient(
+                ellipse 70% 90% at 15% 50%,
+                #5a1450 0%,
+                transparent 70%
+              ),
+              radial-gradient(
+                ellipse 80% 120% at 85% 0%,
+                #2a0f4a 0%,
+                transparent 65%
+              ),
               linear-gradient(180deg, #180a24 0%, #120818 100%);
             opacity: 0;
             transform: translateY(40px);
@@ -926,6 +932,9 @@
               padding: 0 4vw;
             "
           >
+            <div style="font-size: 17px; font-weight: 600; color: #f1e6f3">
+              Collection
+            </div>
             <div
               style="
                 font-family: &quot;Bebas Neue&quot;, sans-serif;
@@ -937,9 +946,6 @@
               "
             >
               Jobs étudiants
-            </div>
-            <div style="font-size: 17px; font-weight: 600; color: #f1e6f3">
-              Vivez l'expérience terrain
             </div>
           </div>
           <div
@@ -962,7 +968,10 @@
                 style-active="{{ press }}"
               >
                 <!-- IMAGE : champ `image` (photo verticale, remplit toute l'affiche) -->
-                <sc-if value="{{ c.hasImage }}" hint-placeholder-val="{{ false }}">
+                <sc-if
+                  value="{{ c.hasImage }}"
+                  hint-placeholder-val="{{ false }}"
+                >
                   <img
                     src="{{ c.image }}"
                     alt="{{ c.name }}"
@@ -976,7 +985,10 @@
                   />
                 </sc-if>
                 <!-- LOGO : champ `logo`, en haut de l'affiche s'il y a une image, sinon centré -->
-                <sc-if value="{{ c.hasLogo }}" hint-placeholder-val="{{ false }}">
+                <sc-if
+                  value="{{ c.hasLogo }}"
+                  hint-placeholder-val="{{ false }}"
+                >
                   <img
                     src="{{ c.logo }}"
                     alt="{{ c.name }}"
@@ -992,7 +1004,10 @@
                   </div>
                 </sc-if>
                 <!-- POSTE : champ `role`, en bas de l'affiche -->
-                <sc-if value="{{ c.hasRole }}" hint-placeholder-val="{{ true }}">
+                <sc-if
+                  value="{{ c.hasRole }}"
+                  hint-placeholder-val="{{ true }}"
+                >
                   <div
                     style="
                       position: absolute;
@@ -1198,7 +1213,6 @@
           { company: 'TF1', role: 'Chef de projet digital', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'images/tf1.webp', bg: 'linear-gradient(90deg,#01168c,#500b64 50%,#9b0003)' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
-        //   badge : texte du bandeau rouge en bas de l'affiche (ex. 'Master 2', '2024'), '' = pas de bandeau
         formations = [
           { rank: 1, school: 'ESCP', logo: 'images/escp-logo.png', bg: '#280092', fg: '#fff' },
           { rank: 2, school: 'EM Lyon', logo: 'images/emlyon.png', bg: '#e2001a', fg: '#fff' },
@@ -1360,7 +1374,7 @@
             nextExp: () => this.scroll(this.rowExp, 1),
             nextForm: () => this.scroll(this.rowForm, 1),
             experiences: this.experiences.map(e => ({ ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? '50%' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
-            formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo, hasBadge: !!f.badge })),
+            formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo })),
             pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
             competences: this.competences, autres: this.autres,
