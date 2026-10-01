@@ -109,6 +109,288 @@
               opacity: 0.5;
             }
           }
+          /* --- JOBS ÉTUDIANTS : zoom avec contour blanc décollé au survol --- */
+          @media (hover: hover) {
+            [data-m="job-poster"]:hover {
+              transform: scale(1.08);
+              outline: 3px solid #fff !important;
+              outline-offset: 3px !important;
+              z-index: 2;
+            }
+          }
+          /* --- MINI-CARTE AU SURVOL + FICHE COMPLÈTE (expériences) --- */
+          [data-fiche] {
+            outline: none;
+          }
+          [data-fiche]:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+          }
+          .cv-pop {
+            position: fixed;
+            z-index: 900;
+            background: #181818;
+            color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.92);
+            transition:
+              opacity 0.2s ease,
+              transform 0.2s ease;
+            cursor: pointer;
+          }
+          .cv-pop.on {
+            opacity: 1;
+            pointer-events: auto;
+            transform: none;
+          }
+          .cv-ban {
+            position: relative;
+            overflow: hidden;
+            container-type: size;
+          }
+          .cv-ban .cv-blur {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(24px);
+            transform: scale(1.2);
+          }
+          /* image entière et centrée ; seuls les bords qui laissent une bande vide se fondent dans la version floutée */
+          .cv-ban .cv-fit {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(100cqw, calc(100cqh * var(--r, 1.78)));
+            aspect-ratio: var(--r, 1.78);
+          }
+          .cv-ban .cv-fit.fw {
+            -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+            mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+          }
+          .cv-ban .cv-fit.fh {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          }
+          /* format presque identique au bandeau : l'image le remplit entièrement */
+          .cv-ban .cv-fit.fc {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: auto;
+          }
+          .cv-ban .cv-fit img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            clip-path: inset(2px);
+          }
+          .cv-ban .cv-name {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 22cqh;
+            letter-spacing: 0.04em;
+          }
+          .cv-info {
+            padding: 12px 14px 14px;
+          }
+          .cv-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+          }
+          .cv-pill {
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1.25;
+            border-radius: 999px;
+            padding: 7px 14px;
+          }
+          .cv-chev {
+            flex: none;
+            width: 34px;
+            height: 34px;
+            border: 2px solid #8c8c8c;
+            border-radius: 50%;
+            background: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+          }
+          .cv-chev:hover {
+            border-color: #fff;
+          }
+          .cv-dates {
+            color: #b3b3b3;
+            margin: 10px 0 6px;
+            font-size: 13px;
+          }
+          .cv-y {
+            border: 1px solid #8c8c8c;
+            padding: 0 4px;
+            margin: 0 2px;
+            color: #ddd;
+          }
+          .cv-kw {
+            font-size: 12px;
+            color: #ddd;
+          }
+          .cv-ov {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+            padding: 4vh 3vw;
+            background: rgba(0, 0, 0, 0.7);
+          }
+          .cv-ov.on {
+            display: block;
+            animation: cvFade 0.2s ease;
+          }
+          @keyframes cvFade {
+            from {
+              opacity: 0;
+            }
+          }
+          .cv-fiche {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #181818;
+            color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+            animation: cvRise 0.25s ease;
+          }
+          @keyframes cvRise {
+            from {
+              transform: translateY(16px) scale(0.98);
+            }
+          }
+          .cv-fiche .cv-ban {
+            height: clamp(200px, 38vw, 340px);
+          }
+          .cv-shade {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #181818 0%, rgba(24, 24, 24, 0) 45%);
+          }
+          .cv-fiche .cv-pill {
+            position: absolute;
+            left: 24px;
+            bottom: 20px;
+            max-width: 80%;
+            font-size: 13px;
+          }
+          .cv-x {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 0;
+            background: #181818;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+          }
+          .cv-body {
+            padding: 20px 24px 28px;
+          }
+          .cv-cols {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 28px;
+          }
+          .cv-meta {
+            color: #b3b3b3;
+            margin-bottom: 10px;
+          }
+          .cv-bold {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+          }
+          .cv-syn {
+            margin: 0;
+            line-height: 1.5;
+          }
+          .cv-side {
+            font-size: 13px;
+            color: #ddd;
+            line-height: 1.45;
+          }
+          .cv-side p {
+            margin: 0 0 10px;
+          }
+          .cv-side span {
+            color: #8c8c8c;
+          }
+          .cv-eh {
+            font-size: 20px;
+            margin: 26px 0 6px;
+          }
+          .cv-ep {
+            display: grid;
+            grid-template-columns: 30% 1fr;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid #404040;
+            font-size: 14px;
+          }
+          .cv-ep span {
+            color: #b3b3b3;
+          }
+          @media (max-width: 700px) {
+            .cv-ov {
+              padding: 0;
+            }
+            .cv-fiche {
+              border-radius: 0;
+              min-height: 100%;
+            }
+            .cv-cols,
+            .cv-ep {
+              grid-template-columns: 1fr;
+            }
+            .cv-cols {
+              gap: 14px;
+            }
+            .cv-ep {
+              gap: 4px;
+            }
+            .cv-body {
+              padding: 16px 18px 28px;
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .cv-pop,
+            .cv-ov.on,
+            .cv-fiche {
+              transition: none;
+              animation: none;
+            }
+          }
           /* --- MOBILE (inspiré de l'app mobile : hero aligné à gauche, boutons pleine largeur) --- */
           @media (max-width: 680px) {
             [data-m="hero"] {
@@ -584,8 +866,8 @@
             <sc-for list="{{ experiences }}" as="e" hint-placeholder-count="4">
               <div
                 data-m="exp-card"
+                data-fiche="{{ e.id }}"
                 style="flex:0 0 46vw;aspect-ratio:16/9;scroll-snap-align:start;border-radius:6px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.5);transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;background:{{ e.bg }}"
-                style-hover="{{ cardHover }}"
                 style-active="{{ press }}"
               >
                 <!-- IMAGE : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé).
@@ -614,7 +896,7 @@
                     style="
                       position: absolute;
                       left: 0;
-                      top: 50%;
+                      top: calc(50% - 26px);
                       width: 100%;
                       height: auto;
                       transform: translateY(-50%);
@@ -847,8 +1129,8 @@
             <sc-for list="{{ pepites }}" as="p" hint-placeholder-count="5">
               <div
                 data-m="pep-card"
+                data-fiche="{{ p.id }}"
                 style="aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
-                style-hover="{{ cardHover }}"
                 style-active="{{ press }}"
               >
                 <sc-if
@@ -974,14 +1256,13 @@
               overflow-y: hidden;
               scroll-snap-type: x mandatory;
               scrollbar-width: none;
-              padding: 14px 4vw 14px 0;
+              padding: 26px 4vw 26px 16px;
             "
           >
             <sc-for list="{{ collection }}" as="c" hint-placeholder-count="6">
               <div
                 data-m="job-poster"
-                style="flex:0 0 clamp(150px,15vw,230px);aspect-ratio:2/3;scroll-snap-align:start;border-radius:8px;position:relative;overflow:hidden;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 10px 28px rgba(0,0,0,.55);outline:1px solid rgba(255,255,255,.08);outline-offset:-1px;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer"
-                style-hover="{{ cardHover }}"
+                style="flex:0 0 clamp(150px,15vw,230px);aspect-ratio:2/3;scroll-snap-align:start;border-radius:8px;position:relative;overflow:hidden;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 10px 28px rgba(0,0,0,.55);outline:1px solid rgba(255,255,255,.08);outline-offset:-1px;transition:transform .2s ease,box-shadow .3s ease,outline-offset .2s ease;cursor:pointer"
                 style-active="{{ press }}"
               >
                 <!-- IMAGE : champ `image` (photo verticale, remplit toute l'affiche) -->
@@ -1568,14 +1849,135 @@
         heroPhoto = React.createRef();
 
         // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
-        // EXPÉRIENCES — pour chaque carte :
+        // FICHES D'EXPÉRIENCES — mini-carte au survol et fiche complète au clic.
+        // Une entrée par `id`, utilisée par « Dernières nouveautés » et « Des pépites pour vous ».
+        //   role, dates, city : intitulé, période (sans durée ni contrat) et ville
+        //   kw : 3 mots-clés (mini-carte) ; bold : phrase en gras ; syn : synopsis
+        //   genres, dist : colonne de droite ; prog : « Un programme » ('' = pas de ligne)
+        //   eps : épisodes [titre, description]
+        fiches = {
+          marathon: {
+            role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris',
+            kw: ['Développement', 'Production', 'Coordination'],
+            bold: 'Bras droit de la productrice, présidente de la filiale',
+            syn: 'Assistant de la productrice de Marathon Studio (Terence Films) : lecture et analyse de projets films et séries, accueil des pitchs, montage de dossiers de financement et coordination de la production.',
+            genres: 'Développement · Production · Analyse éditoriale · Financement',
+            dist: 'Créateurs, auteurs, producteurs, agents, réalisateurs, diffuseurs, institutions (CNC, Région Grand Est), équipes techniques',
+            prog: 'Rigoureux · Réactif · Discret (informations confidentielles)',
+            eps: [
+              ['Lecture et analyse éditoriale', "Lecture et analyse de scénarios, bibles, traitements et notes d'intention ; rédaction de fiches de lecture et de recommandations artistiques."],
+              ['Développement éditorial', "Accompagnement des auteurs dans la structuration de leurs arcs narratifs ; suivi du développement d'un projet d'animation."],
+              ["Veille et sourcing d'adaptations", "Identification de nouveaux concepts et d'opportunités d'adaptation (IP) ; analyse du marché, des formats et de la diffusion ; recommandations aux diffuseurs."],
+              ['Pipeline de développement', "Centralisation des soumissions et des pitchs des créateurs, auteurs, producteurs et agents ; coordination du pipeline jusqu'à la clôture des dossiers."],
+              ['Talents et partenaires', 'Recherche, sélection et coordination de talents et de partenaires artistiques ; échanges avec agents, diffuseurs, coproducteurs et équipes techniques.'],
+              ['Dossiers de présentation et de financement', "Préparation de dossiers de présentation (synopsis, bibles, pitch decks) ; participation au montage de demandes d'aides CNC et Région Grand Est."],
+              ['Coordination de production et tournage', 'Coordination logistique de production (planning, budget, préproduction) ; gestion des sujets opérationnels au tournage et des journées presse.'],
+              ['Post-production et administratif', "Coordination des prestataires de post-production et suivi des rushes ; préparation d'une bande-annonce, des dossiers de production et des conventions."],
+              ['Agenda, réunions et pitchs', "Gestion de l'agenda, des déplacements et des événements de la productrice ; préparation des réunions et des pitchs (notes de synthèse, comptes rendus) ; suivi des projets."],
+            ],
+          },
+          banijay: {
+            role: 'Assistant IP et adaptations littéraires', dates: 'Mars 2025 – Déc. 2025', city: 'Paris',
+            kw: ['IP & adaptation', 'Veille', 'Développement'],
+            bold: "Repérer les histoires à adapter, en France et à l'international",
+            syn: "Appui direct au Directeur Scripted IP & Production : veille d'IP et de formats internationaux, lecture d'œuvres littéraires, notes de lecture et présentations pour les équipes de développement fiction du Groupe.",
+            genres: 'IP · Adaptation littéraire · Veille · Analyse de marché',
+            dist: 'Directeur IP / Formats / Book IP, équipe éditoriale fiction, filiales françaises et internationales, auteurs, scénaristes, agents, éditeurs, Market Research, Banijay Rights, PR',
+            prog: 'Curieux · Structuré · Autonome',
+            eps: [
+              ['Veille IP et formats', 'Repérage de séries, romans et concepts sur différents territoires ; évaluation du potentiel créatif et commercial.'],
+              ["Lecture d'œuvres littéraires", "Lecture, notes de lecture, potentiel audiovisuel et droits d'adaptation."],
+              ['Analyses de marché', 'Benchmarks, notes stratégiques, tableaux et listings de veille concurrentielle.'],
+              ['Circulation des IP', 'Coordination entre filiales françaises et internationales ; notes par pays ou par producteur.'],
+              ['Communauté créative', 'Relations avec auteurs, scénaristes, agents, éditeurs ; recherche de partenaires et coproducteurs.'],
+              ['Outils et suivi', "Suivi des droits d'adaptation et des contrats associés."],
+            ],
+          },
+          tf1: {
+            role: 'Chef de projet Digital & Performance', dates: 'Oct. 2022 – Sept. 2024', city: 'Paris',
+            kw: ['Digital', 'Data', 'Pilotage de projets'],
+            bold: "Traduire les données d'audience en décisions éditoriales",
+            syn: 'Pilotage de projets digitaux transverses (éditorial, marketing, CRM, produit, tech) autour de TF1+ : KPI, tableaux de bord, analyses de performance et recommandations à la direction.',
+            genres: 'Data · Digital · Performance · KPI · Streaming',
+            dist: 'Équipes éditoriales, marketing éditorial, CRM, social media, publicité, produit, équipes techniques, direction',
+            prog: 'Analytique · Pédagogue · Orienté résultats',
+            eps: [
+              ['Pilotage transverse', 'Projets digitaux menés en parallèle avec les équipes éditoriales, marketing, CRM, social media, publicité et produit.'],
+              ['KPI et tableaux de bord', 'Définition et suivi des KPI ; création de tableaux de bord et automatisation des reportings (Tableau).'],
+              ['Performance TF1+ / MYTF1', 'Suivi des contenus et des usages ; recommandations sur la mise en avant des programmes.'],
+              ['Applications et plateforme', 'Pilotage de TF1 Info et MYTF1 ; mise en place de TF1+ avec produit et tech ; ateliers métiers, User Stories (Jira, Confluence).'],
+              ["Analyse d'audience et optimisation", "Analyse des parcours utilisateurs et des audiences ; pilotage d'A/B tests et de démarches d'optimisation (CRO) ; suivi de l'acquisition et de la fidélisation via les campagnes CRM."],
+            ],
+          },
+          oppizi: {
+            role: 'Operations City Manager', dates: 'Janv. 2022 – Oct. 2022', city: 'Lyon',
+            kw: ['Opérations', 'Management', 'Campagnes'],
+            bold: "Une équipe d'une trentaine de freelances à piloter sur le terrain",
+            syn: "Recrutement, formation et encadrement d'équipes de distribution (Brand Ambassadors) ; gestion de campagnes de A à Z, de la préparation au reporting.",
+            genres: 'Management terrain · Opérations · Gestion de campagne · KPI',
+            dist: 'Brand Ambassadors (environ 30 freelances), clients, fournisseurs, lieux de distribution',
+            prog: 'Réactif · Organisé · Leader',
+            eps: [
+              ['Constitution des équipes', "Composition, recrutement, formation et encadrement d'environ 30 freelances."],
+              ['Campagnes de A à Z', 'Préparation, suivi des résultats, clôture et reporting ; suivi des KPI et du budget.'],
+              ['Relation client', 'Interlocuteur des clients pour les nouvelles campagnes.'],
+              ['Logistique terrain', 'Repérage des lieux de distribution, gestion des stocks, équipements et uniformes ; résolution des problèmes opérationnels.'],
+            ],
+          },
+          equancy: {
+            role: 'Consultant Digital Marketing et Web Analytics', dates: 'Juil. 2021 – Déc. 2021', city: 'Paris',
+            kw: ['Web analytics', 'Mesure de performance', 'Conseil'],
+            bold: 'Transformer les données marketing en recommandations opérationnelles',
+            syn: 'Mission de conseil sur la mesure de la performance digitale : stratégie de mesure, analyse marketing, média et CRM, recommandations aux clients et coordination des prestataires.',
+            genres: 'Web Analytics · KPI · Reporting · Tracking',
+            dist: 'Clients, agences digitales et médias, équipes internes (data, BI)',
+            prog: "Analytique · Structuré · À l'écoute du client",
+            eps: [
+              ['Stratégie de mesure', "Définition des KPI, des reportings et suivi de l'implémentation du tracking."],
+              ['Analyse de performance', 'Analyse de la performance marketing, média, digitale et CRM ; analyse des comportements utilisateurs et des données de marché.'],
+              ['Recommandations opérationnelles', 'Coordination des prestataires : agences digitales et médias, équipes internes data et BI.'],
+              ['Accompagnement client', 'Recueil des besoins clients et accompagnement sur leurs enjeux de transformation digitale ; construction de dashboards de pilotage et suivi des évolutions.'],
+            ],
+          },
+          alptis: {
+            role: 'Gestionnaire de Contrats Collectifs en Assurances', dates: 'Déc. 2020 – Juin 2021 et Janv. 2022 – Oct. 2022', city: 'Lyon',
+            kw: ['Assurance', 'Gestion de portefeuille', 'Relation client'],
+            bold: 'Un portefeuille de comptes entreprises à gérer de bout en bout',
+            syn: "Gestion d'un portefeuille de clients (cotisations, comptes entreprises et salariés, encaissements) ; traitement des demandes et coordination des interlocuteurs.",
+            genres: 'Assurance · Gestion de portefeuille · Relation client',
+            dist: 'Entreprises clientes, salariés, délégations commerciales, réseau de courtiers',
+            prog: 'Rigoureux · Méthodique · Fiable',
+            eps: [
+              ['Portefeuille clients', "Gestion d'un portefeuille de clients entreprises : suivi des cotisations, des comptes entreprises et salariés et des encaissements."],
+              ['Analyse des comptes', 'Analyse et renseignement des comptes clients ; traitement des demandes de délais de paiement et des impayés.'],
+              ['Réseau commercial', 'Relation avec les délégations commerciales, le réseau de courtiers et les entreprises pour traiter leurs demandes.'],
+              ['Résolution de problèmes', 'Coordination de multiples interlocuteurs pour résoudre les problèmes opérationnels ; suivi des processus administratifs, financiers et contractuels.'],
+            ],
+          },
+          asv: {
+            role: 'Community Manager', dates: 'Avril 2019 – Juin 2019', city: 'Lyon',
+            kw: ['Community management', 'E-commerce', 'Création de contenu'],
+            bold: 'Faire vivre une marque de bijoux sur les réseaux',
+            syn: 'Animation de la communauté et production de contenus de mise en scène des bijoux ; gestion des partenariats avec les créatrices de contenu, des commandes et des mises en ligne produit.',
+            genres: 'Community management · Contenu · E-commerce',
+            dist: 'Créatrices de contenu, fournisseurs, clientes',
+            prog: '',
+            eps: [
+              ['Calendrier éditorial', 'Planification du calendrier de publication ; production de visuels, photos et vidéos de mise en scène des bijoux.'],
+              ['Partenariats créatrices', 'Gestion des partenariats avec les créatrices de contenu et des envois de dotations.'],
+              ['Commandes et stocks', 'Suivi des stocks et des inventaires, relation avec les fournisseurs ; préparation et expédition soignée des commandes, traitement des retours.'],
+              ['Mise en ligne et promotion', 'Mise en ligne des nouveautés et optimisation des fiches produits (descriptions, visuels) ; création de bannières, mise en place de codes promo et lancements de collections.'],
+            ],
+          },
+        };
+        // EXPÉRIENCES (« Dernières nouveautés ») — poste, dates et ville viennent de `fiches` (même `id`) :
         //   image : vignette affichée en entier et centrée, sur un fond flouté de la même image. '' = garde le dégradé `bg`.
         //   logo  : logo pleine largeur ('' = rien) ; logoCenter: true pour le centrer verticalement.
         //   Toutes les images sont dans le dossier `Vignettes 2/`.
         experiences = [
-          { company: 'Marathon Studio', role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris', image: 'Vignettes 2/Principales - Pour Vous/marathon logo.jpeg', logo: '', bg: '#d2687e' },
-          { company: 'Banijay', role: 'Assistant IP et adaptations littéraires', dates: 'Mai 2025 – Déc. 2025', city: 'Paris', image: 'Vignettes 2/Principales - Pour Vous/Banijay group.png', logo: '', bg: '#5a0033' },
-          { company: 'TF1', role: 'Chef de projet digital', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
+          { id: 'marathon', company: 'Marathon Studio', image: 'Vignettes 2/Principales - Pour Vous/marathon logo.jpeg', logo: '', bg: '#d2687e' },
+          { id: 'banijay', company: 'Banijay', image: 'Vignettes 2/Principales - Pour Vous/Banijay group.png', logo: '', bg: '#5a0033' },
+          { id: 'tf1', company: 'TF1', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
         formations = [
@@ -1588,10 +1990,10 @@
         // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
         //   full : true pour une vignette 16:9 déjà mise en page (affichée bord à bord, sans marge)
         pepites = [
-          { name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis.png', full: true, bg: '#469962', fg: '#fff' },
-          { name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi.png', full: true, bg: '#1a3552', fg: '#fff' },
-          { name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy.png', full: true, bg: '#cc115e', fg: '#fff' },
-          { name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
+          { id: 'alptis', name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis.png', full: true, bg: '#469962', fg: '#fff' },
+          { id: 'oppizi', name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi.png', full: true, bg: '#1a3552', fg: '#fff' },
+          { id: 'equancy', name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy.png', full: true, bg: '#cc115e', fg: '#fff' },
+          { id: 'asv', name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
 
           ];
         // JOBS ÉTUDIANTS — 6 affiches verticales (format 2:3, ex. 600×900 px) :
@@ -1628,11 +2030,13 @@
           document.body.addEventListener('scroll', this.onScroll, { passive: true });
           this.onKey = e => { if (e.key === 'Escape' && this.state.contactOpen) this.setState({ contactOpen: false }); };
           window.addEventListener('keydown', this.onKey);
+          this.setupFiches();
           if (this.props.intro === false) this.finishIntro();
         }
         componentWillUnmount() {
           window.removeEventListener('scroll', this.onScroll); document.body.removeEventListener('scroll', this.onScroll);
           window.removeEventListener('keydown', this.onKey);
+          this.teardownFiches();
           clearInterval(this.revealTimer);
         }
 
@@ -1732,6 +2136,189 @@
           el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
         }
 
+        // --- Mini-carte au survol et fiche complète (expériences) ---
+        // Les vignettes portent data-fiche="<id>". La mini-carte et la fiche sont ajoutées dans <body>
+        // (position fixed) : elles ne sont jamais coupées par les rangées qui défilent.
+        esc(t) {
+          return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+        visual(id) {
+          const e = this.experiences.find(x => x.id === id);
+          if (e) return { src: e.image || e.logo, bg: e.bg, name: e.company, fg: '#fff' };
+          const p = this.pepites.find(x => x.id === id) || {};
+          return { src: p.logo, bg: p.bg, name: p.name, fg: p.fg };
+        }
+        banner(id, extra = '', style = '') {
+          const v = this.visual(id), src = v.src ? encodeURI(v.src) : '';
+          const media = src
+            ? `<img class="cv-blur" src="${src}" alt="" aria-hidden="true"><div class="cv-fit"><img src="${src}" alt="${this.esc(v.name)}" onload="cvFit(this)"></div>`
+            : `<div class="cv-name" style="color:${v.fg}">${this.esc(v.name)}</div>`;
+          return `<div class="cv-ban" style="${style}background:${v.bg}">${media}${extra}</div>`;
+        }
+        yearBoxes(d) {
+          return this.esc(d).replace(/([A-Za-zÀ-ÿ.]+) (\d{4})/g, '$1 <span class="cv-y">$2</span>');
+        }
+        showPop(card) {
+          const id = card.dataset.fiche, f = this.fiches[id];
+          if (!f) return;
+          const pop = this.pop, r = card.getBoundingClientRect(), w = Math.min(Math.max(r.width * 1.24, 280), 600);
+          const chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+          pop.innerHTML = this.banner(id, '', 'aspect-ratio:16/9;')
+            + `<div class="cv-info"><div class="cv-top"><span class="cv-pill">${this.esc(f.role)}</span>`
+            + `<button class="cv-chev" aria-label="Ouvrir la fiche">${chev}</button></div>`
+            + `<div class="cv-dates">${this.yearBoxes(f.dates)}</div><div class="cv-kw">${f.kw.map(k => this.esc(k)).join(' • ')}</div></div>`;
+          pop.dataset.fiche = id;
+          pop.style.width = w + 'px';
+          pop.style.left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8)) + 'px';
+          pop.style.top = '0px';
+          pop.classList.add('on');
+          const h = pop.offsetHeight;
+          pop.style.top = Math.max(8, Math.min(r.top + r.height / 2 - h / 2, innerHeight - h - 8)) + 'px';
+          this.popCard = card;
+        }
+        hidePop() {
+          clearTimeout(this.popTimer);
+          if (this.pop) this.pop.classList.remove('on');
+          this.popCard = null;
+        }
+        openFiche(id) {
+          const f = this.fiches[id];
+          if (!f) return;
+          this.hidePop();
+          this.ficheReturn = document.activeElement;
+          const side = [['Genres', f.genres], ['Distribution', f.dist], ['Un programme', f.prog]]
+            .filter(([, v]) => v).map(([k, v]) => `<p><span>${k} : </span>${this.esc(v)}</p>`).join('');
+          this.ov.innerHTML = `<div class="cv-fiche" role="dialog" aria-modal="true" aria-label="${this.esc(f.role)}">`
+            + this.banner(id, `<div class="cv-shade"></div><span class="cv-pill">${this.esc(f.role)}</span>`)
+            + `<button class="cv-x" aria-label="Fermer">✕</button>`
+            + `<div class="cv-body"><div class="cv-cols"><div><div class="cv-meta">${this.esc(f.dates)} • ${this.esc(f.city)}</div>`
+            + `<div class="cv-bold">${this.esc(f.bold)}</div><p class="cv-syn">${this.esc(f.syn)}</p></div>`
+            + `<div class="cv-side">${side}</div></div>`
+            + `<h3 class="cv-eh">Épisodes</h3>${f.eps.map(([t, d]) => `<div class="cv-ep"><b>${this.esc(t)}</b><span>${this.esc(d)}</span></div>`).join('')}</div></div>`;
+          this.ov.classList.add('on');
+          this.ov.scrollTop = 0;
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+          this.ov.querySelector('.cv-x').focus({ preventScroll: true });
+        }
+        closeFiche() {
+          if (!this.ov || !this.ov.classList.contains('on')) return;
+          this.ov.classList.remove('on');
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          if (this.ficheReturn && this.ficheReturn.focus) {
+            this.quietFocus = true; // rendre le focus à la vignette sans rouvrir sa mini-carte
+            this.ficheReturn.focus({ preventScroll: true });
+            this.quietFocus = false;
+          }
+        }
+        setupFiches() {
+          // Ajuste l'image du bandeau : --r = son format ; fw/fh = bandes vides en haut-bas / sur les côtés ; fc = remplit
+          window.cvFit = img => {
+            const box = img.parentNode, ban = box.parentNode;
+            const r = img.naturalWidth / img.naturalHeight, rb = ban.clientWidth / ban.clientHeight;
+            box.style.setProperty('--r', r);
+            box.classList.remove('fw', 'fh', 'fc');
+            box.classList.add(Math.abs(r / rb - 1) < 0.08 ? 'fc' : r > rb ? 'fw' : 'fh');
+          };
+          const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+          this.pop = document.createElement('div');
+          this.pop.className = 'cv-pop';
+          this.ov = document.createElement('div');
+          this.ov.className = 'cv-ov';
+          document.body.append(this.pop, this.ov);
+          const markCards = () => document.querySelectorAll('[data-fiche]:not([tabindex])').forEach(c => {
+            c.tabIndex = 0; c.setAttribute('role', 'button');
+          });
+          markCards();
+          this.ficheObserver = new MutationObserver(markCards);
+          this.ficheObserver.observe(document.body, { childList: true, subtree: true });
+          const cardOf = t => t && t.closest && t.closest('[data-fiche]:not(.cv-pop)');
+          this.fiH = {
+            over: e => {
+              if (!canHover) return;
+              const c = cardOf(e.target);
+              if (!c || c === this.popCard || (e.relatedTarget && c.contains(e.relatedTarget))) return;
+              clearTimeout(this.popTimer);
+              this.popTimer = setTimeout(() => this.showPop(c), 300);
+            },
+            out: e => {
+              const c = cardOf(e.target), to = e.relatedTarget;
+              if (!c || (to && (c.contains(to) || this.pop.contains(to)))) return;
+              clearTimeout(this.popTimer);
+              if (this.popCard === c) this.hidePop();
+            },
+            popOut: e => {
+              const to = e.relatedTarget;
+              if (!(this.popCard && to && this.popCard.contains(to)) && !this.pop.contains(to)) this.hidePop();
+            },
+            click: e => {
+              if (this.ov.contains(e.target)) {
+                if (e.target === this.ov || e.target.closest('.cv-x')) this.closeFiche();
+                return;
+              }
+              if (this.pop.contains(e.target)) return this.openFiche(this.pop.dataset.fiche);
+              const c = cardOf(e.target);
+              if (c) this.openFiche(c.dataset.fiche);
+            },
+            key: e => {
+              if (e.key === 'Escape') { this.hidePop(); this.closeFiche(); }
+              else if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.fiche) {
+                e.preventDefault(); this.openFiche(e.target.dataset.fiche);
+              }
+            },
+            focus: e => {
+              const c = cardOf(e.target);
+              if (!c || !canHover || this.quietFocus) return;
+              // le focus fait défiler la page jusqu'à la carte : on affiche la mini-carte juste après
+              this.focusAt = Date.now();
+              clearTimeout(this.popTimer);
+              this.popTimer = setTimeout(() => this.showPop(c), 120);
+            },
+            blur: e => { if (cardOf(e.target) && !this.pop.contains(e.relatedTarget)) this.hidePop(); },
+            scroll: e => {
+              if (this.ov.contains(e.target) || Date.now() - (this.focusAt || 0) < 400) return;
+              this.hidePop();
+            },
+          };
+          // La mini-carte est en position fixed : la molette au-dessus d'elle ne ferait défiler rien.
+          // On transmet le défilement vertical à la page et l'horizontal à la rangée de la vignette.
+          this.fiH.wheel = e => {
+            e.preventDefault();
+            const k = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+            const pageScroller = document.body.scrollHeight > document.body.clientHeight && getComputedStyle(document.body).overflowY !== 'visible'
+              ? document.body : document.scrollingElement;
+            const row = this.popCard && this.popCard.parentElement.closest('[data-row], [data-m="pep-grid"]');
+            if (e.deltaX && row) row.scrollLeft += e.deltaX * k;
+            if (e.deltaY) pageScroller.scrollTop += e.deltaY * k;
+            this.hidePop();
+          };
+          this.pop.addEventListener('wheel', this.fiH.wheel, { passive: false });
+          const h = this.fiH;
+          document.addEventListener('mouseover', h.over);
+          document.addEventListener('mouseout', h.out);
+          this.pop.addEventListener('mouseleave', h.popOut);
+          document.addEventListener('click', h.click);
+          document.addEventListener('keydown', h.key);
+          document.addEventListener('focusin', h.focus);
+          document.addEventListener('focusout', h.blur);
+          window.addEventListener('scroll', h.scroll, true);
+        }
+        teardownFiches() {
+          const h = this.fiH;
+          if (!h) return;
+          document.removeEventListener('mouseover', h.over);
+          document.removeEventListener('mouseout', h.out);
+          document.removeEventListener('click', h.click);
+          document.removeEventListener('keydown', h.key);
+          document.removeEventListener('focusin', h.focus);
+          document.removeEventListener('focusout', h.blur);
+          window.removeEventListener('scroll', h.scroll, true);
+          this.ficheObserver.disconnect();
+          this.pop.remove();
+          this.ov.remove();
+        }
+
         // --- Fiche contact ---
         // Seul Safari sur iPhone/iPad affiche la vCard en fiche contact native.
         // Partout ailleurs (Android, ordinateur, navigateurs intégrés aux applis) on affiche la fiche dans la page.
@@ -1777,7 +2364,7 @@
             rowExp: this.rowExp, rowForm: this.rowForm, heroPhoto: this.heroPhoto,
             nextExp: () => this.scroll(this.rowExp, 1),
             nextForm: () => this.scroll(this.rowForm, 1),
-            experiences: this.experiences.map(e => ({ ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? '50%' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
+            experiences: this.experiences.map(e => ({ ...this.fiches[e.id], ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? 'calc(50% - 26px)' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
             formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo })),
             pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
