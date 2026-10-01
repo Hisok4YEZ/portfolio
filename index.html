@@ -264,7 +264,7 @@
       </div>
 
       <!-- ============ HERO ============ -->
-      <!-- PHOTO DE FOND : url('images/hero.png') dans le background du bloc data-m="hero-photo" -->
+      <!-- PHOTO DE FOND : url('Vignettes 2/Hero/hero.png') dans le background du bloc data-m="hero-photo" -->
       <section
         id="top"
         data-m="hero"
@@ -291,7 +291,7 @@
             top: 0;
             width: 58%;
             height: 100%;
-            background: #1c1c1c url(&quot;images/hero.png&quot;) center top /
+            background: #1c1c1c url(&quot;Vignettes 2/Hero/hero.png&quot;) center top /
               cover no-repeat;
             -webkit-mask-image: linear-gradient(
               90deg,
@@ -504,8 +504,10 @@
               ></span
               >Collaborer
             </a>
+            <!-- FICHE CONTACT : vCard native sur Safari iPhone, sinon fiche affichée dans la page -->
             <a
               href="contact.vcf"
+              onClick="{{ openContactCard }}"
               style="
                 display: inline-flex;
                 align-items: center;
@@ -586,36 +588,41 @@
                 style-hover="{{ cardHover }}"
                 style-active="{{ press }}"
               >
-                <!-- IMAGE DE FOND : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé) -->
+                <!-- IMAGE : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé).
+                     Affichée en entier et centrée, sur un fond fait de la même image floutée -->
                 <sc-if
                   value="{{ e.hasImage }}"
                   hint-placeholder-val="{{ false }}"
                 >
                   <img
                     src="{{ e.image }}"
+                    alt=""
+                    aria-hidden="true"
+                    style="
+                      position: absolute;
+                      inset: 0;
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      filter: blur(24px);
+                      transform: scale(1.2);
+                    "
+                  />
+                  <img
+                    src="{{ e.image }}"
                     alt="{{ e.company }}"
                     style="
                       position: absolute;
-                      inset: -3px;
-                      width: calc(100% + 6px);
-                      height: calc(100% + 6px);
-                      object-fit: cover;
-                      object-position: center;
+                      left: 0;
+                      top: 50%;
+                      width: 100%;
+                      height: auto;
+                      transform: translateY(-50%);
+                      -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+                      mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
                     "
                   />
                 </sc-if>
-                <div
-                  style="
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(
-                      0deg,
-                      rgba(0, 0, 0, 0.9) 0%,
-                      rgba(0, 0, 0, 0.5) 22%,
-                      rgba(0, 0, 0, 0) 40%
-                    );
-                  "
-                ></div>
                 <!-- LOGO : champ `logo` (image) affiché pleine largeur, collé en haut (centré verticalement si `logoCenter: true`) ; sinon le nom `company` s'affiche en texte -->
                 <sc-if
                   value="{{ e.hasLogo }}"
@@ -624,19 +631,29 @@
                   <img
                     src="{{ e.logo }}"
                     alt="{{ e.company }}"
-                    style="position:absolute;left:0;top:{{ e.logoTop }};transform:translateY({{ e.logoShift }});width:100%;height:auto"
+                    style="position:absolute;left:0;top:{{ e.logoTop }};transform:translateY({{ e.logoShift }});width:100%;height:auto;clip-path:inset(2px 0)"
                   />
                 </sc-if>
 
+                <!-- BANDEAU DU BAS : bande plus foncée séparée par un fin trait, avec le poste et les dates -->
                 <div
                   style="
                     position: absolute;
-                    left: 14px;
-                    right: 14px;
-                    bottom: 12px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    padding: 10px 14px 12px;
                     display: flex;
                     flex-direction: column;
                     gap: 2px;
+                    background: linear-gradient(
+                      0deg,
+                      rgba(0, 0, 0, 0.92) 0%,
+                      rgba(0, 0, 0, 0.72) 100%
+                    );
+                    border-top: 1px solid rgba(255, 255, 255, 0.16);
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
                   "
                 >
                   <div style="font-size: 13px; font-weight: 700; color: #fff">
@@ -830,7 +847,7 @@
             <sc-for list="{{ pepites }}" as="p" hint-placeholder-count="5">
               <div
                 data-m="pep-card"
-                style="aspect-ratio:16/9;min-width:0;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;overflow:hidden;transition:transform .3s ease;cursor:pointer"
+                style="aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
                 style-hover="{{ cardHover }}"
                 style-active="{{ press }}"
               >
@@ -1188,6 +1205,354 @@
           >
           <span>Paris, France</span>
         </div>
+
+      <!-- ============ FICHE CONTACT (affichée quand la vCard ne peut pas s'ouvrir joliment) ============ -->
+      <!-- Android, ordinateur, navigateurs intégrés (Instagram, LinkedIn…) : les infos s'affichent ici -->
+      <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ false }}">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Fiche contact"
+          style="
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+          "
+        >
+          <div
+            onClick="{{ closeContact }}"
+            style="
+              position: absolute;
+              inset: 0;
+              background: rgba(0, 0, 0, 0.72);
+              backdrop-filter: blur(6px);
+              -webkit-backdrop-filter: blur(6px);
+            "
+          ></div>
+          <div
+            style="
+              position: relative;
+              width: 100%;
+              max-width: 400px;
+              max-height: calc(100vh - 32px);
+              overflow-y: auto;
+              background: #181818;
+              border-radius: 12px;
+              box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+            "
+          >
+            <div
+              style="
+                height: 96px;
+                background: linear-gradient(135deg, #e50914 0%, #7a0409 60%, #2a0204 100%);
+              "
+            ></div>
+            <button
+              onClick="{{ closeContact }}"
+              aria-label="Fermer"
+              style="
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                border: 0;
+                background: rgba(0, 0, 0, 0.45);
+                color: #fff;
+                font-size: 20px;
+                line-height: 1;
+                cursor: pointer;
+              "
+            >
+              ×
+            </button>
+            <div style="padding: 0 22px 22px; margin-top: -48px">
+              <img
+                src="Vignettes 2/Hero/hero.png"
+                alt="Omar Errachid Zine"
+                style="
+                  width: 96px;
+                  height: 96px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                  object-position: center top;
+                  border: 4px solid #181818;
+                  background: #222;
+                "
+              />
+              <div
+                style="
+                  margin-top: 10px;
+                  font-family: &quot;Bebas Neue&quot;, sans-serif;
+                  font-size: 34px;
+                  line-height: 1;
+                  letter-spacing: 0.03em;
+                  color: #fff;
+                "
+              >
+                Omar Errachid Zine
+              </div>
+              <div
+                style="
+                  display: inline-block;
+                  margin: 8px 0 14px;
+                  background: #e50914;
+                  color: #fff;
+                  font-size: 12px;
+                  font-weight: 700;
+                  padding: 4px 10px;
+                  border-radius: 2px;
+                "
+              >
+                Chargé de Production / Développement
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 12px 0;
+                  border-top: 1px solid #2a2a2a;
+                "
+              >
+                <a
+                  href="tel:+33620810418"
+                  style="
+                    flex: 1;
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    color: #fff;
+                  "
+                >
+                  <span
+                    style="
+                      flex: 0 0 36px;
+                      height: 36px;
+                      border-radius: 50%;
+                      background: #2a2a2a;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 15px;
+                      font-weight: 700;
+                    "
+                    >✆</span
+                  >
+                  <span style="min-width: 0">
+                    <span
+                      style="display: block; font-size: 11px; color: #8c8c8c"
+                      >Téléphone</span
+                    >
+                    <span
+                      style="
+                        display: block;
+                        font-size: 15px;
+                        font-weight: 600;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      "
+                      >+33 6 20 81 04 18</span
+                    >
+                  </span>
+                </a>
+                <button
+                  onClick="{{ copyPhone }}"
+                  style="
+                    flex: 0 0 auto;
+                    border: 1px solid #3a3a3a;
+                    background: none;
+                    color: #d0d0d0;
+                    border-radius: 999px;
+                    padding: 6px 12px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                  "
+                >
+                  {{ phoneCopyLabel }}
+                </button>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 12px 0;
+                  border-top: 1px solid #2a2a2a;
+                "
+              >
+                <a
+                  href="mailto:omar.errachid@icloud.com"
+                  style="
+                    flex: 1;
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    color: #fff;
+                  "
+                >
+                  <span
+                    style="
+                      flex: 0 0 36px;
+                      height: 36px;
+                      border-radius: 50%;
+                      background: #2a2a2a;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 15px;
+                      font-weight: 700;
+                    "
+                    >@</span
+                  >
+                  <span style="min-width: 0">
+                    <span
+                      style="display: block; font-size: 11px; color: #8c8c8c"
+                      >Email</span
+                    >
+                    <span
+                      style="
+                        display: block;
+                        font-size: 15px;
+                        font-weight: 600;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      "
+                      >omar.errachid@icloud.com</span
+                    >
+                  </span>
+                </a>
+                <button
+                  onClick="{{ copyEmail }}"
+                  style="
+                    flex: 0 0 auto;
+                    border: 1px solid #3a3a3a;
+                    background: none;
+                    color: #d0d0d0;
+                    border-radius: 999px;
+                    padding: 6px 12px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                  "
+                >
+                  {{ emailCopyLabel }}
+                </button>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  padding: 12px 0;
+                  border-top: 1px solid #2a2a2a;
+                "
+              >
+                <a
+                  href="https://www.linkedin.com/in/omar-errachid/"
+                  target="_blank"
+                  style="
+                    flex: 1;
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    color: #fff;
+                  "
+                >
+                  <span
+                    style="
+                      flex: 0 0 36px;
+                      height: 36px;
+                      border-radius: 50%;
+                      background: #2a2a2a;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 15px;
+                      font-weight: 700;
+                    "
+                    >in</span
+                  >
+                  <span style="min-width: 0">
+                    <span
+                      style="display: block; font-size: 11px; color: #8c8c8c"
+                      >LinkedIn</span
+                    >
+                    <span
+                      style="
+                        display: block;
+                        font-size: 15px;
+                        font-weight: 600;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      "
+                      >linkedin.com/in/omar-errachid</span
+                    >
+                  </span>
+                </a>
+              </div>
+              <div style="display: flex; gap: 10px; margin-top: 16px">
+                <a
+                  href="tel:+33620810418"
+                  style="
+                    flex: 1;
+                    text-align: center;
+                    background: #fff;
+                    color: #000;
+                    font-weight: 700;
+                    font-size: 15px;
+                    padding: 11px 0;
+                    border-radius: 4px;
+                  "
+                  >Appeler</a
+                >
+                <a
+                  href="mailto:omar.errachid@icloud.com"
+                  style="
+                    flex: 1;
+                    text-align: center;
+                    background: rgba(109, 109, 110, 0.7);
+                    color: #fff;
+                    font-weight: 700;
+                    font-size: 15px;
+                    padding: 11px 0;
+                    border-radius: 4px;
+                  "
+                  >Email</a
+                >
+              </div>
+              <a
+                href="contact.vcf"
+                download="Omar-Errachid-Zine.vcf"
+                style="
+                  display: block;
+                  margin-top: 10px;
+                  text-align: center;
+                  border: 1px solid #3a3a3a;
+                  color: #fff;
+                  font-weight: 600;
+                  font-size: 14px;
+                  padding: 10px 0;
+                  border-radius: 4px;
+                "
+                >Enregistrer dans mes contacts</a
+              >
+            </div>
+          </div>
+        </div>
+      </sc-if>
       </div>
     </x-dc>
     <script
@@ -1197,48 +1562,49 @@
     >
       class Component extends DCLogic {
         // intro : 'idle' (attente d'un tap pour autoriser le son) → 'playing' → 'done'
-        state = { tab: 'langues', openLang: null, intro: 'idle', scrolled: false };
+        state = { tab: 'langues', openLang: null, intro: 'idle', scrolled: false, contactOpen: false, copied: null };
         rowExp = React.createRef();
         rowForm = React.createRef();
         heroPhoto = React.createRef();
 
         // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
         // EXPÉRIENCES — pour chaque carte :
-        //   image : chemin de l'image de fond (ex: 'images/tf1.jpg'). '' = garde le dégradé `bg`.
-        //   logo  : chemin d'un logo à superposer (ex: 'images/tf1-logo.png'). '' = le nom `company` s'affiche en texte.
-        //   Déposez vos fichiers dans un dossier `images/` du projet.
+        //   image : vignette affichée en entier et centrée, sur un fond flouté de la même image. '' = garde le dégradé `bg`.
+        //   logo  : logo pleine largeur ('' = rien) ; logoCenter: true pour le centrer verticalement.
+        //   Toutes les images sont dans le dossier `Vignettes 2/`.
         experiences = [
-          { company: 'Marathon Studio', role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris', image: '', logo: 'images/marathon.webp', logoCenter: true, bg: '#ffffff' },
-          { company: 'Banijay', role: 'Assistant IP et adaptations littéraires', dates: 'Mai 2025 – Déc. 2025', city: 'Paris', image: 'images/banijay.png', logo: '', bg: '#5a0033' },
-          { company: 'TF1', role: 'Chef de projet digital', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'images/tf1.webp', bg: 'linear-gradient(90deg,#01168c,#500b64 50%,#9b0003)' },
+          { company: 'Marathon Studio', role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris', image: 'Vignettes 2/Principales - Pour Vous/marathon logo.jpeg', logo: '', bg: '#d2687e' },
+          { company: 'Banijay', role: 'Assistant IP et adaptations littéraires', dates: 'Mai 2025 – Déc. 2025', city: 'Paris', image: 'Vignettes 2/Principales - Pour Vous/Banijay group.png', logo: '', bg: '#5a0033' },
+          { company: 'TF1', role: 'Chef de projet digital', dates: 'Oct. 2024 – Avr. 2025', city: 'Boulogne', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
         formations = [
-          { rank: 1, school: 'ESCP', logo: 'images/escp-logo.png', bg: '#280092', fg: '#fff' },
-          { rank: 2, school: 'EM Lyon', logo: 'images/emlyon.png', bg: '#e2001a', fg: '#fff' },
-          { rank: 3, school: 'Cours Florent', logo: 'images/cours-florent.png', bg: '#0a0a0a', fg: '#fff' },
-          { rank: 4, school: 'LBU', logo: 'images/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
-          { rank: 5, school: 'IUT Lyon 1', logo: 'images/iut-logo.png', bg: '#e2007d', fg: '#fff' },
+          { rank: 1, school: 'ESCP', logo: 'Vignettes 2/Top 5 - Formations/escp-logo.png', bg: '#280092', fg: '#fff' },
+          { rank: 2, school: 'EM Lyon', logo: 'Vignettes 2/Top 5 - Formations/emlyon.png', bg: '#e2001a', fg: '#fff' },
+          { rank: 3, school: 'Cours Florent', logo: 'Vignettes 2/Top 5 - Formations/cours-florent.png', bg: '#0a0a0a', fg: '#fff' },
+          { rank: 4, school: 'LBU', logo: 'Vignettes 2/Top 5 - Formations/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
+          { rank: 5, school: 'IUT Lyon 1', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
         ];
         // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
+        //   full : true pour une vignette 16:9 déjà mise en page (affichée bord à bord, sans marge)
         pepites = [
-          { name: 'Alptis', logo: 'images/alptis.png', bg: '#fff', fg: '#0a6a3a' },
-          { name: 'Oppizi', logo: 'images/oppizi-logo.jpeg', bg: '#fff', fg: '#e5231a' },
-          { name: 'Equancy', logo: 'images/equancy-logo.svg', bg: '#fff', fg: '#222' },
+          { name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis.png', full: true, bg: '#469962', fg: '#fff' },
+          { name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi.png', full: true, bg: '#1a3552', fg: '#fff' },
+          { name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy.png', full: true, bg: '#cc115e', fg: '#fff' },
           { name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
 
           ];
         // JOBS ÉTUDIANTS — 6 affiches verticales (format 2:3, ex. 600×900 px) :
-        //   image : photo de fond qui remplit l'affiche ('' = couleur `bg` seule)
-        //   logo  : logo affiché en haut ('' = le nom `name` s'affiche en titre)
+        //   image : vignette verticale qui remplit toute l'affiche, logo déjà centré dedans
+        //   logo  : logo à superposer ('' = rien) ; sans image ni logo, le nom `name` s'affiche en titre
         //   role  : poste affiché en bas ('' = rien)
         collection = [
-          { name: 'Zara', role: '', image: '', logo: 'images/zara.svg', bg: '#fff', fg: '#111' },
-          { name: 'Confluence', role: '', image: '', logo: 'images/confluence.png', bg: '#fff', fg: '#1a2a7a' },
-          { name: 'Häagen-Dazs', role: '', image: '', logo: 'uploads/Ha%CC%88agen-Dazs_Logo.svg.webp', bg: '#fff', fg: '#6a0a2a' },
-          { name: 'Action', role: '', image: '', logo: 'images/action.png', bg: '#fff', fg: '#111' },
-          { name: 'Primark', role: '', image: '', logo: 'images/primark.png', bg: '#fff', fg: '#111' },
-          { name: 'Laboratoire Eurofins Biomnis', role: '', image: '', logo: '', bg: 'linear-gradient(160deg,#0f3a7a,#061a3a)', fg: '#fff' },
+          { name: 'Zara', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/zara.png', logo: '', bg: '#000', fg: '#fff' },
+          { name: 'Confluence', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Confluence.png', logo: '', bg: '#194294', fg: '#fff' },
+          { name: 'Häagen-Dazs', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Haagen-Dazs.jpg', logo: '', bg: '#630017', fg: '#fff' },
+          { name: 'Action', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Action.png', logo: '', bg: '#021a72', fg: '#fff' },
+          { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark.png', logo: '', bg: '#029ec4', fg: '#fff' },
+          { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins.png', logo: '', bg: '#06468e', fg: '#fff' },
         ];
         langues = [
           { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
@@ -1260,10 +1626,13 @@
           };
           window.addEventListener('scroll', this.onScroll, { passive: true });
           document.body.addEventListener('scroll', this.onScroll, { passive: true });
+          this.onKey = e => { if (e.key === 'Escape' && this.state.contactOpen) this.setState({ contactOpen: false }); };
+          window.addEventListener('keydown', this.onKey);
           if (this.props.intro === false) this.finishIntro();
         }
         componentWillUnmount() {
           window.removeEventListener('scroll', this.onScroll); document.body.removeEventListener('scroll', this.onScroll);
+          window.removeEventListener('keydown', this.onKey);
           clearInterval(this.revealTimer);
         }
 
@@ -1363,11 +1732,46 @@
           el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
         }
 
+        // --- Fiche contact ---
+        // Seul Safari sur iPhone/iPad affiche la vCard en fiche contact native.
+        // Partout ailleurs (Android, ordinateur, navigateurs intégrés aux applis) on affiche la fiche dans la page.
+        canOpenVcard() {
+          const ua = navigator.userAgent || '';
+          const iOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+          const otherBrowser = /CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|FB_IAB|Instagram|LinkedInApp|Twitter|Snapchat|Line\/|BytedanceWebview|musical_ly|TikTok/.test(ua);
+          return iOS && /Safari/.test(ua) && !otherBrowser;
+        }
+        copy(text, key) {
+          const done = () => {
+            this.setState({ copied: key });
+            clearTimeout(this.copyTimer);
+            this.copyTimer = setTimeout(() => this.setState({ copied: null }), 1600);
+          };
+          const fallback = () => {
+            const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', '');
+            t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t);
+            t.select(); try { if (document.execCommand('copy')) done(); } catch (e) {} t.remove();
+          };
+          if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+          else fallback();
+        }
+
         renderVals() {
-          const { tab, openLang, scrolled } = this.state;
+          const { tab, openLang, scrolled, contactOpen, copied } = this.state;
           const tabDefs = [['langues', 'Langues'], ['competences', 'Compétences'], ['autres', 'Autres']];
           return {
             intro: this.buildIntro(),
+            contactOpen,
+            openContactCard: e => {
+              if (this.canOpenVcard()) return;
+              if (e && e.preventDefault) e.preventDefault();
+              this.setState({ contactOpen: true });
+            },
+            closeContact: () => this.setState({ contactOpen: false }),
+            copyPhone: () => this.copy('+33 6 20 81 04 18', 'phone'),
+            copyEmail: () => this.copy('omar.errachid@icloud.com', 'email'),
+            phoneCopyLabel: copied === 'phone' ? 'Copié ✓' : 'Copier',
+            emailCopyLabel: copied === 'email' ? 'Copié ✓' : 'Copier',
             headerBg: scrolled ? '#141414' : 'linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,0) 100%)',
             showBadge: this.props.showBadge ?? true,
             rowExp: this.rowExp, rowForm: this.rowForm, heroPhoto: this.heroPhoto,
@@ -1375,8 +1779,8 @@
             nextForm: () => this.scroll(this.rowForm, 1),
             experiences: this.experiences.map(e => ({ ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? '50%' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
             formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo })),
-            pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo })),
-            collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
+            pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
+            collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
             competences: this.competences, autres: this.autres,
             langues: this.langues.map((l, i) => ({
               ...l,
