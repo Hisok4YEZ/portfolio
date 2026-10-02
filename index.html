@@ -829,9 +829,11 @@
                 transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             "
           >
-            Profil hybride combinant flair éditorial et rigueur de production.
-            Ma mission : dénicher et faire émerger les futurs projets phares du
-            studio. Début du tournage : immédiatement.
+            Profil orienté développement et production audiovisuelle, avec une
+            expérience en analyse éditoriale, suivi de projets et accompagnement
+            de productions. À l’aise dans l’identification de projets, l’analyse
+            de contenus et la coordination des différentes étapes de
+            développement et de production.
           </p>
           <div
             data-m="btns"
@@ -1218,7 +1220,7 @@
             data-m="row-title"
             style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
           >
-            Des pépites pour vous
+            Ça pourrait vous intéresser
           </h2>
           <div
             data-m="pep-grid"
@@ -1505,6 +1507,14 @@
                     "
                   >
                     {{ l.flag }}
+                    <sc-if
+                      value="{{ l.hasArt }}"
+                      hint-placeholder-val="{{ false }}"
+                    >
+                      <span
+                        style="width:52px;height:38px;border-radius:5px;background:{{ l.art }}"
+                      ></span>
+                    </sc-if>
                   </div>
                   <div style="font-size: 13px; font-weight: 700">
                     {{ l.name }}
@@ -1964,7 +1974,7 @@
 
         // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
         // FICHES D'EXPÉRIENCES — mini-carte au survol et fiche complète au clic.
-        // Une entrée par `id`, utilisée par « Dernières nouveautés » et « Des pépites pour vous ».
+        // Une entrée par `id`, utilisée par « Dernières nouveautés » et « Ça pourrait vous intéresser ».
         //   role, dates, city : intitulé, période (sans durée ni contrat) et ville
         //   kw : 3 mots-clés (mini-carte) ; bold : phrase en gras ; syn : synopsis
         //   genres, dist : colonne de droite ; prog : « Un programme » ('' = pas de ligne)
@@ -1973,20 +1983,19 @@
           marathon: {
             role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris',
             kw: ['Développement', 'Production', 'Coordination'],
-            bold: 'Bras droit de la productrice, présidente de la filiale',
-            syn: 'Assistant de la productrice de Marathon Studio (Terence Films) : lecture et analyse de projets films et séries, accueil des pitchs, montage de dossiers de financement et coordination de la production.',
+            bold: 'Chargé de mission auprès de la productrice, présidente de la filiale',
+            syn: 'Lecture et analyse de projets films et séries, accueil des pitchs, montage de dossiers de financement et coordination de la production, assistance de la productrice (agenda, réunions, CR)',
             genres: 'Développement · Production · Analyse éditoriale · Financement',
             dist: 'Créateurs, auteurs, producteurs, agents, réalisateurs, diffuseurs, institutions (CNC, Région Grand Est), équipes techniques',
             prog: 'Rigoureux · Réactif · Discret (informations confidentielles)',
             eps: [
               ['Lecture et analyse éditoriale', "Lecture et analyse de scénarios, bibles, traitements et notes d'intention ; rédaction de fiches de lecture et de recommandations artistiques."],
-              ['Développement éditorial', "Accompagnement des auteurs dans la structuration de leurs arcs narratifs ; suivi du développement d'un projet d'animation."],
+              ['Développement éditorial', 'Accompagnement des auteurs dans la structuration de leurs arcs narratifs ; suivi du développement de projets séries, unitaires et animation.'],
               ["Veille et sourcing d'adaptations", "Identification de nouveaux concepts et d'opportunités d'adaptation (IP) ; analyse du marché, des formats et de la diffusion ; recommandations aux diffuseurs."],
-              ['Pipeline de développement', "Centralisation des soumissions et des pitchs des créateurs, auteurs, producteurs et agents ; coordination du pipeline jusqu'à la clôture des dossiers."],
+              ['Pipeline de développement', 'Centralisation des soumissions et des pitchs des créateurs, auteurs, producteurs et agents ; coordination des projets.'],
               ['Talents et partenaires', 'Recherche, sélection et coordination de talents et de partenaires artistiques ; échanges avec agents, diffuseurs, coproducteurs et équipes techniques.'],
               ['Dossiers de présentation et de financement', "Préparation de dossiers de présentation (synopsis, bibles, pitch decks) ; participation au montage de demandes d'aides CNC et Région Grand Est."],
               ['Coordination de production et tournage', 'Coordination logistique de production (planning, budget, préproduction) ; gestion des sujets opérationnels au tournage et des journées presse.'],
-              ['Post-production et administratif', "Coordination des prestataires de post-production et suivi des rushes ; préparation d'une bande-annonce, des dossiers de production et des conventions."],
               ['Agenda, réunions et pitchs', "Gestion de l'agenda, des déplacements et des événements de la productrice ; préparation des réunions et des pitchs (notes de synthèse, comptes rendus) ; suivi des projets."],
             ],
           },
@@ -1999,12 +2008,12 @@
             dist: 'Directeur IP / Formats / Book IP, équipe éditoriale fiction, filiales françaises et internationales, auteurs, scénaristes, agents, éditeurs, Market Research, Banijay Rights, PR',
             prog: 'Curieux · Structuré · Autonome',
             eps: [
-              ['Veille IP et formats', 'Repérage de séries, romans et concepts sur différents territoires ; évaluation du potentiel créatif et commercial.'],
-              ["Lecture d'œuvres littéraires", "Lecture, notes de lecture, potentiel audiovisuel et droits d'adaptation."],
-              ['Analyses de marché', 'Benchmarks, notes stratégiques, tableaux et listings de veille concurrentielle.'],
-              ['Circulation des IP', 'Coordination entre filiales françaises et internationales ; notes par pays ou par producteur.'],
-              ['Communauté créative', 'Relations avec auteurs, scénaristes, agents, éditeurs ; recherche de partenaires et coproducteurs.'],
-              ['Outils et suivi', "Suivi des droits d'adaptation et des contrats associés."],
+              ['Veille IP et formats', 'Repérage de séries, romans et concepts sur différents territoires, avec évaluation de leur potentiel créatif et commercial.'],
+              ["Lecture d'œuvres littéraires", 'Lecture d’œuvres et de manuscrits, rédaction de notes de lecture et évaluation de leur potentiel audiovisuel et des droits d’adaptation.'],
+              ['Analyses de marché', 'Réalisation de benchmarks, de notes stratégiques et d’outils de veille sur les tendances et la concurrence.'],
+              ['Circulation des IP', 'Coordination de la circulation des IP entre les différentes filiales françaises et internationales du groupe.'],
+              ['Communauté créative', 'Échanges avec auteurs, scénaristes, agents et éditeurs, ainsi que recherche de partenaires et de coproducteurs.'],
+              ['Outils et suivi', "Création d’outils pour le suivi des droits d'adaptation et des contrats associés."],
             ],
           },
           tf1: {
@@ -2016,7 +2025,7 @@
             dist: 'Équipes éditoriales, marketing éditorial, CRM, social media, publicité, produit, équipes techniques, direction',
             prog: 'Analytique · Pédagogue · Orienté résultats',
             eps: [
-              ['Pilotage transverse', 'Projets digitaux menés en parallèle avec les équipes éditoriales, marketing, CRM, social media, publicité et produit.'],
+              ['Pilotage transverse', 'Projets digitaux menés avec les équipes éditoriales, marketing, CRM, social media, publicité et produit.'],
               ['KPI et tableaux de bord', 'Définition et suivi des KPI ; création de tableaux de bord et automatisation des reportings (Tableau).'],
               ['Performance TF1+ / MYTF1', 'Suivi des contenus et des usages ; recommandations sur la mise en avant des programmes.'],
               ['Applications et plateforme', 'Pilotage de TF1 Info et MYTF1 ; mise en place de TF1+ avec produit et tech ; ateliers métiers, User Stories (Jira, Confluence).'],
@@ -2026,15 +2035,15 @@
           oppizi: {
             role: 'Operations City Manager', dates: 'Janv. 2022 – Oct. 2022', city: 'Lyon',
             kw: ['Opérations', 'Management', 'Campagnes'],
-            bold: "Une équipe d'une trentaine de freelances à piloter sur le terrain",
-            syn: "Recrutement, formation et encadrement d'équipes de distribution (Brand Ambassadors) ; gestion de campagnes de A à Z, de la préparation au reporting.",
+            bold: 'Management d’une équipe de distribution de flyers',
+            syn: 'Gestion d’équipes de distribution (Brand Ambassadors) d’environ 30 freelances et suivi de campagnes de leur préparation à leur clôture, avec pilotage des résultats et reporting.',
             genres: 'Management terrain · Opérations · Gestion de campagne · KPI',
             dist: 'Brand Ambassadors (environ 30 freelances), clients, fournisseurs, lieux de distribution',
             prog: 'Réactif · Organisé · Leader',
             eps: [
               ['Constitution des équipes', "Composition, recrutement, formation et encadrement d'environ 30 freelances."],
-              ['Campagnes de A à Z', 'Préparation, suivi des résultats, clôture et reporting ; suivi des KPI et du budget.'],
-              ['Relation client', 'Interlocuteur des clients pour les nouvelles campagnes.'],
+              ['Campagnes de A à Z', 'Préparation et suivi des campagnes jusqu’à leur clôture, avec reporting des résultats, suivi des KPI et du budget.'],
+              ['Relation client', 'Gestion de la relation avec les clients et accompagnement dans la préparation de nouvelles campagnes.'],
               ['Logistique terrain', 'Repérage des lieux de distribution, gestion des stocks, équipements et uniformes ; résolution des problèmes opérationnels.'],
             ],
           },
@@ -2078,7 +2087,7 @@
             prog: '',
             eps: [
               ['Calendrier éditorial', 'Planification du calendrier de publication ; production de visuels, photos et vidéos de mise en scène des bijoux.'],
-              ['Partenariats créatrices', 'Gestion des partenariats avec les créatrices de contenu et des envois de dotations.'],
+              ['Partenariats créatrices', 'Gestion des partenariats avec les créatrices de contenu.'],
               ['Commandes et stocks', 'Suivi des stocks et des inventaires, relation avec les fournisseurs ; préparation et expédition soignée des commandes, traitement des retours.'],
               ['Mise en ligne et promotion', 'Mise en ligne des nouveautés et optimisation des fiches produits (descriptions, visuels) ; création de bannières, mise en place de codes promo et lancements de collections.'],
             ],
@@ -2124,16 +2133,56 @@
           { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark.png', logo: '', bg: '#029ec4', fg: '#fff' },
           { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins.png', logo: '', bg: '#06468e', fg: '#fff' },
         ];
+        // LANGUES — flag : emoji du drapeau ; art : drapeau dessiné en CSS quand l'emoji n'existe pas partout (catalan)
         langues = [
           { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
           { name: 'Espagnol', flag: '🇪🇸', level: 'Courant · C1' },
-          { name: 'Arabe', flag: '🇲🇦', level: 'Courant C1' },
+          { name: 'Arabe', flag: '🇲🇦', level: 'Courant · C1' },
           { name: 'Anglais', flag: '🇬🇧', level: 'Courant · C1' },
           { name: 'Italien', flag: '🇮🇹', level: 'Intermédiaire · B1' },
           { name: 'Portugais', flag: '🇵🇹', level: 'Notions · A2' },
+          { name: 'Catalan', flag: '', art: 'repeating-linear-gradient(180deg,#fcdd09 0 11.11%,#da121a 11.11% 22.22%)', level: 'Courant · C1' },
         ];
-        competences = ['Développement de projets', 'Lecture de scénarios', 'Pitch & note d’intention', 'Budget prévisionnel', 'Casting', 'Suite Adobe', 'Final Cut Pro', 'Notion / Trello', 'Veille éditoriale'];
-        autres = ['Permis B', 'Musique · guitare', 'Photographie', 'Bénévolat festival', 'Course à pied'];
+        competences = [
+          'Développement de projets audiovisuels',
+          'Suivi de production',
+          'Analyse éditoriale',
+          'Lecture et analyse de scénarios',
+          'Adaptation littéraire',
+          'Recherche et évaluation d’IP',
+          'Suivi d’auteurs et scénaristes',
+          'Préparation de dossiers de production',
+          'Suivi budgétaire',
+          'Coordination de projets',
+          'Organisation et gestion des priorités',
+          'Gestion de planning',
+          'Suivi administratif',
+          'Reporting et analyse de données',
+          'Veille et analyse de marché',
+          'Coordination d’équipes',
+          'Recrutement et formation',
+          'Management d’équipe',
+          'Gestion opérationnelle',
+          'Gestion logistique',
+          'Relation client',
+          'Suivi des KPI',
+          'Gestion de campagnes',
+          'Maîtrise d’Excel',
+          'Création de tableaux de suivi',
+          'Rédaction de synthèses et présentations',
+        ];
+        autres = [
+          '🚗 Permis B',
+          '🎸 Guitare',
+          '🎹 Piano',
+          '🥊 Boxe',
+          '🎾 Tennis',
+          '🏊 Piscine',
+          '📣 Cheerleading',
+          '🎭 Théâtre',
+          '🔨 Bricolage',
+          '💻 Nouvelles technologies',
+        ];
         // ====== FIN DES DONNÉES ======
 
         componentDidMount() {
@@ -2277,7 +2326,9 @@
         showPop(card) {
           const id = card.dataset.fiche, f = this.fiches[id];
           if (!f) return;
-          const pop = this.pop, r = card.getBoundingClientRect(), w = Math.min(Math.max(r.width * 1.24, 280), innerWidth - 16);
+          const pop = this.pop, r = card.getBoundingClientRect();
+          const grow = card.dataset.m === 'exp-card' ? 1.1 : 1.24; // grandes vignettes : légère augmentation
+          const w = Math.min(Math.max(r.width * grow, 280), innerWidth - 16);
           const chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
           pop.innerHTML = this.banner(id, '', 'aspect-ratio:16/9;')
             + `<div class="cv-info"><div class="cv-top"><span class="cv-pill">${this.esc(f.role)}</span>`
@@ -2492,7 +2543,7 @@
             pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
             competences: this.competences, autres: this.autres,
-            langues: this.langues,
+            langues: this.langues.map(l => ({ ...l, hasArt: !!l.art })),
             tabs: tabDefs.map(([id, label]) => ({
               label, select: () => this.setState({ tab: id }),
               color: tab === id ? '#fff' : '#B3B3B3', border: tab === id ? '#E50914' : 'transparent',
