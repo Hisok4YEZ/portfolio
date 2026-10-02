@@ -109,6 +109,65 @@
               opacity: 0.5;
             }
           }
+          /* --- TOP 5 FORMATIONS : panneau diplôme · années · ville --- */
+          [data-m="f-item"] {
+            outline: none;
+          }
+          [data-m="f-info"] {
+            position: relative;
+            z-index: 1;
+            align-self: stretch;
+            width: 0;
+            overflow: hidden;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            transition:
+              width 0.35s ease,
+              margin 0.35s ease;
+          }
+          [data-m="f-info"]::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--c);
+            opacity: 0.5;
+          }
+          [data-m="f-info"]::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: var(--a);
+          }
+          [data-m="f-text"] {
+            position: relative;
+            width: 230px;
+            padding: 16px 18px 16px 26px;
+          }
+          [data-m="f-text"] b {
+            display: block;
+            font-size: 15px;
+            line-height: 1.3;
+            margin-bottom: 6px;
+          }
+          [data-m="f-text"] small {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+          }
+          [data-m="f-item"].open [data-m="f-info"],
+          [data-m="f-item"]:focus-visible [data-m="f-info"] {
+            width: 230px;
+            margin: 0 -8px 0 10px;
+          }
+          @media (hover: hover) {
+            [data-m="f-item"]:hover [data-m="f-info"] {
+              width: 230px;
+              margin: 0 -8px 0 10px;
+            }
+          }
           /* --- JOBS ÉTUDIANTS : zoom avec contour blanc décollé au survol --- */
           @media (hover: hover) {
             [data-m="job-poster"]:hover {
@@ -171,12 +230,34 @@
             aspect-ratio: var(--r, 1.78);
           }
           .cv-ban .cv-fit.fw {
-            -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
-            mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+            -webkit-mask-image: linear-gradient(
+              transparent,
+              #000 10%,
+              #000 90%,
+              transparent
+            );
+            mask-image: linear-gradient(
+              transparent,
+              #000 10%,
+              #000 90%,
+              transparent
+            );
           }
           .cv-ban .cv-fit.fh {
-            -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+            -webkit-mask-image: linear-gradient(
+              90deg,
+              transparent,
+              #000 10%,
+              #000 90%,
+              transparent
+            );
+            mask-image: linear-gradient(
+              90deg,
+              transparent,
+              #000 10%,
+              #000 90%,
+              transparent
+            );
           }
           /* format presque identique au bandeau : l'image le remplit entièrement */
           .cv-ban .cv-fit.fc {
@@ -291,7 +372,11 @@
           .cv-shade {
             position: absolute;
             inset: 0;
-            background: linear-gradient(0deg, #181818 0%, rgba(24, 24, 24, 0) 45%);
+            background: linear-gradient(
+              0deg,
+              #181818 0%,
+              rgba(24, 24, 24, 0) 45%
+            );
           }
           .cv-fiche .cv-pill {
             position: absolute;
@@ -360,6 +445,9 @@
           }
           .cv-ep span {
             color: #b3b3b3;
+          }
+          .cv-ep:last-child {
+            border-bottom: 0;
           }
           @media (max-width: 700px) {
             .cv-ov {
@@ -457,6 +545,12 @@
             }
             [data-m="row-title"] {
               font-size: 17px !important;
+            }
+            [data-m="f-text"] {
+              width: 190px;
+            }
+            [data-m="f-item"].open [data-m="f-info"] {
+              width: 190px;
             }
             [data-m="rank"] {
               font-size: 96px !important;
@@ -573,8 +667,8 @@
             top: 0;
             width: 58%;
             height: 100%;
-            background: #1c1c1c url(&quot;Vignettes 2/Hero/hero.png&quot;) center top /
-              cover no-repeat;
+            background: #1c1c1c url(&quot;Vignettes 2/Hero/hero.png&quot;)
+              center top / cover no-repeat;
             -webkit-mask-image: linear-gradient(
               90deg,
               transparent 0%,
@@ -900,8 +994,18 @@
                       width: 100%;
                       height: auto;
                       transform: translateY(-50%);
-                      -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
-                      mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+                      -webkit-mask-image: linear-gradient(
+                        transparent,
+                        #000 14%,
+                        #000 86%,
+                        transparent
+                      );
+                      mask-image: linear-gradient(
+                        transparent,
+                        #000 14%,
+                        #000 86%,
+                        transparent
+                      );
                     "
                   />
                 </sc-if>
@@ -1007,17 +1111,10 @@
             "
           >
             <sc-for list="{{ formations }}" as="f" hint-placeholder-count="5">
+              <!-- FORMATION : au survol (ou appui sur mobile), un panneau glisse entre le chiffre et le logo -->
               <div
-                style="
-                  flex: 0 0 auto;
-                  display: flex;
-                  align-items: flex-end;
-                  scroll-snap-align: start;
-                  transition: transform 0.3s ease;
-                  cursor: pointer;
-                "
-                style-hover="{{ cardHover }}"
-                style-active="{{ press }}"
+                data-m="f-item"
+                style="flex:0 0 auto;display:flex;align-items:flex-end;scroll-snap-align:start;cursor:pointer;--c:{{ f.bg }};--a:{{ f.accent }}"
               >
                 <div
                   data-m="rank"
@@ -1035,6 +1132,12 @@
                   "
                 >
                   {{ f.rank }}
+                </div>
+                <div data-m="f-info">
+                  <div data-m="f-text">
+                    <b>{{ f.deg }}</b>
+                    <small>{{ f.years }} • {{ f.city }}</small>
+                  </div>
                 </div>
                 <div
                   style="width:clamp(130px,15vw,180px);aspect-ratio:1;border-radius:6px;background:{{ f.bg }};color:{{ f.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 14px 12px;text-align:center;position:relative;z-index:2;overflow:hidden"
@@ -1256,7 +1359,8 @@
               overflow-y: hidden;
               scroll-snap-type: x mandatory;
               scrollbar-width: none;
-              padding: 26px 4vw 26px 16px;
+              padding: 26px 4vw 26px 20px;
+              scroll-padding-left: 20px;
             "
           >
             <sc-for list="{{ collection }}" as="c" hint-placeholder-count="6">
@@ -1376,36 +1480,41 @@
           <sc-if value="{{ isLangues }}" hint-placeholder-val="{{ true }}">
             <div style="display: flex; flex-wrap: wrap; gap: 22px">
               <sc-for list="{{ langues }}" as="l" hint-placeholder-count="5">
-                <button
-                  onClick="{{ l.toggle }}"
+                <div
                   style="
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     gap: 10px;
-                    background: none;
-                    border: 0;
-                    cursor: pointer;
                     color: #fff;
-                    padding: 0;
-                    transition: transform 0.25s;
                   "
-                  style-hover="{{ flagHover }}"
-                  style-active="{{ press }}"
                 >
                   <div
                     data-m="flag"
-                    style="width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;background:#1f1f1f;box-shadow:0 8px 20px rgba(0,0,0,.5);border:3px solid {{ l.ring }};transition:border-color .25s,box-shadow .25s"
+                    style="
+                      width: 92px;
+                      height: 92px;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-size: 52px;
+                      background: #1f1f1f;
+                      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+                      border: 3px solid #2a2a2a;
+                    "
                   >
                     {{ l.flag }}
                   </div>
                   <div style="font-size: 13px; font-weight: 700">
                     {{ l.name }}
                   </div>
-                  <div style="font-size: 12px; color: #f5b400; height: 16px">
-                    {{ l.shownLevel }}
+                  <div
+                    style="font-size: 12px; color: #f5b400; text-align: center"
+                  >
+                    {{ l.level }}
                   </div>
-                </button>
+                </div>
               </sc-for>
             </div>
           </sc-if>
@@ -1487,353 +1596,358 @@
           <span>Paris, France</span>
         </div>
 
-      <!-- ============ FICHE CONTACT (affichée quand la vCard ne peut pas s'ouvrir joliment) ============ -->
-      <!-- Android, ordinateur, navigateurs intégrés (Instagram, LinkedIn…) : les infos s'affichent ici -->
-      <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ false }}">
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Fiche contact"
-          style="
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-          "
-        >
+        <!-- ============ FICHE CONTACT (affichée quand la vCard ne peut pas s'ouvrir joliment) ============ -->
+        <!-- Android, ordinateur, navigateurs intégrés (Instagram, LinkedIn…) : les infos s'affichent ici -->
+        <sc-if value="{{ contactOpen }}" hint-placeholder-val="{{ false }}">
           <div
-            onClick="{{ closeContact }}"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Fiche contact"
             style="
-              position: absolute;
+              position: fixed;
               inset: 0;
-              background: rgba(0, 0, 0, 0.72);
-              backdrop-filter: blur(6px);
-              -webkit-backdrop-filter: blur(6px);
-            "
-          ></div>
-          <div
-            style="
-              position: relative;
-              width: 100%;
-              max-width: 400px;
-              max-height: calc(100vh - 32px);
-              overflow-y: auto;
-              background: #181818;
-              border-radius: 12px;
-              box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+              z-index: 1000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 16px;
             "
           >
             <div
-              style="
-                height: 96px;
-                background: linear-gradient(135deg, #e50914 0%, #7a0409 60%, #2a0204 100%);
-              "
-            ></div>
-            <button
               onClick="{{ closeContact }}"
-              aria-label="Fermer"
               style="
                 position: absolute;
-                top: 12px;
-                right: 12px;
-                width: 34px;
-                height: 34px;
-                border-radius: 50%;
-                border: 0;
-                background: rgba(0, 0, 0, 0.45);
-                color: #fff;
-                font-size: 20px;
-                line-height: 1;
-                cursor: pointer;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.72);
+                backdrop-filter: blur(6px);
+                -webkit-backdrop-filter: blur(6px);
+              "
+            ></div>
+            <div
+              style="
+                position: relative;
+                width: 100%;
+                max-width: 400px;
+                max-height: calc(100vh - 32px);
+                overflow-y: auto;
+                background: #181818;
+                border-radius: 12px;
+                box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
               "
             >
-              ×
-            </button>
-            <div style="padding: 0 22px 22px; margin-top: -48px">
-              <img
-                src="Vignettes 2/Hero/hero.png"
-                alt="Omar Errachid Zine"
+              <div
                 style="
-                  width: 96px;
                   height: 96px;
+                  background: linear-gradient(
+                    135deg,
+                    #e50914 0%,
+                    #7a0409 60%,
+                    #2a0204 100%
+                  );
+                "
+              ></div>
+              <button
+                onClick="{{ closeContact }}"
+                aria-label="Fermer"
+                style="
+                  position: absolute;
+                  top: 12px;
+                  right: 12px;
+                  width: 34px;
+                  height: 34px;
                   border-radius: 50%;
-                  object-fit: cover;
-                  object-position: center top;
-                  border: 4px solid #181818;
-                  background: #222;
-                "
-              />
-              <div
-                style="
-                  margin-top: 10px;
-                  font-family: &quot;Bebas Neue&quot;, sans-serif;
-                  font-size: 34px;
+                  border: 0;
+                  background: rgba(0, 0, 0, 0.45);
+                  color: #fff;
+                  font-size: 20px;
                   line-height: 1;
-                  letter-spacing: 0.03em;
-                  color: #fff;
+                  cursor: pointer;
                 "
               >
-                Omar Errachid Zine
-              </div>
-              <div
-                style="
-                  display: inline-block;
-                  margin: 8px 0 14px;
-                  background: #e50914;
-                  color: #fff;
-                  font-size: 12px;
-                  font-weight: 700;
-                  padding: 4px 10px;
-                  border-radius: 2px;
-                "
-              >
-                Chargé de Production / Développement
-              </div>
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 12px;
-                  padding: 12px 0;
-                  border-top: 1px solid #2a2a2a;
-                "
-              >
-                <a
-                  href="tel:+33620810418"
+                ×
+              </button>
+              <div style="padding: 0 22px 22px; margin-top: -48px">
+                <img
+                  src="Vignettes 2/Hero/hero.png"
+                  alt="Omar Errachid Zine"
                   style="
-                    flex: 1;
-                    min-width: 0;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
+                    width: 96px;
+                    height: 96px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    object-position: center top;
+                    border: 4px solid #181818;
+                    background: #222;
+                  "
+                />
+                <div
+                  style="
+                    margin-top: 10px;
+                    font-family: &quot;Bebas Neue&quot;, sans-serif;
+                    font-size: 34px;
+                    line-height: 1;
+                    letter-spacing: 0.03em;
                     color: #fff;
                   "
                 >
-                  <span
-                    style="
-                      flex: 0 0 36px;
-                      height: 36px;
-                      border-radius: 50%;
-                      background: #2a2a2a;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 15px;
-                      font-weight: 700;
-                    "
-                    >✆</span
-                  >
-                  <span style="min-width: 0">
-                    <span
-                      style="display: block; font-size: 11px; color: #8c8c8c"
-                      >Téléphone</span
-                    >
-                    <span
-                      style="
-                        display: block;
-                        font-size: 15px;
-                        font-weight: 600;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                      "
-                      >+33 6 20 81 04 18</span
-                    >
-                  </span>
-                </a>
-                <button
-                  onClick="{{ copyPhone }}"
+                  Omar Errachid Zine
+                </div>
+                <div
                   style="
-                    flex: 0 0 auto;
-                    border: 1px solid #3a3a3a;
-                    background: none;
-                    color: #d0d0d0;
-                    border-radius: 999px;
-                    padding: 6px 12px;
+                    display: inline-block;
+                    margin: 8px 0 14px;
+                    background: #e50914;
+                    color: #fff;
                     font-size: 12px;
-                    font-weight: 600;
-                    cursor: pointer;
-                  "
-                >
-                  {{ phoneCopyLabel }}
-                </button>
-              </div>
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 12px;
-                  padding: 12px 0;
-                  border-top: 1px solid #2a2a2a;
-                "
-              >
-                <a
-                  href="mailto:omar.errachid@icloud.com"
-                  style="
-                    flex: 1;
-                    min-width: 0;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    color: #fff;
-                  "
-                >
-                  <span
-                    style="
-                      flex: 0 0 36px;
-                      height: 36px;
-                      border-radius: 50%;
-                      background: #2a2a2a;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 15px;
-                      font-weight: 700;
-                    "
-                    >@</span
-                  >
-                  <span style="min-width: 0">
-                    <span
-                      style="display: block; font-size: 11px; color: #8c8c8c"
-                      >Email</span
-                    >
-                    <span
-                      style="
-                        display: block;
-                        font-size: 15px;
-                        font-weight: 600;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                      "
-                      >omar.errachid@icloud.com</span
-                    >
-                  </span>
-                </a>
-                <button
-                  onClick="{{ copyEmail }}"
-                  style="
-                    flex: 0 0 auto;
-                    border: 1px solid #3a3a3a;
-                    background: none;
-                    color: #d0d0d0;
-                    border-radius: 999px;
-                    padding: 6px 12px;
-                    font-size: 12px;
-                    font-weight: 600;
-                    cursor: pointer;
-                  "
-                >
-                  {{ emailCopyLabel }}
-                </button>
-              </div>
-              <div
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 12px;
-                  padding: 12px 0;
-                  border-top: 1px solid #2a2a2a;
-                "
-              >
-                <a
-                  href="https://www.linkedin.com/in/omar-errachid/"
-                  target="_blank"
-                  style="
-                    flex: 1;
-                    min-width: 0;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    color: #fff;
-                  "
-                >
-                  <span
-                    style="
-                      flex: 0 0 36px;
-                      height: 36px;
-                      border-radius: 50%;
-                      background: #2a2a2a;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      font-size: 15px;
-                      font-weight: 700;
-                    "
-                    >in</span
-                  >
-                  <span style="min-width: 0">
-                    <span
-                      style="display: block; font-size: 11px; color: #8c8c8c"
-                      >LinkedIn</span
-                    >
-                    <span
-                      style="
-                        display: block;
-                        font-size: 15px;
-                        font-weight: 600;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                      "
-                      >linkedin.com/in/omar-errachid</span
-                    >
-                  </span>
-                </a>
-              </div>
-              <div style="display: flex; gap: 10px; margin-top: 16px">
-                <a
-                  href="tel:+33620810418"
-                  style="
-                    flex: 1;
-                    text-align: center;
-                    background: #fff;
-                    color: #000;
                     font-weight: 700;
-                    font-size: 15px;
-                    padding: 11px 0;
+                    padding: 4px 10px;
+                    border-radius: 2px;
+                  "
+                >
+                  Chargé de Production / Développement
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 0;
+                    border-top: 1px solid #2a2a2a;
+                  "
+                >
+                  <a
+                    href="tel:+33620810418"
+                    style="
+                      flex: 1;
+                      min-width: 0;
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      color: #fff;
+                    "
+                  >
+                    <span
+                      style="
+                        flex: 0 0 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        background: #2a2a2a;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        font-weight: 700;
+                      "
+                      >✆</span
+                    >
+                    <span style="min-width: 0">
+                      <span
+                        style="display: block; font-size: 11px; color: #8c8c8c"
+                        >Téléphone</span
+                      >
+                      <span
+                        style="
+                          display: block;
+                          font-size: 15px;
+                          font-weight: 600;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                        "
+                        >+33 6 20 81 04 18</span
+                      >
+                    </span>
+                  </a>
+                  <button
+                    onClick="{{ copyPhone }}"
+                    style="
+                      flex: 0 0 auto;
+                      border: 1px solid #3a3a3a;
+                      background: none;
+                      color: #d0d0d0;
+                      border-radius: 999px;
+                      padding: 6px 12px;
+                      font-size: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                    "
+                  >
+                    {{ phoneCopyLabel }}
+                  </button>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 0;
+                    border-top: 1px solid #2a2a2a;
+                  "
+                >
+                  <a
+                    href="mailto:omar.errachid@icloud.com"
+                    style="
+                      flex: 1;
+                      min-width: 0;
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      color: #fff;
+                    "
+                  >
+                    <span
+                      style="
+                        flex: 0 0 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        background: #2a2a2a;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        font-weight: 700;
+                      "
+                      >@</span
+                    >
+                    <span style="min-width: 0">
+                      <span
+                        style="display: block; font-size: 11px; color: #8c8c8c"
+                        >Email</span
+                      >
+                      <span
+                        style="
+                          display: block;
+                          font-size: 15px;
+                          font-weight: 600;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                        "
+                        >omar.errachid@icloud.com</span
+                      >
+                    </span>
+                  </a>
+                  <button
+                    onClick="{{ copyEmail }}"
+                    style="
+                      flex: 0 0 auto;
+                      border: 1px solid #3a3a3a;
+                      background: none;
+                      color: #d0d0d0;
+                      border-radius: 999px;
+                      padding: 6px 12px;
+                      font-size: 12px;
+                      font-weight: 600;
+                      cursor: pointer;
+                    "
+                  >
+                    {{ emailCopyLabel }}
+                  </button>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 0;
+                    border-top: 1px solid #2a2a2a;
+                  "
+                >
+                  <a
+                    href="https://www.linkedin.com/in/omar-errachid/"
+                    target="_blank"
+                    style="
+                      flex: 1;
+                      min-width: 0;
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      color: #fff;
+                    "
+                  >
+                    <span
+                      style="
+                        flex: 0 0 36px;
+                        height: 36px;
+                        border-radius: 50%;
+                        background: #2a2a2a;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        font-weight: 700;
+                      "
+                      >in</span
+                    >
+                    <span style="min-width: 0">
+                      <span
+                        style="display: block; font-size: 11px; color: #8c8c8c"
+                        >LinkedIn</span
+                      >
+                      <span
+                        style="
+                          display: block;
+                          font-size: 15px;
+                          font-weight: 600;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          white-space: nowrap;
+                        "
+                        >linkedin.com/in/omar-errachid</span
+                      >
+                    </span>
+                  </a>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 16px">
+                  <a
+                    href="tel:+33620810418"
+                    style="
+                      flex: 1;
+                      text-align: center;
+                      background: #fff;
+                      color: #000;
+                      font-weight: 700;
+                      font-size: 15px;
+                      padding: 11px 0;
+                      border-radius: 4px;
+                    "
+                    >Appeler</a
+                  >
+                  <a
+                    href="mailto:omar.errachid@icloud.com"
+                    style="
+                      flex: 1;
+                      text-align: center;
+                      background: rgba(109, 109, 110, 0.7);
+                      color: #fff;
+                      font-weight: 700;
+                      font-size: 15px;
+                      padding: 11px 0;
+                      border-radius: 4px;
+                    "
+                    >Email</a
+                  >
+                </div>
+                <a
+                  href="contact.vcf"
+                  download="Omar-Errachid-Zine.vcf"
+                  style="
+                    display: block;
+                    margin-top: 10px;
+                    text-align: center;
+                    border: 1px solid #3a3a3a;
+                    color: #fff;
+                    font-weight: 600;
+                    font-size: 14px;
+                    padding: 10px 0;
                     border-radius: 4px;
                   "
-                  >Appeler</a
-                >
-                <a
-                  href="mailto:omar.errachid@icloud.com"
-                  style="
-                    flex: 1;
-                    text-align: center;
-                    background: rgba(109, 109, 110, 0.7);
-                    color: #fff;
-                    font-weight: 700;
-                    font-size: 15px;
-                    padding: 11px 0;
-                    border-radius: 4px;
-                  "
-                  >Email</a
+                  >Enregistrer dans mes contacts</a
                 >
               </div>
-              <a
-                href="contact.vcf"
-                download="Omar-Errachid-Zine.vcf"
-                style="
-                  display: block;
-                  margin-top: 10px;
-                  text-align: center;
-                  border: 1px solid #3a3a3a;
-                  color: #fff;
-                  font-weight: 600;
-                  font-size: 14px;
-                  padding: 10px 0;
-                  border-radius: 4px;
-                "
-                >Enregistrer dans mes contacts</a
-              >
             </div>
           </div>
-        </div>
-      </sc-if>
+        </sc-if>
       </div>
     </x-dc>
     <script
@@ -1843,7 +1957,7 @@
     >
       class Component extends DCLogic {
         // intro : 'idle' (attente d'un tap pour autoriser le son) → 'playing' → 'done'
-        state = { tab: 'langues', openLang: null, intro: 'idle', scrolled: false, contactOpen: false, copied: null };
+        state = { tab: 'langues', intro: 'idle', scrolled: false, contactOpen: false, copied: null };
         rowExp = React.createRef();
         rowForm = React.createRef();
         heroPhoto = React.createRef();
@@ -1980,12 +2094,14 @@
           { id: 'tf1', company: 'TF1', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
+        //   deg, years, city : diplôme, années et ville du panneau qui s'ouvre au survol (fond = `bg` à 50 %)
+        //   accent : couleur du trait du panneau (par défaut `bg`) — utile quand le fond est noir
         formations = [
-          { rank: 1, school: 'ESCP', logo: 'Vignettes 2/Top 5 - Formations/escp-logo.png', bg: '#280092', fg: '#fff' },
-          { rank: 2, school: 'EM Lyon', logo: 'Vignettes 2/Top 5 - Formations/emlyon.png', bg: '#e2001a', fg: '#fff' },
-          { rank: 3, school: 'Cours Florent', logo: 'Vignettes 2/Top 5 - Formations/cours-florent.png', bg: '#0a0a0a', fg: '#fff' },
-          { rank: 4, school: 'LBU', logo: 'Vignettes 2/Top 5 - Formations/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
-          { rank: 5, school: 'IUT Lyon 1', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
+          { rank: 1, school: 'ESCP', deg: 'MSc Media Management', years: '2024 à 2025', city: 'Paris', logo: 'Vignettes 2/Top 5 - Formations/escp-logo.png', bg: '#280092', fg: '#fff' },
+          { rank: 2, school: 'EM Lyon', deg: 'Programme Grande École', years: '2020 à 2023', city: 'Lyon', logo: 'Vignettes 2/Top 5 - Formations/emlyon.png', bg: '#e2001a', fg: '#fff' },
+          { rank: 3, school: 'Cours Florent', deg: 'Cours du soir', years: '2023 à 2024', city: 'Paris', accent: '#fff', logo: 'Vignettes 2/Top 5 - Formations/cours-florent.png', bg: '#090907', fg: '#fff' },
+          { rank: 4, school: 'LBU', deg: 'Licence (Business / Management)', years: '2019 à 2020', city: 'Leeds', logo: 'Vignettes 2/Top 5 - Formations/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
+          { rank: 5, school: 'IUT Lyon 1', deg: 'DUT Gestion des Entreprises et des Administrations (GEA)', years: '2017 à 2019', city: 'Lyon', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
         ];
         // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
         //   full : true pour une vignette 16:9 déjà mise en page (affichée bord à bord, sans marge)
@@ -2011,8 +2127,8 @@
         langues = [
           { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
           { name: 'Espagnol', flag: '🇪🇸', level: 'Courant · C1' },
-          { name: 'Arabe', flag: '🇲🇦', level: 'Bilingue' },
-          { name: 'Anglais', flag: '🇬🇧', level: 'Professionnel · B2' },
+          { name: 'Arabe', flag: '🇲🇦', level: 'Courant C1' },
+          { name: 'Anglais', flag: '🇬🇧', level: 'Courant · C1' },
           { name: 'Italien', flag: '🇮🇹', level: 'Intermédiaire · B1' },
           { name: 'Portugais', flag: '🇵🇹', level: 'Notions · A2' },
         ];
@@ -2161,7 +2277,7 @@
         showPop(card) {
           const id = card.dataset.fiche, f = this.fiches[id];
           if (!f) return;
-          const pop = this.pop, r = card.getBoundingClientRect(), w = Math.min(Math.max(r.width * 1.24, 280), 600);
+          const pop = this.pop, r = card.getBoundingClientRect(), w = Math.min(Math.max(r.width * 1.24, 280), innerWidth - 16);
           const chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
           pop.innerHTML = this.banner(id, '', 'aspect-ratio:16/9;')
             + `<div class="cv-info"><div class="cv-top"><span class="cv-pill">${this.esc(f.role)}</span>`
@@ -2231,7 +2347,9 @@
             c.tabIndex = 0; c.setAttribute('role', 'button');
           });
           markCards();
-          this.ficheObserver = new MutationObserver(markCards);
+          const markSchools = () => document.querySelectorAll('[data-m="f-item"]:not([tabindex])').forEach(f => { f.tabIndex = 0; });
+          markSchools();
+          this.ficheObserver = new MutationObserver(() => { markCards(); markSchools(); });
           this.ficheObserver.observe(document.body, { childList: true, subtree: true });
           const cardOf = t => t && t.closest && t.closest('[data-fiche]:not(.cv-pop)');
           this.fiH = {
@@ -2253,6 +2371,11 @@
               if (!(this.popCard && to && this.popCard.contains(to)) && !this.pop.contains(to)) this.hidePop();
             },
             click: e => {
+              if (!canHover) {
+                const school = e.target.closest && e.target.closest('[data-m="f-item"]');
+                document.querySelectorAll('[data-m="f-item"].open').forEach(x => x !== school && x.classList.remove('open'));
+                if (school) school.classList.toggle('open');
+              }
               if (this.ov.contains(e.target)) {
                 if (e.target === this.ov || e.target.closest('.cv-x')) this.closeFiche();
                 return;
@@ -2344,7 +2467,7 @@
         }
 
         renderVals() {
-          const { tab, openLang, scrolled, contactOpen, copied } = this.state;
+          const { tab, scrolled, contactOpen, copied } = this.state;
           const tabDefs = [['langues', 'Langues'], ['competences', 'Compétences'], ['autres', 'Autres']];
           return {
             intro: this.buildIntro(),
@@ -2365,16 +2488,11 @@
             nextExp: () => this.scroll(this.rowExp, 1),
             nextForm: () => this.scroll(this.rowForm, 1),
             experiences: this.experiences.map(e => ({ ...this.fiches[e.id], ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? 'calc(50% - 26px)' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
-            formations: this.formations.map(f => ({ ...f, hasLogo: !!f.logo, noLogo: !f.logo })),
+            formations: this.formations.map(f => ({ ...f, accent: f.accent || f.bg, hasLogo: !!f.logo, noLogo: !f.logo })),
             pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
             competences: this.competences, autres: this.autres,
-            langues: this.langues.map((l, i) => ({
-              ...l,
-              toggle: () => this.setState(s => ({ openLang: s.openLang === i ? null : i })),
-              shownLevel: openLang === i ? l.level : '',
-              ring: openLang === i ? '#E50914' : '#2a2a2a',
-            })),
+            langues: this.langues,
             tabs: tabDefs.map(([id, label]) => ({
               label, select: () => this.setState({ tab: id }),
               color: tab === id ? '#fff' : '#B3B3B3', border: tab === id ? '#E50914' : 'transparent',
@@ -2385,7 +2503,6 @@
             arrowHover: { opacity: 1 },
             btnWhiteHover: { background: '#e6e6e6', transform: 'scale(1.03)' },
             btnGreyHover: { background: 'rgba(109,109,110,.45)', transform: 'scale(1.03)' },
-            flagHover: { transform: 'scale(1.08)' },
             pillHover: { background: '#333', transform: 'scale(1.04)' },
           };
         }
