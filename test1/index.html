@@ -386,66 +386,20 @@
             overflow: hidden;
             container-type: size;
           }
-          .cv-ban .cv-blur {
+          /* VIGNETTES À FOND PROLONGÉ (« -etendu.jpg », générées par outils/etendre_fonds.py) :
+             le logo est au centre d'une toile --k fois plus grande, de même format, dont le fond prolonge celui de l'image.
+             Affichée en « contain » dans une boîte --k fois plus grande que son conteneur, la partie d'origine tombe
+             exactement à la taille et à la place d'une image en « contain » : logo entier, centré, sans déformation,
+             et le fond prolongé remplit tout le reste jusqu'aux bords, sans flou ni liseré. */
+          .cv-ext {
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(24px);
-            transform: scale(1.2);
-          }
-          /* image entière et centrée ; seuls les bords qui laissent une bande vide se fondent dans la version floutée */
-          .cv-ban .cv-fit {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: min(100cqw, calc(100cqh * var(--r, 1.78)));
-            aspect-ratio: var(--r, 1.78);
-          }
-          .cv-ban .cv-fit.fw {
-            -webkit-mask-image: linear-gradient(
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-            mask-image: linear-gradient(
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-          }
-          .cv-ban .cv-fit.fh {
-            -webkit-mask-image: linear-gradient(
-              90deg,
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-            mask-image: linear-gradient(
-              90deg,
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-          }
-          /* format presque identique au bandeau : l'image le remplit entièrement */
-          .cv-ban .cv-fit.fc {
-            width: 100%;
-            height: 100%;
-            aspect-ratio: auto;
-          }
-          .cv-ban .cv-fit img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            clip-path: inset(2px);
+            left: calc(50% - var(--k, 2.4) * 50%);
+            top: calc(50% - var(--k, 2.4) * 50%);
+            width: calc(var(--k, 2.4) * 100%);
+            height: calc(var(--k, 2.4) * 100%);
+            max-width: none;
+            object-fit: contain;
+            pointer-events: none;
           }
           .cv-ban .cv-name {
             position: absolute;
@@ -1174,49 +1128,23 @@
                 style-active="{{ press }}"
               >
                 <!-- IMAGE : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé).
-                     Affichée en entier et centrée, sur un fond fait de la même image floutée -->
+                     Vignette à fond prolongé (« -etendu.jpg ») : logo entier et centré dans la zone au-dessus du bandeau,
+                     le fond prolongé remplit toute la carte -->
                 <sc-if
                   value="{{ e.hasImage }}"
                   hint-placeholder-val="{{ false }}"
                 >
-                  <img
-                    src="{{ e.image }}"
-                    alt=""
-                    aria-hidden="true"
-                    style="
-                      position: absolute;
-                      inset: 0;
-                      width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                      filter: blur(24px);
-                      transform: scale(1.2);
-                    "
-                  />
-                  <img
-                    src="{{ e.image }}"
-                    alt="{{ e.company }}"
+                  <div
                     style="
                       position: absolute;
                       left: 0;
-                      top: calc(50% - 26px);
-                      width: 100%;
-                      height: auto;
-                      transform: translateY(-50%);
-                      -webkit-mask-image: linear-gradient(
-                        transparent,
-                        #000 14%,
-                        #000 86%,
-                        transparent
-                      );
-                      mask-image: linear-gradient(
-                        transparent,
-                        #000 14%,
-                        #000 86%,
-                        transparent
-                      );
+                      right: 0;
+                      top: 0;
+                      bottom: 52px;
                     "
-                  />
+                  >
+                    <img class="cv-ext" src="{{ e.image }}" alt="{{ e.company }}" />
+                  </div>
                 </sc-if>
                 <!-- LOGO : champ `logo` (image) affiché pleine largeur, collé en haut (centré verticalement si `logoCenter: true`) ; sinon le nom `company` s'affiche en texte -->
                 <sc-if
@@ -1442,11 +1370,18 @@
               <div
                 data-m="pep-card"
                 data-fiche="{{ p.id }}"
-                style="aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
+                style="position:relative;aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
                 style-active="{{ press }}"
               >
+                <!-- vignette 16:9 à fond prolongé (`full: true`) : remplit toute la carte -->
                 <sc-if
-                  value="{{ p.hasLogo }}"
+                  value="{{ p.hasFull }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <img class="cv-ext" src="{{ p.logo }}" alt="{{ p.name }}" />
+                </sc-if>
+                <sc-if
+                  value="{{ p.hasSmallLogo }}"
                   hint-placeholder-val="{{ false }}"
                 >
                   <img
@@ -1578,21 +1513,17 @@
                 style="flex:0 0 clamp(150px,15vw,230px);aspect-ratio:2/3;scroll-snap-align:start;border-radius:8px;position:relative;overflow:hidden;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 10px 28px rgba(0,0,0,.55);outline:1px solid rgba(255,255,255,.08);outline-offset:-1px;transition:transform .2s ease,box-shadow .3s ease,outline-offset .2s ease;cursor:pointer"
                 style-active="{{ press }}"
               >
-                <!-- IMAGE : champ `image` (photo verticale, remplit toute l'affiche) -->
+                <!-- IMAGE : champ `image` (vignette verticale à fond prolongé, « -etendu.jpg ») :
+                     affichée entière, sans recadrage, le fond prolongé remplit toute l'affiche -->
                 <sc-if
                   value="{{ c.hasImage }}"
                   hint-placeholder-val="{{ false }}"
                 >
                   <img
+                    class="cv-ext"
                     src="{{ c.image }}"
                     alt="{{ c.name }}"
-                    style="
-                      position: absolute;
-                      inset: 0;
-                      width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                    "
+                    style="--k: 1.2"
                   />
                 </sc-if>
                 <!-- LOGO : champ `logo`, en haut de l'affiche s'il y a une image, sinon centré -->
@@ -2191,13 +2122,13 @@
         // Tous les textes sont plus bas, dans `textes`, avec un bloc par langue (fr, es, en).
 
         // EXPÉRIENCES (« Dernières nouveautés ») — poste, dates et ville viennent de `textes.<langue>.fiches` (même `id`) :
-        //   image : vignette affichée en entier et centrée, sur un fond flouté de la même image. '' = garde le dégradé `bg`.
+        //   image : vignette à fond prolongé (« -etendu.jpg », voir outils/etendre_fonds.py), logo entier et centré. '' = garde le dégradé `bg`.
         //   logo  : logo pleine largeur ('' = rien) ; logoCenter: true pour le centrer verticalement.
         //   Toutes les images sont dans le dossier `Vignettes 2/`.
         experiences = [
-          { id: 'marathon', company: 'Marathon Studio', image: 'Vignettes 2/Principales - Pour Vous/marathon logo.jpeg', logo: '', bg: '#d2687e' },
-          { id: 'banijay', company: 'Banijay', image: 'Vignettes 2/Principales - Pour Vous/Banijay group.png', logo: '', bg: '#5a0033' },
-          { id: 'tf1', company: 'TF1', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
+          { id: 'marathon', company: 'Marathon Studio', image: 'Vignettes 2/Principales - Pour Vous/marathon logo-etendu.jpg', logo: '', bg: '#d2687e' },
+          { id: 'banijay', company: 'Banijay', image: 'Vignettes 2/Principales - Pour Vous/Banijay group-etendu.jpg', logo: '', bg: '#5a0033' },
+          { id: 'tf1', company: 'TF1', image: 'Vignettes 2/Principales - Pour Vous/TF1-etendu.jpg', logo: '', bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
         //   diplôme, années et ville du panneau qui s'ouvre au survol : `textes.<langue>.formations` (même `id`)
@@ -2210,25 +2141,25 @@
           { id: 'iutlyon1', rank: 5, school: 'IUT Lyon 1', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
         ];
         // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
-        //   full : true pour une vignette 16:9 déjà mise en page (affichée bord à bord, sans marge)
+        //   full : true pour une vignette 16:9 à fond prolongé (« -etendu.jpg »), qui remplit toute la carte
         pepites = [
-          { id: 'alptis', name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis.png', full: true, bg: '#469962', fg: '#fff' },
-          { id: 'oppizi', name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi.png', full: true, bg: '#1a3552', fg: '#fff' },
-          { id: 'equancy', name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy.png', full: true, bg: '#cc115e', fg: '#fff' },
+          { id: 'alptis', name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis-etendu.jpg', full: true, bg: '#469962', fg: '#fff' },
+          { id: 'oppizi', name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi-etendu.jpg', full: true, bg: '#1a3552', fg: '#fff' },
+          { id: 'equancy', name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy-etendu.jpg', full: true, bg: '#cc115e', fg: '#fff' },
           { id: 'asv', name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
 
           ];
         // JOBS ÉTUDIANTS — 6 affiches verticales (format 2:3, ex. 600×900 px) :
-        //   image : vignette verticale qui remplit toute l'affiche, logo déjà centré dedans
+        //   image : vignette verticale à fond prolongé (« -etendu.jpg »), affichée entière, logo déjà centré dedans
         //   logo  : logo à superposer ('' = rien) ; sans image ni logo, le nom `name` s'affiche en titre
         //   role  : poste affiché en bas ('' = rien)
         collection = [
-          { name: 'Zara', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/zara.png', logo: '', bg: '#000', fg: '#fff' },
-          { name: 'Confluence', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Confluence.png', logo: '', bg: '#194294', fg: '#fff' },
-          { name: 'Häagen-Dazs', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Haagen-Dazs.jpg', logo: '', bg: '#630017', fg: '#fff' },
-          { name: 'Action', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Action.png', logo: '', bg: '#021a72', fg: '#fff' },
-          { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark.png', logo: '', bg: '#029ec4', fg: '#fff' },
-          { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins.png', logo: '', bg: '#06468e', fg: '#fff' },
+          { name: 'Zara', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/zara-etendu.jpg', logo: '', bg: '#000', fg: '#fff' },
+          { name: 'Confluence', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Confluence-etendu.jpg', logo: '', bg: '#194294', fg: '#fff' },
+          { name: 'Häagen-Dazs', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Haagen-Dazs-etendu.jpg', logo: '', bg: '#630017', fg: '#fff' },
+          { name: 'Action', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Action-etendu.jpg', logo: '', bg: '#021a72', fg: '#fff' },
+          { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark-etendu.jpg', logo: '', bg: '#029ec4', fg: '#fff' },
+          { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins-etendu.jpg', logo: '', bg: '#06468e', fg: '#fff' },
         ];
         // SENYERA façon emoji : l'emoji du drapeau catalan s'affiche en drapeau noir sur iPhone et Android,
         // on le dessine donc avec le même aspect que les autres (drapeau qui flotte, reflet, coins arrondis).
@@ -2238,8 +2169,9 @@
           const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 48'>`
             + `<defs><linearGradient id='s' x1='0' x2='1'><stop offset='0' stop-color='#fff' stop-opacity='.3'/><stop offset='.25' stop-color='#fff' stop-opacity='0'/>`
             + `<stop offset='.5' stop-color='#000' stop-opacity='.16'/><stop offset='.78' stop-color='#000' stop-opacity='0'/><stop offset='1' stop-color='#fff' stop-opacity='.2'/></linearGradient></defs>`
-            + `<path d='${band(6, 42)}' fill='#fcdd09'/><path d='${reds}' fill='#da121a'/>`
-            + `<path d='${band(6, 42)}' fill='url(#s)' stroke='#000' stroke-opacity='.18' stroke-width='.8' stroke-linejoin='round'/></svg>`;
+            // miroir horizontal : le drapeau flotte dans le même sens que les emojis
+            + `<g transform='matrix(-1 0 0 1 64 0)'><path d='${band(6, 42)}' fill='#fcdd09'/><path d='${reds}' fill='#da121a'/>`
+            + `<path d='${band(6, 42)}' fill='url(#s)' stroke='#000' stroke-opacity='.18' stroke-width='.8' stroke-linejoin='round'/></g></svg>`;
           return `url("data:image/svg+xml,${encodeURIComponent(svg)}") center / contain no-repeat`;
         })();
         // LANGUES — flag : emoji du drapeau ; art : drapeau dessiné quand l'emoji n'existe pas partout (catalan)
@@ -2962,7 +2894,7 @@
         banner(id, extra = '', style = '') {
           const v = this.visual(id), src = v.src ? encodeURI(v.src) : '';
           const media = src
-            ? `<img class="cv-blur" src="${src}" alt="" aria-hidden="true"><div class="cv-fit"><img src="${src}" alt="${this.esc(v.name)}" onload="cvFit(this)"></div>`
+            ? `<img class="cv-ext" src="${src}" alt="${this.esc(v.name)}">`
             : `<div class="cv-name" style="color:${v.fg}">${this.esc(v.name)}</div>`;
           return `<div class="cv-ban" style="${style}background:${v.bg}">${media}${extra}</div>`;
         }
@@ -3026,14 +2958,6 @@
           }
         }
         setupFiches() {
-          // Ajuste l'image du bandeau : --r = son format ; fw/fh = bandes vides en haut-bas / sur les côtés ; fc = remplit
-          window.cvFit = img => {
-            const box = img.parentNode, ban = box.parentNode;
-            const r = img.naturalWidth / img.naturalHeight, rb = ban.clientWidth / ban.clientHeight;
-            box.style.setProperty('--r', r);
-            box.classList.remove('fw', 'fh', 'fc');
-            box.classList.add(Math.abs(r / rb - 1) < 0.08 ? 'fc' : r > rb ? 'fw' : 'fh');
-          };
           const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
           this.pop = document.createElement('div');
           this.pop.className = 'cv-pop';
@@ -3192,7 +3116,7 @@
             nextForm: () => this.scroll(this.rowForm, 1),
             experiences: this.experiences.map(e => ({ ...T.fiches[e.id], ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? 'calc(50% - 26px)' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
             formations: this.formations.map(f => ({ ...f, ...T.formations[f.id], accent: f.accent || f.bg, hasLogo: !!f.logo, noLogo: !f.logo })),
-            pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
+            pepites: this.pepites.map(p => ({ ...p, hasFull: !!p.logo && !!p.full, hasSmallLogo: !!p.logo && !p.full, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
             competences: T.competences, autres: T.autres,
             langues: this.langues.map(l => ({ ...l, name: T.langues[l.id][0], level: T.langues[l.id][1], hasArt: !!l.art })),
