@@ -10,9 +10,11 @@
       <helmet>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&display=swap"
           rel="stylesheet"
         />
+        <!-- le CV n'est affiché qu'après le choix de la langue : la photo du hero est chargée dès l'intro -->
+        <link rel="preload" as="image" href="Vignettes 2/Hero/hero.png" />
         <style>
           html,
           body {
@@ -107,6 +109,179 @@
             50% {
               transform: scale(1.5);
               opacity: 0.5;
+            }
+          }
+          /* --- CHOIX DE LA LANGUE (maquette cvflix_langue_transformation.html) ---
+             trois cartes centrées sur un fond bordeaux sombre ; chaque drapeau se transforme en carte au survol */
+          @property --w {
+            syntax: "<percentage>";
+            inherits: false;
+            initial-value: 0%;
+          }
+          .lg-page {
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            color: #f3eaea;
+            font: 15px/1.4 "Helvetica Neue", Arial, sans-serif;
+            background: #090000
+              linear-gradient(#46141a 0%, #1d0609 55%, #090000 100%) no-repeat;
+            animation: cvFade 0.5s ease;
+          }
+          .lg-logo {
+            padding: 14px 4vw;
+            font-family: "Bebas Neue", sans-serif;
+            font-size: 34px;
+            letter-spacing: 0.06em;
+            color: #e50914;
+            line-height: 1;
+            text-shadow: 0 0 18px rgba(229, 9, 20, 0.35);
+          }
+          .lg-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 42px;
+            padding: 0 16px 72px;
+            text-align: center;
+          }
+          .lg-main h1 {
+            margin: 0;
+            font-size: clamp(22px, 3.4vw, 34px);
+            font-weight: 600;
+            text-wrap: balance;
+          }
+          .lg-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+          }
+          .lg-card {
+            all: unset;
+            box-sizing: border-box;
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: 244px;
+            height: 207px;
+            cursor: pointer;
+            transition:
+              transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+              opacity 0.3s ease;
+          }
+          .lg-card:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 4px;
+            border-radius: 18px;
+          }
+          .lg-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: rgba(var(--pale), 0.16);
+            box-shadow: inset 0 0 0 1px rgba(var(--pale), 0.12);
+            opacity: 0;
+            clip-path: inset(36% 47% 36% 47% round 16px);
+            transition:
+              clip-path 0.45s cubic-bezier(0.65, 0, 0.25, 1),
+              opacity 0.2s ease;
+          }
+          .lg-fwrap {
+            position: relative;
+            z-index: 1;
+            width: var(--fw);
+            height: 129px;
+            filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.45));
+            transition: filter 0.35s;
+          }
+          /* le drapeau est découpé : un trou incliné part du centre et s'élargit (evenodd), donc aucune surface ni aucun joint par-dessus */
+          .lg-flag {
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+            overflow: hidden;
+            --w: 0%;
+            clip-path: polygon(
+              evenodd,
+              -30% -30%,
+              130% -30%,
+              130% 130%,
+              -30% 130%,
+              -30% -30%,
+              calc(50% + 4% + var(--w) * -0.5) -10%,
+              calc(50% + 4% + var(--w) * 0.5) -10%,
+              calc(50% - 4% + var(--w) * 0.5) 110%,
+              calc(50% - 4% + var(--w) * -0.5) 110%,
+              calc(50% + 4% + var(--w) * -0.5) -10%,
+              -30% -30%
+            );
+            transition: --w 0.45s cubic-bezier(0.65, 0, 0.25, 1) 0.04s;
+          }
+          .lg-flag svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+          }
+          .lg-arms {
+            position: absolute;
+            left: 20.1%;
+            top: 28.68%;
+            width: 26.8%;
+            height: 43.41%;
+          }
+          .lg-txt {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            font: 400 28px/1 Anton, Impact, "Arial Narrow", sans-serif;
+            letter-spacing: 0.6px;
+            color: #fff;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: scale(0.88);
+            transition:
+              opacity 0.2s ease,
+              transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+          }
+          .lg-card:is(:hover, :focus-visible, .on) {
+            transform: scale(1.06);
+            z-index: 2;
+          }
+          .lg-card:is(:hover, :focus-visible, .on) .lg-bg {
+            opacity: 1;
+            clip-path: inset(0 0 0 0 round 16px);
+          }
+          .lg-card:is(:hover, :focus-visible, .on) .lg-fwrap {
+            filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+          }
+          .lg-card:is(:hover, :focus-visible, .on) .lg-flag {
+            --w: 66%;
+          }
+          .lg-card:is(:hover, :focus-visible, .on) .lg-txt {
+            opacity: 1;
+            transform: none;
+            transition-delay: 0.2s, 0.2s;
+          }
+          @media (hover: hover) {
+            .lg-row:has(.lg-card:hover) .lg-card:not(:hover) {
+              opacity: 0.5;
+              transform: scale(0.96);
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .lg-page,
+            .lg-page * {
+              animation: none !important;
+              transition-duration: 0.01s !important;
+              transition-delay: 0s !important;
             }
           }
           /* --- TOP 5 FORMATIONS : panneau diplôme · années · ville --- */
@@ -211,66 +386,20 @@
             overflow: hidden;
             container-type: size;
           }
-          .cv-ban .cv-blur {
+          /* VIGNETTES À FOND PROLONGÉ (« -etendu.jpg », générées par outils/etendre_fonds.py) :
+             le logo est au centre d'une toile --k fois plus grande, de même format, dont le fond prolonge celui de l'image.
+             Affichée en « contain » dans une boîte --k fois plus grande que son conteneur, la partie d'origine tombe
+             exactement à la taille et à la place d'une image en « contain » : logo entier, centré, sans déformation,
+             et le fond prolongé remplit tout le reste jusqu'aux bords, sans flou ni liseré. */
+          .cv-ext {
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(24px);
-            transform: scale(1.2);
-          }
-          /* image entière et centrée ; seuls les bords qui laissent une bande vide se fondent dans la version floutée */
-          .cv-ban .cv-fit {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: min(100cqw, calc(100cqh * var(--r, 1.78)));
-            aspect-ratio: var(--r, 1.78);
-          }
-          .cv-ban .cv-fit.fw {
-            -webkit-mask-image: linear-gradient(
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-            mask-image: linear-gradient(
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-          }
-          .cv-ban .cv-fit.fh {
-            -webkit-mask-image: linear-gradient(
-              90deg,
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-            mask-image: linear-gradient(
-              90deg,
-              transparent,
-              #000 10%,
-              #000 90%,
-              transparent
-            );
-          }
-          /* format presque identique au bandeau : l'image le remplit entièrement */
-          .cv-ban .cv-fit.fc {
-            width: 100%;
-            height: 100%;
-            aspect-ratio: auto;
-          }
-          .cv-ban .cv-fit img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            clip-path: inset(2px);
+            left: calc(50% - var(--k, 2.4) * 50%);
+            top: calc(50% - var(--k, 2.4) * 50%);
+            width: calc(var(--k, 2.4) * 100%);
+            height: calc(var(--k, 2.4) * 100%);
+            max-width: none;
+            object-fit: contain;
+            pointer-events: none;
           }
           .cv-ban .cv-name {
             position: absolute;
@@ -591,6 +720,11 @@
       <!-- ============ INTRO (overlay animé + sting sonore) : construit dans le code logique ============ -->
       {{ intro }}
 
+      <!-- ============ CHOIX DE LA LANGUE (après l'intro, avant le CV) : construit dans le code logique ============ -->
+      {{ langPage }}
+
+      <!-- ============ CV (affiché une fois la langue choisie) ============ -->
+      <sc-if value="{{ cvVisible }}" hint-placeholder-val="{{ true }}">
       <!-- ============ HEADER ============ -->
       <div
         style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:28px;padding:14px 4vw;transition:background .4s;background:{{ headerBg }}"
@@ -611,7 +745,7 @@
           data-m="nav-link"
           href="#parcourir"
           style="font-size: 14px; color: #e5e5e5"
-          >Parcourir</a
+          >{{ ui.browse }}</a
         >
         <div
           style="
@@ -621,6 +755,37 @@
             gap: 18px;
           "
         >
+          <!-- LANGUE : ramène à la page de choix de la langue -->
+          <a
+            href="{{ langHome }}"
+            onClick="{{ backToLangs }}"
+            aria-label="{{ ui.changeLang }}"
+            title="{{ ui.changeLang }}"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 13px;
+              font-weight: 700;
+              letter-spacing: 0.04em;
+              color: #e5e5e5;
+            "
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9.5" />
+              <path
+                d="M2.5 12h19M12 2.5c2.6 2.6 3.9 5.8 3.9 9.5s-1.3 6.9-3.9 9.5c-2.6-2.6-3.9-5.8-3.9-9.5s1.3-6.9 3.9-9.5z"
+              /></svg
+            >{{ ui.code }}
+          </a>
           <!-- LIEN LINKEDIN : remplacer le href -->
           <a
             href="https://www.linkedin.com/in/omar-errachid/"
@@ -734,7 +899,7 @@
                 animation: badgeDot 1.6s ease-in-out infinite;
               "
             ></span
-            >Disponible dès maintenant
+            >{{ ui.badge }}
           </div>
         </sc-if>
 
@@ -809,7 +974,7 @@
                 transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             "
           >
-            Chargé de Production / Développement
+            {{ ui.title }}
           </div>
           <!-- ACCROCHE -->
           <p
@@ -829,11 +994,7 @@
                 transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             "
           >
-            Profil orienté développement et production audiovisuelle, avec une
-            expérience en analyse éditoriale, suivi de projets et accompagnement
-            de productions. À l’aise dans l’identification de projets, l’analyse
-            de contenus et la coordination des différentes étapes de
-            développement et de production.
+            {{ ui.bio }}
           </p>
           <div
             data-m="btns"
@@ -880,7 +1041,7 @@
                   border-left: 14px solid #000;
                 "
               ></span
-              >Collaborer
+              >{{ ui.collab }}
             </a>
             <!-- FICHE CONTACT : vCard native sur Safari iPhone, sinon fiche affichée dans la page -->
             <a
@@ -903,7 +1064,7 @@
               "
               style-hover="{{ btnGreyHover }}"
               style-active="{{ press }}"
-              >Fiche contact</a
+              >{{ ui.contact }}</a
             >
           </div>
         </div>
@@ -943,7 +1104,7 @@
               letter-spacing: 0.01em;
             "
           >
-            Dernières nouveautés
+            {{ ui.rowExp }}
           </h2>
           <div
             data-row="1"
@@ -967,49 +1128,23 @@
                 style-active="{{ press }}"
               >
                 <!-- IMAGE : champ `image` dans le tableau `experiences` (laisser '' pour garder le dégradé).
-                     Affichée en entier et centrée, sur un fond fait de la même image floutée -->
+                     Vignette à fond prolongé (« -etendu.jpg ») : logo entier et centré dans la zone au-dessus du bandeau,
+                     le fond prolongé remplit toute la carte -->
                 <sc-if
                   value="{{ e.hasImage }}"
                   hint-placeholder-val="{{ false }}"
                 >
-                  <img
-                    src="{{ e.image }}"
-                    alt=""
-                    aria-hidden="true"
-                    style="
-                      position: absolute;
-                      inset: 0;
-                      width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                      filter: blur(24px);
-                      transform: scale(1.2);
-                    "
-                  />
-                  <img
-                    src="{{ e.image }}"
-                    alt="{{ e.company }}"
+                  <div
                     style="
                       position: absolute;
                       left: 0;
-                      top: calc(50% - 26px);
-                      width: 100%;
-                      height: auto;
-                      transform: translateY(-50%);
-                      -webkit-mask-image: linear-gradient(
-                        transparent,
-                        #000 14%,
-                        #000 86%,
-                        transparent
-                      );
-                      mask-image: linear-gradient(
-                        transparent,
-                        #000 14%,
-                        #000 86%,
-                        transparent
-                      );
+                      right: 0;
+                      top: 0;
+                      bottom: 52px;
                     "
-                  />
+                  >
+                    <img class="cv-ext" src="{{ e.image }}" alt="{{ e.company }}" />
+                  </div>
                 </sc-if>
                 <!-- LOGO : champ `logo` (image) affiché pleine largeur, collé en haut (centré verticalement si `logoCenter: true`) ; sinon le nom `company` s'affiche en texte -->
                 <sc-if
@@ -1057,7 +1192,7 @@
           <button
             data-m="arrow"
             onClick="{{ nextExp }}"
-            aria-label="Suivant"
+            aria-label="{{ ui.next }}"
             style="
               position: absolute;
               right: 0;
@@ -1096,7 +1231,7 @@
             data-m="row-title"
             style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
           >
-            Top 5 des formations suivies
+            {{ ui.rowForm }}
           </h2>
           <div
             data-row="2"
@@ -1181,7 +1316,7 @@
           <button
             data-m="arrow"
             onClick="{{ nextForm }}"
-            aria-label="Suivant"
+            aria-label="{{ ui.next }}"
             style="
               position: absolute;
               right: 0;
@@ -1220,7 +1355,7 @@
             data-m="row-title"
             style="margin: 0 4vw 12px; font-size: 20px; font-weight: 700"
           >
-            Ça pourrait vous intéresser
+            {{ ui.rowPep }}
           </h2>
           <div
             data-m="pep-grid"
@@ -1235,11 +1370,18 @@
               <div
                 data-m="pep-card"
                 data-fiche="{{ p.id }}"
-                style="aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
+                style="position:relative;aspect-ratio:16/9;min-width:0;box-sizing:border-box;border-radius:6px;background:{{ p.bg }};color:{{ p.fg }};box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:{{ p.pad }};overflow:hidden;transition:transform .3s ease;cursor:pointer"
                 style-active="{{ press }}"
               >
+                <!-- vignette 16:9 à fond prolongé (`full: true`) : remplit toute la carte -->
                 <sc-if
-                  value="{{ p.hasLogo }}"
+                  value="{{ p.hasFull }}"
+                  hint-placeholder-val="{{ false }}"
+                >
+                  <img class="cv-ext" src="{{ p.logo }}" alt="{{ p.name }}" />
+                </sc-if>
+                <sc-if
+                  value="{{ p.hasSmallLogo }}"
                   hint-placeholder-val="{{ false }}"
                 >
                   <img
@@ -1337,7 +1479,7 @@
             "
           >
             <div style="font-size: 17px; font-weight: 600; color: #f1e6f3">
-              Collection
+              {{ ui.collKicker }}
             </div>
             <div
               style="
@@ -1349,7 +1491,7 @@
                 text-shadow: 0 0 24px rgba(255, 120, 220, 0.35);
               "
             >
-              Jobs étudiants
+              {{ ui.collTitle }}
             </div>
           </div>
           <div
@@ -1371,21 +1513,17 @@
                 style="flex:0 0 clamp(150px,15vw,230px);aspect-ratio:2/3;scroll-snap-align:start;border-radius:8px;position:relative;overflow:hidden;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 10px 28px rgba(0,0,0,.55);outline:1px solid rgba(255,255,255,.08);outline-offset:-1px;transition:transform .2s ease,box-shadow .3s ease,outline-offset .2s ease;cursor:pointer"
                 style-active="{{ press }}"
               >
-                <!-- IMAGE : champ `image` (photo verticale, remplit toute l'affiche) -->
+                <!-- IMAGE : champ `image` (vignette verticale à fond prolongé, « -etendu.jpg ») :
+                     affichée entière, sans recadrage, le fond prolongé remplit toute l'affiche -->
                 <sc-if
                   value="{{ c.hasImage }}"
                   hint-placeholder-val="{{ false }}"
                 >
                   <img
+                    class="cv-ext"
                     src="{{ c.image }}"
                     alt="{{ c.name }}"
-                    style="
-                      position: absolute;
-                      inset: 0;
-                      width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                    "
+                    style="--k: 1.2"
                   />
                 </sc-if>
                 <!-- LOGO : champ `logo`, en haut de l'affiche s'il y a une image, sinon centré -->
@@ -1458,7 +1596,7 @@
             data-m="row-title"
             style="margin: 0 0 16px; font-size: 20px; font-weight: 700"
           >
-            Bonus
+            {{ ui.bonus }}
           </h2>
           <div
             data-m="tabs"
@@ -1512,7 +1650,7 @@
                       hint-placeholder-val="{{ false }}"
                     >
                       <span
-                        style="width:52px;height:38px;border-radius:5px;background:{{ l.art }}"
+                        style="width:1em;height:.75em;background:{{ l.art }}"
                       ></span>
                     </sc-if>
                   </div>
@@ -1603,7 +1741,7 @@
           <a href="mailto:omar.errachid@icloud.com" style="color: inherit"
             >omar.errachid@icloud.com</a
           >
-          <span>Paris, France</span>
+          <span>{{ ui.city }}</span>
         </div>
 
         <!-- ============ FICHE CONTACT (affichée quand la vCard ne peut pas s'ouvrir joliment) ============ -->
@@ -1612,7 +1750,7 @@
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Fiche contact"
+            aria-label="{{ ui.contactAria }}"
             style="
               position: fixed;
               inset: 0;
@@ -1658,7 +1796,7 @@
               ></div>
               <button
                 onClick="{{ closeContact }}"
-                aria-label="Fermer"
+                aria-label="{{ ui.close }}"
                 style="
                   position: absolute;
                   top: 12px;
@@ -1714,7 +1852,7 @@
                     border-radius: 2px;
                   "
                 >
-                  Chargé de Production / Développement
+                  {{ ui.title }}
                 </div>
                 <div
                   style="
@@ -1753,7 +1891,7 @@
                     <span style="min-width: 0">
                       <span
                         style="display: block; font-size: 11px; color: #8c8c8c"
-                        >Téléphone</span
+                        >{{ ui.phone }}</span
                       >
                       <span
                         style="
@@ -1822,7 +1960,7 @@
                     <span style="min-width: 0">
                       <span
                         style="display: block; font-size: 11px; color: #8c8c8c"
-                        >Email</span
+                        >{{ ui.email }}</span
                       >
                       <span
                         style="
@@ -1892,7 +2030,7 @@
                     <span style="min-width: 0">
                       <span
                         style="display: block; font-size: 11px; color: #8c8c8c"
-                        >LinkedIn</span
+                        >{{ ui.linkedin }}</span
                       >
                       <span
                         style="
@@ -1921,7 +2059,7 @@
                       padding: 11px 0;
                       border-radius: 4px;
                     "
-                    >Appeler</a
+                    >{{ ui.call }}</a
                   >
                   <a
                     href="mailto:omar.errachid@icloud.com"
@@ -1935,7 +2073,7 @@
                       padding: 11px 0;
                       border-radius: 4px;
                     "
-                    >Email</a
+                    >{{ ui.email }}</a
                   >
                 </div>
                 <a
@@ -1952,13 +2090,14 @@
                     padding: 10px 0;
                     border-radius: 4px;
                   "
-                  >Enregistrer dans mes contacts</a
+                  >{{ ui.save }}</a
                 >
               </div>
             </div>
           </div>
         </sc-if>
       </div>
+      </sc-if>
     </x-dc>
     <script
       type="text/x-dc"
@@ -1967,222 +2106,564 @@
     >
       class Component extends DCLogic {
         // intro : 'idle' (attente d'un tap pour autoriser le son) → 'playing' → 'done'
-        state = { tab: 'langues', intro: 'idle', scrolled: false, contactOpen: false, copied: null };
+        // lang : langue du CV ('fr', 'es', 'en'), lue dans l'adresse (?lang=) ; null = page de choix de la langue
+        state = { tab: 'langues', intro: 'idle', scrolled: false, contactOpen: false, copied: null, lang: this.langFromUrl() };
+
+        // ====== CHOIX DE LA LANGUE ======
+        // Adresse du CV dans chaque langue. Les trois versions sont cette même page avec `?lang=` :
+        // le lien se partage tel quel et la langue est conservée au rechargement et pendant la navigation.
+        CV_URLS = { en: '?lang=en', es: '?lang=es', fr: '?lang=fr' };
         rowExp = React.createRef();
         rowForm = React.createRef();
         heroPhoto = React.createRef();
 
         // ====== DONNÉES À REMPLACER PAR VOS VRAIES INFOS ======
-        // FICHES D'EXPÉRIENCES — mini-carte au survol et fiche complète au clic.
-        // Une entrée par `id`, utilisée par « Dernières nouveautés » et « Ça pourrait vous intéresser ».
-        //   role, dates, city : intitulé, période (sans durée ni contrat) et ville
-        //   kw : 3 mots-clés (mini-carte) ; bold : phrase en gras ; syn : synopsis
-        //   genres, dist : colonne de droite ; prog : « Un programme » ('' = pas de ligne)
-        //   eps : épisodes [titre, description]
-        fiches = {
-          marathon: {
-            role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris',
-            kw: ['Développement', 'Production', 'Coordination'],
-            bold: 'Chargé de mission auprès de la productrice, présidente de la filiale',
-            syn: 'Lecture et analyse de projets films et séries, accueil des pitchs, montage de dossiers de financement et coordination de la production, assistance de la productrice (agenda, réunions, CR)',
-            genres: 'Développement · Production · Analyse éditoriale · Financement',
-            dist: 'Créateurs, auteurs, producteurs, agents, réalisateurs, diffuseurs, institutions (CNC, Région Grand Est), équipes techniques',
-            prog: 'Rigoureux · Réactif · Discret (informations confidentielles)',
-            eps: [
-              ['Lecture et analyse éditoriale', "Lecture et analyse de scénarios, bibles, traitements et notes d'intention ; rédaction de fiches de lecture et de recommandations artistiques."],
-              ['Développement éditorial', 'Accompagnement des auteurs dans la structuration de leurs arcs narratifs ; suivi du développement de projets séries, unitaires et animation.'],
-              ["Veille et sourcing d'adaptations", "Identification de nouveaux concepts et d'opportunités d'adaptation (IP) ; analyse du marché, des formats et de la diffusion ; recommandations aux diffuseurs."],
-              ['Pipeline de développement', 'Centralisation des soumissions et des pitchs des créateurs, auteurs, producteurs et agents ; coordination des projets.'],
-              ['Talents et partenaires', 'Recherche, sélection et coordination de talents et de partenaires artistiques ; échanges avec agents, diffuseurs, coproducteurs et équipes techniques.'],
-              ['Dossiers de présentation et de financement', "Préparation de dossiers de présentation (synopsis, bibles, pitch decks) ; participation au montage de demandes d'aides CNC et Région Grand Est."],
-              ['Coordination de production et tournage', 'Coordination logistique de production (planning, budget, préproduction) ; gestion des sujets opérationnels au tournage et des journées presse.'],
-              ['Agenda, réunions et pitchs', "Gestion de l'agenda, des déplacements et des événements de la productrice ; préparation des réunions et des pitchs (notes de synthèse, comptes rendus) ; suivi des projets."],
-            ],
-          },
-          banijay: {
-            role: 'Assistant IP et adaptations littéraires', dates: 'Mars 2025 – Déc. 2025', city: 'Paris',
-            kw: ['IP & adaptation', 'Veille', 'Développement'],
-            bold: "Repérer les histoires à adapter, en France et à l'international",
-            syn: "Appui direct au Directeur Scripted IP & Production : veille d'IP et de formats internationaux, lecture d'œuvres littéraires, notes de lecture et présentations pour les équipes de développement fiction du Groupe.",
-            genres: 'IP · Adaptation littéraire · Veille · Analyse de marché',
-            dist: 'Directeur IP / Formats / Book IP, équipe éditoriale fiction, filiales françaises et internationales, auteurs, scénaristes, agents, éditeurs, Market Research, Banijay Rights, PR',
-            prog: 'Curieux · Structuré · Autonome',
-            eps: [
-              ['Veille IP et formats', 'Repérage de séries, romans et concepts sur différents territoires, avec évaluation de leur potentiel créatif et commercial.'],
-              ["Lecture d'œuvres littéraires", 'Lecture d’œuvres et de manuscrits, rédaction de notes de lecture et évaluation de leur potentiel audiovisuel et des droits d’adaptation.'],
-              ['Analyses de marché', 'Réalisation de benchmarks, de notes stratégiques et d’outils de veille sur les tendances et la concurrence.'],
-              ['Circulation des IP', 'Coordination de la circulation des IP entre les différentes filiales françaises et internationales du groupe.'],
-              ['Communauté créative', 'Échanges avec auteurs, scénaristes, agents et éditeurs, ainsi que recherche de partenaires et de coproducteurs.'],
-              ['Outils et suivi', "Création d’outils pour le suivi des droits d'adaptation et des contrats associés."],
-            ],
-          },
-          tf1: {
-            role: 'Chef de projet Digital & Performance', dates: 'Oct. 2022 – Sept. 2024', city: 'Paris',
-            kw: ['Digital', 'Data', 'Pilotage de projets'],
-            bold: "Traduire les données d'audience en décisions éditoriales",
-            syn: 'Pilotage de projets digitaux transverses (éditorial, marketing, CRM, produit, tech) autour de TF1+ : KPI, tableaux de bord, analyses de performance et recommandations à la direction.',
-            genres: 'Data · Digital · Performance · KPI · Streaming',
-            dist: 'Équipes éditoriales, marketing éditorial, CRM, social media, publicité, produit, équipes techniques, direction',
-            prog: 'Analytique · Pédagogue · Orienté résultats',
-            eps: [
-              ['Pilotage transverse', 'Projets digitaux menés avec les équipes éditoriales, marketing, CRM, social media, publicité et produit.'],
-              ['KPI et tableaux de bord', 'Définition et suivi des KPI ; création de tableaux de bord et automatisation des reportings (Tableau).'],
-              ['Performance TF1+ / MYTF1', 'Suivi des contenus et des usages ; recommandations sur la mise en avant des programmes.'],
-              ['Applications et plateforme', 'Pilotage de TF1 Info et MYTF1 ; mise en place de TF1+ avec produit et tech ; ateliers métiers, User Stories (Jira, Confluence).'],
-              ["Analyse d'audience et optimisation", "Analyse des parcours utilisateurs et des audiences ; pilotage d'A/B tests et de démarches d'optimisation (CRO) ; suivi de l'acquisition et de la fidélisation via les campagnes CRM."],
-            ],
-          },
-          oppizi: {
-            role: 'Operations City Manager', dates: 'Janv. 2022 – Oct. 2022', city: 'Lyon',
-            kw: ['Opérations', 'Management', 'Campagnes'],
-            bold: 'Management d’une équipe de distribution de flyers',
-            syn: 'Gestion d’équipes de distribution (Brand Ambassadors) d’environ 30 freelances et suivi de campagnes de leur préparation à leur clôture, avec pilotage des résultats et reporting.',
-            genres: 'Management terrain · Opérations · Gestion de campagne · KPI',
-            dist: 'Brand Ambassadors (environ 30 freelances), clients, fournisseurs, lieux de distribution',
-            prog: 'Réactif · Organisé · Leader',
-            eps: [
-              ['Constitution des équipes', "Composition, recrutement, formation et encadrement d'environ 30 freelances."],
-              ['Campagnes de A à Z', 'Préparation et suivi des campagnes jusqu’à leur clôture, avec reporting des résultats, suivi des KPI et du budget.'],
-              ['Relation client', 'Gestion de la relation avec les clients et accompagnement dans la préparation de nouvelles campagnes.'],
-              ['Logistique terrain', 'Repérage des lieux de distribution, gestion des stocks, équipements et uniformes ; résolution des problèmes opérationnels.'],
-            ],
-          },
-          equancy: {
-            role: 'Consultant Digital Marketing et Web Analytics', dates: 'Juil. 2021 – Déc. 2021', city: 'Paris',
-            kw: ['Web analytics', 'Mesure de performance', 'Conseil'],
-            bold: 'Transformer les données marketing en recommandations opérationnelles',
-            syn: 'Mission de conseil sur la mesure de la performance digitale : stratégie de mesure, analyse marketing, média et CRM, recommandations aux clients et coordination des prestataires.',
-            genres: 'Web Analytics · KPI · Reporting · Tracking',
-            dist: 'Clients, agences digitales et médias, équipes internes (data, BI)',
-            prog: "Analytique · Structuré · À l'écoute du client",
-            eps: [
-              ['Stratégie de mesure', "Définition des KPI, des reportings et suivi de l'implémentation du tracking."],
-              ['Analyse de performance', 'Analyse de la performance marketing, média, digitale et CRM ; analyse des comportements utilisateurs et des données de marché.'],
-              ['Recommandations opérationnelles', 'Coordination des prestataires : agences digitales et médias, équipes internes data et BI.'],
-              ['Accompagnement client', 'Recueil des besoins clients et accompagnement sur leurs enjeux de transformation digitale ; construction de dashboards de pilotage et suivi des évolutions.'],
-            ],
-          },
-          alptis: {
-            role: 'Gestionnaire de Contrats Collectifs en Assurances', dates: 'Déc. 2020 – Juin 2021 et Janv. 2022 – Oct. 2022', city: 'Lyon',
-            kw: ['Assurance', 'Gestion de portefeuille', 'Relation client'],
-            bold: 'Un portefeuille de comptes entreprises à gérer de bout en bout',
-            syn: "Gestion d'un portefeuille de clients (cotisations, comptes entreprises et salariés, encaissements) ; traitement des demandes et coordination des interlocuteurs.",
-            genres: 'Assurance · Gestion de portefeuille · Relation client',
-            dist: 'Entreprises clientes, salariés, délégations commerciales, réseau de courtiers',
-            prog: 'Rigoureux · Méthodique · Fiable',
-            eps: [
-              ['Portefeuille clients', "Gestion d'un portefeuille de clients entreprises : suivi des cotisations, des comptes entreprises et salariés et des encaissements."],
-              ['Analyse des comptes', 'Analyse et renseignement des comptes clients ; traitement des demandes de délais de paiement et des impayés.'],
-              ['Réseau commercial', 'Relation avec les délégations commerciales, le réseau de courtiers et les entreprises pour traiter leurs demandes.'],
-              ['Résolution de problèmes', 'Coordination de multiples interlocuteurs pour résoudre les problèmes opérationnels ; suivi des processus administratifs, financiers et contractuels.'],
-            ],
-          },
-          asv: {
-            role: 'Community Manager', dates: 'Avril 2019 – Juin 2019', city: 'Lyon',
-            kw: ['Community management', 'E-commerce', 'Création de contenu'],
-            bold: 'Faire vivre une marque de bijoux sur les réseaux',
-            syn: 'Animation de la communauté et production de contenus de mise en scène des bijoux ; gestion des partenariats avec les créatrices de contenu, des commandes et des mises en ligne produit.',
-            genres: 'Community management · Contenu · E-commerce',
-            dist: 'Créatrices de contenu, fournisseurs, clientes',
-            prog: '',
-            eps: [
-              ['Calendrier éditorial', 'Planification du calendrier de publication ; production de visuels, photos et vidéos de mise en scène des bijoux.'],
-              ['Partenariats créatrices', 'Gestion des partenariats avec les créatrices de contenu.'],
-              ['Commandes et stocks', 'Suivi des stocks et des inventaires, relation avec les fournisseurs ; préparation et expédition soignée des commandes, traitement des retours.'],
-              ['Mise en ligne et promotion', 'Mise en ligne des nouveautés et optimisation des fiches produits (descriptions, visuels) ; création de bannières, mise en place de codes promo et lancements de collections.'],
-            ],
-          },
-        };
-        // EXPÉRIENCES (« Dernières nouveautés ») — poste, dates et ville viennent de `fiches` (même `id`) :
-        //   image : vignette affichée en entier et centrée, sur un fond flouté de la même image. '' = garde le dégradé `bg`.
+        // Les visuels (images, logos, couleurs) sont communs aux trois langues.
+        // Tous les textes sont plus bas, dans `textes`, avec un bloc par langue (fr, es, en).
+
+        // EXPÉRIENCES (« Dernières nouveautés ») — poste, dates et ville viennent de `textes.<langue>.fiches` (même `id`) :
+        //   image : vignette à fond prolongé (« -etendu.jpg », voir outils/etendre_fonds.py), logo entier et centré. '' = garde le dégradé `bg`.
         //   logo  : logo pleine largeur ('' = rien) ; logoCenter: true pour le centrer verticalement.
         //   Toutes les images sont dans le dossier `Vignettes 2/`.
         experiences = [
-          { id: 'marathon', company: 'Marathon Studio', image: 'Vignettes 2/Principales - Pour Vous/marathon logo.jpeg', logo: '', bg: '#d2687e' },
-          { id: 'banijay', company: 'Banijay', image: 'Vignettes 2/Principales - Pour Vous/Banijay group.png', logo: '', bg: '#5a0033' },
-          { id: 'tf1', company: 'TF1', image: '', logo: 'Vignettes 2/Principales - Pour Vous/TF1.jpeg', logoCenter: true, bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
+          { id: 'marathon', company: 'Marathon Studio', image: 'Vignettes 2/Principales - Pour Vous/marathon logo-etendu.jpg', logo: '', bg: '#d2687e' },
+          { id: 'banijay', company: 'Banijay', image: 'Vignettes 2/Principales - Pour Vous/Banijay group-etendu.jpg', logo: '', bg: '#5a0033' },
+          { id: 'tf1', company: 'TF1', image: 'Vignettes 2/Principales - Pour Vous/TF1-etendu.jpg', logo: '', bg: 'linear-gradient(90deg,#031b87,#3454c1 25%,#885798 50%,#b12c4b 75%,#91060d) top / 100% 50% no-repeat, linear-gradient(90deg,#000e73,#000d80 25%,#440653 50%,#95102d 75%,#870b09) bottom / 100% 50% no-repeat' },
         ];
         // FORMATIONS — logo : image affichée dans la carte (fond `bg` visible autour), '' = nom en texte
-        //   deg, years, city : diplôme, années et ville du panneau qui s'ouvre au survol (fond = `bg` à 50 %)
+        //   diplôme, années et ville du panneau qui s'ouvre au survol : `textes.<langue>.formations` (même `id`)
         //   accent : couleur du trait du panneau (par défaut `bg`) — utile quand le fond est noir
         formations = [
-          { rank: 1, school: 'ESCP', deg: 'MSc Media Management', years: '2024 à 2025', city: 'Paris', logo: 'Vignettes 2/Top 5 - Formations/escp-logo.png', bg: '#280092', fg: '#fff' },
-          { rank: 2, school: 'EM Lyon', deg: 'Programme Grande École', years: '2020 à 2023', city: 'Lyon', logo: 'Vignettes 2/Top 5 - Formations/emlyon.png', bg: '#e2001a', fg: '#fff' },
-          { rank: 3, school: 'Cours Florent', deg: 'Cours du soir', years: '2023 à 2024', city: 'Paris', accent: '#fff', logo: 'Vignettes 2/Top 5 - Formations/cours-florent.png', bg: '#090907', fg: '#fff' },
-          { rank: 4, school: 'LBU', deg: 'Licence (Business / Management)', years: '2019 à 2020', city: 'Leeds', logo: 'Vignettes 2/Top 5 - Formations/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
-          { rank: 5, school: 'IUT Lyon 1', deg: 'DUT Gestion des Entreprises et des Administrations (GEA)', years: '2017 à 2019', city: 'Lyon', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
+          { id: 'escp', rank: 1, school: 'ESCP', logo: 'Vignettes 2/Top 5 - Formations/escp-logo.png', bg: '#280092', fg: '#fff' },
+          { id: 'emlyon', rank: 2, school: 'EM Lyon', logo: 'Vignettes 2/Top 5 - Formations/emlyon.png', bg: '#e2001a', fg: '#fff' },
+          { id: 'coursflorent', rank: 3, school: 'Cours Florent', accent: '#fff', logo: 'Vignettes 2/Top 5 - Formations/cours-florent.png', bg: '#090907', fg: '#fff' },
+          { id: 'lbu', rank: 4, school: 'LBU', logo: 'Vignettes 2/Top 5 - Formations/lbu-logo.png', bg: '#2d1952', fg: '#fff' },
+          { id: 'iutlyon1', rank: 5, school: 'IUT Lyon 1', logo: 'Vignettes 2/Top 5 - Formations/iut-logo.png', bg: '#e2007d', fg: '#fff' },
         ];
         // PÉPITES — logo : '' = nom en texte. Utiliser des images rognées au plus près du logo : il remplit toute la carte
-        //   full : true pour une vignette 16:9 déjà mise en page (affichée bord à bord, sans marge)
+        //   full : true pour une vignette 16:9 à fond prolongé (« -etendu.jpg »), qui remplit toute la carte
         pepites = [
-          { id: 'alptis', name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis.png', full: true, bg: '#469962', fg: '#fff' },
-          { id: 'oppizi', name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi.png', full: true, bg: '#1a3552', fg: '#fff' },
-          { id: 'equancy', name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy.png', full: true, bg: '#cc115e', fg: '#fff' },
+          { id: 'alptis', name: 'Alptis', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Alptis-etendu.jpg', full: true, bg: '#469962', fg: '#fff' },
+          { id: 'oppizi', name: 'Oppizi', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Oppizi-etendu.jpg', full: true, bg: '#1a3552', fg: '#fff' },
+          { id: 'equancy', name: 'Equancy', logo: 'Vignettes 2/Horizontales - Des pépites pour vous/Equancy-etendu.jpg', full: true, bg: '#cc115e', fg: '#fff' },
           { id: 'asv', name: 'ASV', logo: '', bg: '#000', fg: '#fff' },
 
           ];
         // JOBS ÉTUDIANTS — 6 affiches verticales (format 2:3, ex. 600×900 px) :
-        //   image : vignette verticale qui remplit toute l'affiche, logo déjà centré dedans
+        //   image : vignette verticale à fond prolongé (« -etendu.jpg »), affichée entière, logo déjà centré dedans
         //   logo  : logo à superposer ('' = rien) ; sans image ni logo, le nom `name` s'affiche en titre
         //   role  : poste affiché en bas ('' = rien)
         collection = [
-          { name: 'Zara', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/zara.png', logo: '', bg: '#000', fg: '#fff' },
-          { name: 'Confluence', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Confluence.png', logo: '', bg: '#194294', fg: '#fff' },
-          { name: 'Häagen-Dazs', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Haagen-Dazs.jpg', logo: '', bg: '#630017', fg: '#fff' },
-          { name: 'Action', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Action.png', logo: '', bg: '#021a72', fg: '#fff' },
-          { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark.png', logo: '', bg: '#029ec4', fg: '#fff' },
-          { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins.png', logo: '', bg: '#06468e', fg: '#fff' },
+          { name: 'Zara', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/zara-etendu.jpg', logo: '', bg: '#000', fg: '#fff' },
+          { name: 'Confluence', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Confluence-etendu.jpg', logo: '', bg: '#194294', fg: '#fff' },
+          { name: 'Häagen-Dazs', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Haagen-Dazs-etendu.jpg', logo: '', bg: '#630017', fg: '#fff' },
+          { name: 'Action', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Action-etendu.jpg', logo: '', bg: '#021a72', fg: '#fff' },
+          { name: 'Primark', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/Primark-etendu.jpg', logo: '', bg: '#029ec4', fg: '#fff' },
+          { name: 'Laboratoire Eurofins Biomnis', role: '', image: 'Vignettes 2/Verticlaes - Jobs étudiants/eurofins-etendu.jpg', logo: '', bg: '#06468e', fg: '#fff' },
         ];
-        // LANGUES — flag : emoji du drapeau ; art : drapeau dessiné en CSS quand l'emoji n'existe pas partout (catalan)
+        // SENYERA façon emoji : l'emoji du drapeau catalan s'affiche en drapeau noir sur iPhone et Android,
+        // on le dessine donc avec le même aspect que les autres (drapeau qui flotte, reflet, coins arrondis).
+        senyera = (() => {
+          const band = (a, b) => `M3 ${a}C21 ${a - 5} 41 ${a + 5} 61 ${a}V${b}C41 ${b + 5} 21 ${b - 5} 3 ${b}Z`;
+          const reds = [10, 18, 26, 34].map(y => band(y, y + 4)).join('');
+          const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 48'>`
+            + `<defs><linearGradient id='s' x1='0' x2='1'><stop offset='0' stop-color='#fff' stop-opacity='.3'/><stop offset='.25' stop-color='#fff' stop-opacity='0'/>`
+            + `<stop offset='.5' stop-color='#000' stop-opacity='.16'/><stop offset='.78' stop-color='#000' stop-opacity='0'/><stop offset='1' stop-color='#fff' stop-opacity='.2'/></linearGradient></defs>`
+            // miroir horizontal : le drapeau flotte dans le même sens que les emojis
+            + `<g transform='matrix(-1 0 0 1 64 0)'><path d='${band(6, 42)}' fill='#fcdd09'/><path d='${reds}' fill='#da121a'/>`
+            + `<path d='${band(6, 42)}' fill='url(#s)' stroke='#000' stroke-opacity='.18' stroke-width='.8' stroke-linejoin='round'/></g></svg>`;
+          return `url("data:image/svg+xml,${encodeURIComponent(svg)}") center / contain no-repeat`;
+        })();
+        // LANGUES — flag : emoji du drapeau ; art : drapeau dessiné quand l'emoji n'existe pas partout (catalan)
+        //   nom et niveau : `textes.<langue>.langues` (même `id`)
         langues = [
-          { name: 'Français', flag: '🇫🇷', level: 'Langue maternelle' },
-          { name: 'Espagnol', flag: '🇪🇸', level: 'Courant · C1' },
-          { name: 'Arabe', flag: '🇲🇦', level: 'Courant · C1' },
-          { name: 'Anglais', flag: '🇬🇧', level: 'Courant · C1' },
-          { name: 'Italien', flag: '🇮🇹', level: 'Intermédiaire · B1' },
-          { name: 'Portugais', flag: '🇵🇹', level: 'Notions · A2' },
-          { name: 'Catalan', flag: '', art: 'repeating-linear-gradient(180deg,#fcdd09 0 11.11%,#da121a 11.11% 22.22%)', level: 'Courant · C1' },
+          { id: 'fr', flag: '🇫🇷' },
+          { id: 'es', flag: '🇪🇸' },
+          { id: 'ar', flag: '🇲🇦' },
+          { id: 'en', flag: '🇬🇧' },
+          { id: 'it', flag: '🇮🇹' },
+          { id: 'pt', flag: '🇵🇹' },
+          { id: 'ca', flag: '', art: this.senyera },
         ];
-        competences = [
-          'Développement de projets audiovisuels',
-          'Suivi de production',
-          'Analyse éditoriale',
-          'Lecture et analyse de scénarios',
-          'Adaptation littéraire',
-          'Recherche et évaluation d’IP',
-          'Suivi d’auteurs et scénaristes',
-          'Préparation de dossiers de production',
-          'Suivi budgétaire',
-          'Coordination de projets',
-          'Organisation et gestion des priorités',
-          'Gestion de planning',
-          'Suivi administratif',
-          'Reporting et analyse de données',
-          'Veille et analyse de marché',
-          'Coordination d’équipes',
-          'Recrutement et formation',
-          'Management d’équipe',
-          'Gestion opérationnelle',
-          'Gestion logistique',
-          'Relation client',
-          'Suivi des KPI',
-          'Gestion de campagnes',
-          'Maîtrise d’Excel',
-          'Création de tableaux de suivi',
-          'Rédaction de synthèses et présentations',
-        ];
-        autres = [
-          '🚗 Permis B',
-          '🎸 Guitare',
-          '🎹 Piano',
-          '🥊 Boxe',
-          '🎾 Tennis',
-          '🏊 Piscine',
-          '📣 Cheerleading',
-          '🎭 Théâtre',
-          '🔨 Bricolage',
-          '💻 Nouvelles technologies',
-        ];
+
+        // ====== TEXTES DU SITE (FR / ES / EN) — d'après « CVFLIX — Textes du site (FR ES EN) » ======
+        // Un bloc par langue, avec les mêmes clés :
+        //   ui : interface (intro, en-tête, hero, titres des rangées, fiches, fiche contact)
+        //   fiches : une entrée par expérience (même `id` que `experiences` et `pepites`)
+        //     role, dates, city : intitulé, période et ville ; kw : 3 mots-clés (mini-carte)
+        //     bold : phrase en gras ; syn : synopsis ; genres, dist : colonne de droite
+        //     prog : « Un programme » ('' = pas de ligne) ; eps : épisodes [titre, description]
+        //   formations : diplôme, années et ville (même `id` que `formations`)
+        //   langues : [nom, niveau] (même `id` que `langues`) ; competences, autres : listes de l'onglet Bonus
+        textes = {
+          fr: {
+            ui: {
+              code: 'FR', tap: 'Appuyer pour lancer', skip: 'Passer', choose: 'Choisissez votre langue', changeLang: 'Changer de langue',
+              browse: 'Parcourir', badge: 'Disponible dès maintenant', title: 'Chargé de Production / Développement',
+              bio: 'Profil orienté développement et production audiovisuelle, avec une expérience en analyse éditoriale, suivi de projets et accompagnement de productions. À l’aise dans l’identification de projets, l’analyse de contenus et la coordination des différentes étapes de développement et de production.',
+              collab: 'Collaborer', contact: 'Fiche contact',
+              rowExp: 'Dernières nouveautés', rowForm: 'Top 5 des formations suivies', rowPep: 'Ça pourrait vous intéresser',
+              collKicker: 'Collection', collTitle: 'Jobs étudiants', bonus: 'Bonus',
+              tabs: { langues: 'Langues', competences: 'Compétences', autres: 'Autres' },
+              next: 'Suivant', city: 'Paris, France',
+              open: 'Ouvrir la fiche', close: 'Fermer', genres: 'Genres', dist: 'Distribution', prog: 'Un programme', episodes: 'Épisodes', colon: ' : ',
+              contactAria: 'Fiche contact', phone: 'Téléphone', email: 'Email', linkedin: 'LinkedIn',
+              copy: 'Copier', copied: 'Copié ✓', call: 'Appeler', save: 'Enregistrer dans mes contacts',
+            },
+            fiches: {
+              marathon: {
+                role: 'Assistant de production & développement', dates: 'Janv. 2026 – Juil. 2026', city: 'Paris',
+                kw: ['Développement', 'Production', 'Coordination'],
+                bold: 'Chargé de mission auprès de la productrice, présidente de la filiale',
+                syn: 'Lecture et analyse de projets films et séries, accueil des pitchs, montage de dossiers de financement et coordination de la production, assistance de la productrice (agenda, réunions, CR)',
+                genres: 'Développement · Production · Analyse éditoriale · Financement',
+                dist: 'Créateurs, auteurs, producteurs, agents, réalisateurs, diffuseurs, institutions (CNC, Région Grand Est), équipes techniques',
+                prog: 'Rigoureux · Réactif · Discret (informations confidentielles)',
+                eps: [
+                  ['Lecture et analyse éditoriale', "Lecture et analyse de scénarios, bibles, traitements et notes d'intention ; rédaction de fiches de lecture et de recommandations artistiques."],
+                  ['Développement éditorial', 'Accompagnement des auteurs dans la structuration de leurs arcs narratifs ; suivi du développement de projets séries, unitaires et animation.'],
+                  ["Veille et sourcing d'adaptations", "Identification de nouveaux concepts et d'opportunités d'adaptation (IP) ; analyse du marché, des formats et de la diffusion ; recommandations aux diffuseurs."],
+                  ['Pipeline de développement', 'Centralisation des soumissions et des pitchs des créateurs, auteurs, producteurs et agents ; coordination des projets.'],
+                  ['Talents et partenaires', 'Recherche, sélection et coordination de talents et de partenaires artistiques ; échanges avec agents, diffuseurs, coproducteurs et équipes techniques.'],
+                  ['Dossiers de présentation et de financement', "Préparation de dossiers de présentation (synopsis, bibles, pitch decks) ; participation au montage de demandes d'aides CNC et Région Grand Est."],
+                  ['Coordination de production et tournage', 'Coordination logistique de production (planning, budget, préproduction) ; gestion des sujets opérationnels au tournage et des journées presse.'],
+                  ['Agenda, réunions et pitchs', "Gestion de l'agenda, des déplacements et des événements de la productrice ; préparation des réunions et des pitchs (notes de synthèse, comptes rendus) ; suivi des projets."],
+                ],
+              },
+              banijay: {
+                role: 'Assistant IP et adaptations littéraires', dates: 'Mars 2025 – Déc. 2025', city: 'Paris',
+                kw: ['IP & adaptation', 'Veille', 'Développement'],
+                bold: "Repérer les histoires à adapter, en France et à l'international",
+                syn: "Appui direct au Directeur Scripted IP & Production : veille d'IP et de formats internationaux, lecture d'œuvres littéraires, notes de lecture et présentations pour les équipes de développement fiction du Groupe.",
+                genres: 'IP · Adaptation littéraire · Veille · Analyse de marché',
+                dist: 'Directeur IP / Formats / Book IP, équipe éditoriale fiction, filiales françaises et internationales, auteurs, scénaristes, agents, éditeurs, Market Research, Banijay Rights, PR',
+                prog: 'Curieux · Structuré · Autonome',
+                eps: [
+                  ['Veille IP et formats', 'Repérage de séries, romans et concepts sur différents territoires, avec évaluation de leur potentiel créatif et commercial.'],
+                  ["Lecture d'œuvres littéraires", 'Lecture d’œuvres et de manuscrits, rédaction de notes de lecture et évaluation de leur potentiel audiovisuel et des droits d’adaptation.'],
+                  ['Analyses de marché', 'Réalisation de benchmarks, de notes stratégiques et d’outils de veille sur les tendances et la concurrence.'],
+                  ['Circulation des IP', 'Coordination de la circulation des IP entre les différentes filiales françaises et internationales du groupe.'],
+                  ['Communauté créative', 'Échanges avec auteurs, scénaristes, agents et éditeurs, ainsi que recherche de partenaires et de coproducteurs.'],
+                  ['Outils et suivi', "Création d’outils pour le suivi des droits d'adaptation et des contrats associés."],
+                ],
+              },
+              tf1: {
+                role: 'Chef de projet Digital & Performance', dates: 'Oct. 2022 – Sept. 2024', city: 'Paris',
+                kw: ['Digital', 'Data', 'Pilotage de projets'],
+                bold: "Traduire les données d'audience en décisions éditoriales",
+                syn: 'Pilotage de projets digitaux transverses (éditorial, marketing, CRM, produit, tech) autour de TF1+ : KPI, tableaux de bord, analyses de performance et recommandations à la direction.',
+                genres: 'Data · Digital · Performance · KPI · Streaming',
+                dist: 'Équipes éditoriales, marketing éditorial, CRM, social media, publicité, produit, équipes techniques, direction',
+                prog: 'Analytique · Pédagogue · Orienté résultats',
+                eps: [
+                  ['Pilotage transverse', 'Projets digitaux menés avec les équipes éditoriales, marketing, CRM, social media, publicité et produit.'],
+                  ['KPI et tableaux de bord', 'Définition et suivi des KPI ; création de tableaux de bord et automatisation des reportings (Tableau).'],
+                  ['Performance TF1+ / MYTF1', 'Suivi des contenus et des usages ; recommandations sur la mise en avant des programmes.'],
+                  ['Applications et plateforme', 'Pilotage de TF1 Info et MYTF1 ; mise en place de TF1+ avec produit et tech ; ateliers métiers, User Stories (Jira, Confluence).'],
+                  ["Analyse d'audience et optimisation", "Analyse des parcours utilisateurs et des audiences ; pilotage d'A/B tests et de démarches d'optimisation (CRO) ; suivi de l'acquisition et de la fidélisation via les campagnes CRM."],
+                ],
+              },
+              oppizi: {
+                role: 'Operations City Manager', dates: 'Janv. 2022 – Oct. 2022', city: 'Lyon',
+                kw: ['Opérations', 'Management', 'Campagnes'],
+                bold: 'Management d’une équipe de distribution de flyers',
+                syn: 'Gestion d’équipes de distribution (Brand Ambassadors) d’environ 30 freelances et suivi de campagnes de leur préparation à leur clôture, avec pilotage des résultats et reporting.',
+                genres: 'Management terrain · Opérations · Gestion de campagne · KPI',
+                dist: 'Brand Ambassadors (environ 30 freelances), clients, fournisseurs, lieux de distribution',
+                prog: 'Réactif · Organisé · Leader',
+                eps: [
+                  ['Constitution des équipes', "Composition, recrutement, formation et encadrement d'environ 30 freelances."],
+                  ['Campagnes de A à Z', 'Préparation et suivi des campagnes jusqu’à leur clôture, avec reporting des résultats, suivi des KPI et du budget.'],
+                  ['Relation client', 'Gestion de la relation avec les clients et accompagnement dans la préparation de nouvelles campagnes.'],
+                  ['Logistique terrain', 'Repérage des lieux de distribution, gestion des stocks, équipements et uniformes ; résolution des problèmes opérationnels.'],
+                ],
+              },
+              equancy: {
+                role: 'Consultant Digital Marketing et Web Analytics', dates: 'Juil. 2021 – Déc. 2021', city: 'Paris',
+                kw: ['Web analytics', 'Mesure de performance', 'Conseil'],
+                bold: 'Transformer les données marketing en recommandations opérationnelles',
+                syn: 'Mission de conseil sur la mesure de la performance digitale : stratégie de mesure, analyse marketing, média et CRM, recommandations aux clients et coordination des prestataires.',
+                genres: 'Web Analytics · KPI · Reporting · Tracking',
+                dist: 'Clients, agences digitales et médias, équipes internes (data, BI)',
+                prog: "Analytique · Structuré · À l'écoute du client",
+                eps: [
+                  ['Stratégie de mesure', "Définition des KPI, des reportings et suivi de l'implémentation du tracking."],
+                  ['Analyse de performance', 'Analyse de la performance marketing, média, digitale et CRM ; analyse des comportements utilisateurs et des données de marché.'],
+                  ['Recommandations opérationnelles', 'Coordination des prestataires : agences digitales et médias, équipes internes data et BI.'],
+                  ['Accompagnement client', 'Recueil des besoins clients et accompagnement sur leurs enjeux de transformation digitale ; construction de dashboards de pilotage et suivi des évolutions.'],
+                ],
+              },
+              alptis: {
+                role: 'Gestionnaire de Contrats Collectifs en Assurances', dates: 'Déc. 2020 – Juin 2021 et Janv. 2022 – Oct. 2022', city: 'Lyon',
+                kw: ['Assurance', 'Gestion de portefeuille', 'Relation client'],
+                bold: 'Un portefeuille de comptes entreprises à gérer de bout en bout',
+                syn: "Gestion d'un portefeuille de clients (cotisations, comptes entreprises et salariés, encaissements) ; traitement des demandes et coordination des interlocuteurs.",
+                genres: 'Assurance · Gestion de portefeuille · Relation client',
+                dist: 'Entreprises clientes, salariés, délégations commerciales, réseau de courtiers',
+                prog: 'Rigoureux · Méthodique · Fiable',
+                eps: [
+                  ['Portefeuille clients', "Gestion d'un portefeuille de clients entreprises : suivi des cotisations, des comptes entreprises et salariés et des encaissements."],
+                  ['Analyse des comptes', 'Analyse et renseignement des comptes clients ; traitement des demandes de délais de paiement et des impayés.'],
+                  ['Réseau commercial', 'Relation avec les délégations commerciales, le réseau de courtiers et les entreprises pour traiter leurs demandes.'],
+                  ['Résolution de problèmes', 'Coordination de multiples interlocuteurs pour résoudre les problèmes opérationnels ; suivi des processus administratifs, financiers et contractuels.'],
+                ],
+              },
+              asv: {
+                role: 'Community Manager', dates: 'Avril 2019 – Juin 2019', city: 'Lyon',
+                kw: ['Community management', 'E-commerce', 'Création de contenu'],
+                bold: 'Faire vivre une marque de bijoux sur les réseaux',
+                syn: 'Animation de la communauté et production de contenus de mise en scène des bijoux ; gestion des partenariats avec les créatrices de contenu, des commandes et des mises en ligne produit.',
+                genres: 'Community management · Contenu · E-commerce',
+                dist: 'Créatrices de contenu, fournisseurs, clientes',
+                prog: '',
+                eps: [
+                  ['Calendrier éditorial', 'Planification du calendrier de publication ; production de visuels, photos et vidéos de mise en scène des bijoux.'],
+                  ['Partenariats créatrices', 'Gestion des partenariats avec les créatrices de contenu.'],
+                  ['Commandes et stocks', 'Suivi des stocks et des inventaires, relation avec les fournisseurs ; préparation et expédition soignée des commandes, traitement des retours.'],
+                  ['Mise en ligne et promotion', 'Mise en ligne des nouveautés et optimisation des fiches produits (descriptions, visuels) ; création de bannières, mise en place de codes promo et lancements de collections.'],
+                ],
+              },
+            },
+            formations: {
+              escp: { deg: 'MSc Media Management', years: '2024 à 2025', city: 'Paris' },
+              emlyon: { deg: 'Programme Grande École', years: '2020 à 2023', city: 'Lyon' },
+              coursflorent: { deg: 'Cours du soir', years: '2023 à 2024', city: 'Paris' },
+              lbu: { deg: 'Licence (Business / Management)', years: '2019 à 2020', city: 'Leeds' },
+              iutlyon1: { deg: 'DUT Gestion des Entreprises et des Administrations (GEA)', years: '2017 à 2019', city: 'Lyon' },
+            },
+            langues: {
+              fr: ['Français', 'Langue maternelle'],
+              es: ['Espagnol', 'Courant · C1'],
+              ar: ['Arabe', 'Courant · C1'],
+              en: ['Anglais', 'Courant · C1'],
+              it: ['Italien', 'Intermédiaire · B1'],
+              pt: ['Portugais', 'Notions · A2'],
+              ca: ['Catalan', 'Courant · C1'],
+            },
+            competences: [
+              'Développement de projets audiovisuels', 'Suivi de production', 'Analyse éditoriale', 'Lecture et analyse de scénarios',
+              'Adaptation littéraire', 'Recherche et évaluation d’IP', 'Suivi d’auteurs et scénaristes', 'Préparation de dossiers de production',
+              'Suivi budgétaire', 'Coordination de projets', 'Organisation et gestion des priorités', 'Gestion de planning',
+              'Suivi administratif', 'Reporting et analyse de données', 'Veille et analyse de marché', 'Coordination d’équipes',
+              'Recrutement et formation', 'Management d’équipe', 'Gestion opérationnelle', 'Gestion logistique',
+              'Relation client', 'Suivi des KPI', 'Gestion de campagnes', 'Maîtrise d’Excel',
+              'Création de tableaux de suivi', 'Rédaction de synthèses et présentations',
+            ],
+            autres: ['🚗 Permis B', '🎸 Guitare', '🎹 Piano', '🥊 Boxe', '🎾 Tennis', '🏊 Piscine', '📣 Cheerleading', '🎭 Théâtre', '🔨 Bricolage', '💻 Nouvelles technologies'],
+          },
+
+          es: {
+            ui: {
+              code: 'ES', tap: 'Toca para empezar', skip: 'Saltar', choose: 'Elige tu idioma', changeLang: 'Cambiar idioma',
+              browse: 'Explorar', badge: 'Disponible ya', title: 'Coordinador de Producción y Desarrollo',
+              bio: 'Perfil centrado en el desarrollo y la producción audiovisual, con experiencia en análisis editorial, seguimiento de proyectos y acompañamiento de producciones. Me muevo con soltura detectando proyectos, analizando contenidos y coordinando cada fase del desarrollo y la producción.',
+              collab: 'Trabajemos juntos', contact: 'Contacto',
+              rowExp: 'Novedades', rowForm: 'Top 5: mi formación', rowPep: 'Quizá te interese',
+              collKicker: 'Colección', collTitle: 'Trabajos de estudiante', bonus: 'Extras',
+              tabs: { langues: 'Idiomas', competences: 'Competencias', autres: 'Otros' },
+              next: 'Siguiente', city: 'París, Francia',
+              open: 'Ver ficha', close: 'Cerrar', genres: 'Géneros', dist: 'Reparto', prog: 'Este título es', episodes: 'Episodios', colon: ': ',
+              contactAria: 'Datos de contacto', phone: 'Teléfono', email: 'Correo', linkedin: 'LinkedIn',
+              copy: 'Copiar', copied: 'Copiado ✓', call: 'Llamar', save: 'Guardar en mis contactos',
+            },
+            fiches: {
+              marathon: {
+                role: 'Asistente de producción y desarrollo', dates: 'Ene. 2026 – Jul. 2026', city: 'París',
+                kw: ['Desarrollo', 'Producción', 'Coordinación'],
+                bold: 'Mano derecha de la productora, presidenta de la filial',
+                syn: 'Lectura y análisis de proyectos de cine y series, recepción de pitches, preparación de dosieres de financiación y coordinación de la producción, además de asistencia directa a la productora (agenda, reuniones, actas)',
+                genres: 'Desarrollo · Producción · Análisis editorial · Financiación',
+                dist: 'Creadores, guionistas, productores, agentes, directores, cadenas y plataformas, instituciones (CNC, Región Grand Est), equipos técnicos',
+                prog: 'Riguroso · Resolutivo · Discreto (información confidencial)',
+                eps: [
+                  ['Lectura y análisis editorial', 'Lectura y análisis de guiones, biblias, tratamientos y notas de intención; redacción de informes de lectura y recomendaciones artísticas.'],
+                  ['Desarrollo editorial', 'Acompañamiento a los guionistas en la construcción de sus arcos narrativos; seguimiento del desarrollo de series, TV movies y proyectos de animación.'],
+                  ['Búsqueda de adaptaciones', 'Detección de nuevos conceptos y oportunidades de adaptación (IP); análisis del mercado, los formatos y la distribución; recomendaciones a cadenas y plataformas.'],
+                  ['Pipeline de desarrollo', 'Centralización de las propuestas y pitches de creadores, guionistas, productores y agentes; coordinación de los proyectos.'],
+                  ['Talento y socios', 'Búsqueda, selección y coordinación de talento y socios artísticos; contacto con agentes, cadenas, coproductores y equipos técnicos.'],
+                  ['Dosieres de presentación y financiación', 'Preparación de dosieres de presentación (sinopsis, biblias, pitch decks); participación en las solicitudes de ayudas al CNC y a la Región Grand Est.'],
+                  ['Coordinación de producción y rodaje', 'Coordinación logística de la producción (plan de trabajo, presupuesto, preproducción); gestión de la operativa en rodaje y de las jornadas de prensa.'],
+                  ['Agenda, reuniones y pitches', 'Gestión de la agenda, los viajes y los eventos de la productora; preparación de reuniones y pitches (notas de síntesis, actas); seguimiento de los proyectos.'],
+                ],
+              },
+              banijay: {
+                role: 'Asistente de IP y adaptaciones literarias', dates: 'Mar. 2025 – Dic. 2025', city: 'París',
+                kw: ['IP y adaptación', 'Scouting', 'Desarrollo'],
+                bold: 'Encontrar historias para adaptar, en Francia y en el extranjero',
+                syn: 'Apoyo directo al Director de Scripted IP & Production: búsqueda de IP y formatos internacionales, lectura de obras literarias, informes de lectura y presentaciones para los equipos de desarrollo de ficción del Grupo.',
+                genres: 'IP · Adaptación literaria · Scouting · Análisis de mercado',
+                dist: 'Dirección de IP / Formatos / Book IP, equipo editorial de ficción, filiales francesas e internacionales, autores, guionistas, agentes, editoriales, Market Research, Banijay Rights, PR',
+                prog: 'Curioso · Metódico · Autónomo',
+                eps: [
+                  ['Scouting de IP y formatos', 'Detección de series, novelas y conceptos en distintos territorios, valorando su potencial creativo y comercial.'],
+                  ['Lectura de obras literarias', 'Lectura de obras y manuscritos, redacción de informes de lectura y valoración de su potencial audiovisual y de los derechos de adaptación.'],
+                  ['Análisis de mercado', 'Elaboración de benchmarks, notas estratégicas y herramientas de seguimiento de tendencias y competencia.'],
+                  ['Circulación de IP', 'Coordinación del intercambio de IP entre las distintas filiales francesas e internacionales del grupo.'],
+                  ['Comunidad creativa', 'Contacto con autores, guionistas, agentes y editoriales, y búsqueda de socios y coproductores.'],
+                  ['Herramientas y seguimiento', 'Creación de herramientas para el seguimiento de los derechos de adaptación y sus contratos.'],
+                ],
+              },
+              tf1: {
+                role: 'Jefe de proyecto Digital y Performance', dates: 'Oct. 2022 – Sept. 2024', city: 'París',
+                kw: ['Digital', 'Datos', 'Gestión de proyectos'],
+                bold: 'Convertir los datos de audiencia en decisiones editoriales',
+                syn: 'Gestión de proyectos digitales transversales (editorial, marketing, CRM, producto, tecnología) en torno a TF1+: KPI, dashboards, análisis de rendimiento y recomendaciones a la dirección.',
+                genres: 'Datos · Digital · Rendimiento · KPI · Streaming',
+                dist: 'Equipos editoriales, marketing de contenidos, CRM, redes sociales, publicidad, producto, equipos técnicos, dirección',
+                prog: 'Analítico · Didáctico · Orientado a resultados',
+                eps: [
+                  ['Gestión transversal', 'Proyectos digitales liderados junto a los equipos editoriales, de marketing, CRM, redes sociales, publicidad y producto.'],
+                  ['KPI y dashboards', 'Definición y seguimiento de KPI; creación de dashboards y automatización de informes (Tableau).'],
+                  ['Rendimiento de TF1+ / MYTF1', 'Seguimiento de contenidos y hábitos de uso; recomendaciones sobre qué programas destacar.'],
+                  ['Aplicaciones y plataforma', 'Gestión de TF1 Info y MYTF1; lanzamiento de TF1+ con los equipos de producto y tecnología; talleres con negocio, user stories (Jira, Confluence).'],
+                  ['Análisis de audiencia y optimización', 'Análisis de audiencias y recorridos de usuario; gestión de tests A/B y de acciones de optimización (CRO); seguimiento de la captación y la fidelización mediante campañas de CRM.'],
+                ],
+              },
+              oppizi: {
+                role: 'Operations City Manager', dates: 'Ene. 2022 – Oct. 2022', city: 'Lyon',
+                kw: ['Operaciones', 'Gestión de equipos', 'Campañas'],
+                bold: 'Al frente de un equipo de reparto de flyers',
+                syn: 'Gestión de equipos de reparto (Brand Ambassadors) de unos 30 freelances y seguimiento de las campañas de principio a fin, con control de resultados y reporting.',
+                genres: 'Gestión sobre el terreno · Operaciones · Gestión de campañas · KPI',
+                dist: 'Brand Ambassadors (unos 30 freelances), clientes, proveedores, puntos de reparto',
+                prog: 'Resolutivo · Organizado · Líder',
+                eps: [
+                  ['Formación de equipos', 'Selección, contratación, formación y supervisión de unos 30 freelances.'],
+                  ['Campañas de principio a fin', 'Preparación y seguimiento de las campañas hasta su cierre, con reporting de resultados y control de KPI y presupuesto.'],
+                  ['Relación con clientes', 'Gestión de la relación con los clientes y acompañamiento en la preparación de nuevas campañas.'],
+                  ['Logística sobre el terreno', 'Localización de puntos de reparto, gestión de stock, material y uniformes; resolución de incidencias operativas.'],
+                ],
+              },
+              equancy: {
+                role: 'Consultor de Marketing Digital y Analítica Web', dates: 'Jul. 2021 – Dic. 2021', city: 'París',
+                kw: ['Analítica web', 'Medición del rendimiento', 'Consultoría'],
+                bold: 'Convertir los datos de marketing en recomendaciones accionables',
+                syn: 'Consultoría en medición del rendimiento digital: estrategia de medición, análisis de marketing, medios y CRM, recomendaciones a clientes y coordinación de proveedores.',
+                genres: 'Analítica web · KPI · Reporting · Tracking',
+                dist: 'Clientes, agencias digitales y de medios, equipos internos (datos, BI)',
+                prog: 'Analítico · Metódico · Cercano al cliente',
+                eps: [
+                  ['Estrategia de medición', 'Definición de KPI e informes, y seguimiento de la implementación del tracking.'],
+                  ['Análisis de rendimiento', 'Análisis del rendimiento de marketing, medios, digital y CRM; estudio del comportamiento de los usuarios y de los datos de mercado.'],
+                  ['Recomendaciones accionables', 'Coordinación de proveedores: agencias digitales y de medios, equipos internos de datos y BI.'],
+                  ['Acompañamiento al cliente', 'Recogida de necesidades y acompañamiento de los clientes en su transformación digital; creación de dashboards de seguimiento y control de su evolución.'],
+                ],
+              },
+              alptis: {
+                role: 'Gestor de Seguros Colectivos', dates: 'Dic. 2020 – Jun. 2021 y Ene. 2022 – Oct. 2022', city: 'Lyon',
+                kw: ['Seguros', 'Gestión de cartera', 'Atención al cliente'],
+                bold: 'Una cartera de cuentas de empresa gestionada de principio a fin',
+                syn: 'Gestión de una cartera de clientes (primas, cuentas de empresas y empleados, cobros); tramitación de solicitudes y coordinación de los distintos interlocutores.',
+                genres: 'Seguros · Gestión de cartera · Atención al cliente',
+                dist: 'Empresas clientes, empleados, delegaciones comerciales, red de corredores',
+                prog: 'Riguroso · Metódico · Fiable',
+                eps: [
+                  ['Cartera de clientes', 'Gestión de una cartera de empresas clientes: seguimiento de primas, cuentas de empresas y empleados, y cobros.'],
+                  ['Análisis de cuentas', 'Análisis y actualización de las cuentas de clientes; gestión de aplazamientos de pago e impagos.'],
+                  ['Red comercial', 'Relación con las delegaciones comerciales, la red de corredores y las empresas para atender sus solicitudes.'],
+                  ['Resolución de incidencias', 'Coordinación de múltiples interlocutores para resolver incidencias operativas; seguimiento de procesos administrativos, financieros y contractuales.'],
+                ],
+              },
+              asv: {
+                role: 'Community Manager', dates: 'Abr. 2019 – Jun. 2019', city: 'Lyon',
+                kw: ['Community management', 'E-commerce', 'Creación de contenido'],
+                bold: 'Dar vida a una marca de joyas en redes sociales',
+                syn: 'Dinamización de la comunidad y creación de contenidos para lucir las joyas; gestión de colaboraciones con creadoras de contenido, pedidos y publicación de productos.',
+                genres: 'Community management · Contenido · E-commerce',
+                dist: 'Creadoras de contenido, proveedores, clientas',
+                prog: '',
+                eps: [
+                  ['Calendario editorial', 'Planificación del calendario de publicaciones; producción de visuales, fotos y vídeos para lucir las joyas.'],
+                  ['Colaboraciones con creadoras', 'Gestión de las colaboraciones con creadoras de contenido.'],
+                  ['Pedidos y stock', 'Control de stock e inventarios, relación con proveedores; preparación y envío cuidado de los pedidos, gestión de devoluciones.'],
+                  ['Publicación y promoción', 'Publicación de novedades y optimización de las fichas de producto (descripciones, imágenes); creación de banners, códigos promocionales y lanzamientos de colecciones.'],
+                ],
+              },
+            },
+            formations: {
+              escp: { deg: 'MSc en Media Management', years: '2024 – 2025', city: 'París' },
+              emlyon: { deg: 'Máster en Management (Programa Grande École)', years: '2020 – 2023', city: 'Lyon' },
+              coursflorent: { deg: 'Clases nocturnas de interpretación', years: '2023 – 2024', city: 'París' },
+              lbu: { deg: 'Grado en Business / Management', years: '2019 – 2020', city: 'Leeds' },
+              iutlyon1: { deg: 'Diplomatura universitaria en Gestión de Empresas y Administraciones (DUT GEA)', years: '2017 – 2019', city: 'Lyon' },
+            },
+            langues: {
+              fr: ['Francés', 'Lengua materna'],
+              es: ['Español', 'Fluido · C1'],
+              ar: ['Árabe', 'Fluido · C1'],
+              en: ['Inglés', 'Fluido · C1'],
+              it: ['Italiano', 'Intermedio · B1'],
+              pt: ['Portugués', 'Nociones · A2'],
+              ca: ['Catalán', 'Fluido · C1'],
+            },
+            competences: [
+              'Desarrollo de proyectos audiovisuales', 'Seguimiento de producción', 'Análisis editorial', 'Lectura y análisis de guiones',
+              'Adaptación literaria', 'Búsqueda y evaluación de IP', 'Acompañamiento de autores y guionistas', 'Preparación de dosieres de producción',
+              'Control presupuestario', 'Coordinación de proyectos', 'Organización y gestión de prioridades', 'Gestión de calendarios',
+              'Gestión administrativa', 'Reporting y análisis de datos', 'Vigilancia y análisis de mercado', 'Coordinación de equipos',
+              'Selección y formación', 'Dirección de equipos', 'Gestión operativa', 'Gestión logística',
+              'Atención al cliente', 'Seguimiento de KPI', 'Gestión de campañas', 'Dominio de Excel',
+              'Creación de cuadros de seguimiento', 'Redacción de informes y presentaciones',
+            ],
+            autres: ['🚗 Carné de conducir B', '🎸 Guitarra', '🎹 Piano', '🥊 Boxeo', '🎾 Tenis', '🏊 Natación', '📣 Cheerleading', '🎭 Teatro', '🔨 Bricolaje', '💻 Nuevas tecnologías'],
+          },
+
+          en: {
+            ui: {
+              code: 'EN', tap: 'Tap to start', skip: 'Skip', choose: 'Choose your language', changeLang: 'Change language',
+              browse: 'Browse', badge: 'Available now', title: 'Production & Development Coordinator',
+              bio: 'Film and TV development and production professional with hands-on experience in script and editorial analysis, project tracking and production support. Skilled at spotting promising projects, assessing content and steering each stage from development through production.',
+              collab: 'Let’s work together', contact: 'Contact',
+              rowExp: 'New Releases', rowForm: 'Top 5 in Education', rowPep: 'You Might Also Like',
+              collKicker: 'Collection', collTitle: 'Student Jobs', bonus: 'Bonus',
+              tabs: { langues: 'Languages', competences: 'Skills', autres: 'More' },
+              next: 'Next', city: 'Paris, France',
+              open: 'View details', close: 'Close', genres: 'Genres', dist: 'Cast', prog: 'This show is', episodes: 'Episodes', colon: ': ',
+              contactAria: 'Contact card', phone: 'Phone', email: 'Email', linkedin: 'LinkedIn',
+              copy: 'Copy', copied: 'Copied ✓', call: 'Call', save: 'Add to contacts',
+            },
+            fiches: {
+              marathon: {
+                role: 'Production & Development Assistant', dates: 'Jan 2026 – Jul 2026', city: 'Paris',
+                kw: ['Development', 'Production', 'Coordination'],
+                bold: 'Right hand to the producer heading the subsidiary',
+                syn: 'Reading and assessing film and series projects, taking pitches, putting together funding applications and coordinating production, while supporting the producer day to day (schedule, meetings, minutes)',
+                genres: 'Development · Production · Script analysis · Financing',
+                dist: 'Creators, writers, producers, agents, directors, broadcasters and streamers, public funders (CNC, Grand Est Region), crew',
+                prog: 'Thorough · Responsive · Discreet (confidential information)',
+                eps: [
+                  ['Script reading & analysis', 'Reading and analysing scripts, series bibles, treatments and statements of intent; writing coverage and creative recommendations.'],
+                  ['Creative development', 'Helping writers shape their story arcs; tracking the development of series, single dramas and animation projects.'],
+                  ['Scouting adaptations', 'Spotting new concepts and adaptation opportunities (IP); analysing the market, formats and distribution; making recommendations to broadcasters.'],
+                  ['Development slate', 'Managing incoming submissions and pitches from creators, writers, producers and agents; coordinating projects.'],
+                  ['Talent & partners', 'Finding, selecting and coordinating talent and creative partners; liaising with agents, broadcasters, co-producers and crew.'],
+                  ['Pitch materials & funding applications', 'Preparing pitch materials (synopses, bibles, pitch decks); helping put together funding applications to the CNC and the Grand Est Region.'],
+                  ['Production & shoot coordination', 'Coordinating production logistics (schedule, budget, pre-production); handling on-set operations and press days.'],
+                  ['Schedule, meetings & pitches', 'Managing the producer’s diary, travel and events; preparing meetings and pitches (briefing notes, minutes); following up on projects.'],
+                ],
+              },
+              banijay: {
+                role: 'IP & Book Adaptations Assistant', dates: 'Mar 2025 – Dec 2025', city: 'Paris',
+                kw: ['IP & adaptation', 'Scouting', 'Development'],
+                bold: 'Finding stories worth adapting, in France and worldwide',
+                syn: 'Reporting directly to the Director of Scripted IP & Production: scouting international IP and formats, reading books, writing coverage and building presentations for the Group’s scripted development teams.',
+                genres: 'IP · Book adaptation · Scouting · Market analysis',
+                dist: 'Head of IP / Formats / Book IP, scripted editorial team, French and international labels, authors, screenwriters, agents, publishers, Market Research, Banijay Rights, PR',
+                prog: 'Curious · Organised · Self-starter',
+                eps: [
+                  ['IP & format scouting', 'Tracking series, novels and concepts across territories and assessing their creative and commercial potential.'],
+                  ['Book reading', 'Reading published books and manuscripts, writing coverage and assessing their screen potential and adaptation rights.'],
+                  ['Market analysis', 'Producing benchmarks, strategy notes and tools to track trends and competitors.'],
+                  ['IP sharing across the group', 'Coordinating how IP moves between the group’s French and international labels.'],
+                  ['Creative community', 'Working with authors, screenwriters, agents and publishers, and seeking out partners and co-producers.'],
+                  ['Tools & tracking', 'Building tools to track adaptation rights and the related contracts.'],
+                ],
+              },
+              tf1: {
+                role: 'Digital & Performance Project Manager', dates: 'Oct 2022 – Sep 2024', city: 'Paris',
+                kw: ['Digital', 'Data', 'Project management'],
+                bold: 'Turning audience data into editorial decisions',
+                syn: 'Leading cross-functional digital projects (editorial, marketing, CRM, product, tech) around TF1+: KPIs, dashboards, performance analysis and recommendations to senior management.',
+                genres: 'Data · Digital · Performance · KPIs · Streaming',
+                dist: 'Editorial teams, content marketing, CRM, social media, ad sales, product, tech teams, senior management',
+                prog: 'Analytical · Clear communicator · Results-driven',
+                eps: [
+                  ['Cross-team leadership', 'Digital projects run with editorial, marketing, CRM, social media, ad sales and product teams.'],
+                  ['KPIs & dashboards', 'Defining and tracking KPIs; building dashboards and automating reports (Tableau).'],
+                  ['TF1+ / MYTF1 performance', 'Monitoring content and viewing habits; advising on which shows to feature.'],
+                  ['Apps & platform', 'Managing the TF1 Info and MYTF1 apps; launching TF1+ with product and tech; stakeholder workshops, user stories (Jira, Confluence).'],
+                  ['Audience analysis & optimisation', 'Analysing audiences and user journeys; running A/B tests and conversion optimisation (CRO); tracking acquisition and retention through CRM campaigns.'],
+                ],
+              },
+              oppizi: {
+                role: 'Operations City Manager', dates: 'Jan 2022 – Oct 2022', city: 'Lyon',
+                kw: ['Operations', 'Team management', 'Campaigns'],
+                bold: 'Leading a street-marketing flyer team',
+                syn: 'Managing distribution teams of around 30 freelance Brand Ambassadors and running campaigns from setup to wrap-up, with results tracking and reporting.',
+                genres: 'Field management · Operations · Campaign management · KPIs',
+                dist: 'Brand Ambassadors (around 30 freelancers), clients, suppliers, distribution spots',
+                prog: 'Responsive · Organised · Natural leader',
+                eps: [
+                  ['Building the team', 'Recruiting, training and supervising around 30 freelancers.'],
+                  ['Campaigns end to end', 'Preparing and running campaigns through to close, reporting on results and tracking KPIs and budget.'],
+                  ['Client relations', 'Managing client relationships and helping clients plan new campaigns.'],
+                  ['Field logistics', 'Scouting distribution spots, managing stock, equipment and uniforms; solving operational issues.'],
+                ],
+              },
+              equancy: {
+                role: 'Digital Marketing & Web Analytics Consultant', dates: 'Jul 2021 – Dec 2021', city: 'Paris',
+                kw: ['Web analytics', 'Performance measurement', 'Consulting'],
+                bold: 'Turning marketing data into actionable recommendations',
+                syn: 'Consulting on digital performance measurement: measurement strategy, marketing, media and CRM analysis, client recommendations and vendor coordination.',
+                genres: 'Web analytics · KPIs · Reporting · Tracking',
+                dist: 'Clients, digital and media agencies, in-house teams (data, BI)',
+                prog: 'Analytical · Organised · Client-focused',
+                eps: [
+                  ['Measurement strategy', 'Defining KPIs and reports, and overseeing tracking implementation.'],
+                  ['Performance analysis', 'Analysing marketing, media, digital and CRM performance; studying user behaviour and market data.'],
+                  ['Actionable recommendations', 'Coordinating vendors: digital and media agencies, in-house data and BI teams.'],
+                  ['Client support', 'Gathering client needs and guiding them through digital transformation; building management dashboards and tracking progress.'],
+                ],
+              },
+              alptis: {
+                role: 'Group Insurance Account Administrator', dates: 'Dec 2020 – Jun 2021 and Jan 2022 – Oct 2022', city: 'Lyon',
+                kw: ['Insurance', 'Portfolio management', 'Client relations'],
+                bold: 'A portfolio of corporate accounts, managed end to end',
+                syn: 'Managing a client portfolio (premiums, company and employee accounts, payments); handling requests and coordinating the people involved.',
+                genres: 'Insurance · Portfolio management · Client relations',
+                dist: 'Client companies, employees, regional sales offices, broker network',
+                prog: 'Thorough · Methodical · Reliable',
+                eps: [
+                  ['Client portfolio', 'Managing a portfolio of corporate clients: tracking premiums, company and employee accounts, and payments.'],
+                  ['Account review', 'Reviewing and updating client accounts; handling payment extension requests and arrears.'],
+                  ['Sales network', 'Working with sales offices, the broker network and client companies to resolve their requests.'],
+                  ['Problem solving', 'Bringing multiple stakeholders together to fix operational issues; overseeing administrative, financial and contractual processes.'],
+                ],
+              },
+              asv: {
+                role: 'Community Manager', dates: 'Apr 2019 – Jun 2019', city: 'Lyon',
+                kw: ['Community management', 'E-commerce', 'Content creation'],
+                bold: 'Bringing a jewellery brand to life on social media',
+                syn: 'Growing the community and creating content to showcase the jewellery; managing influencer partnerships, orders and product listings.',
+                genres: 'Community management · Content · E-commerce',
+                dist: 'Content creators, suppliers, customers',
+                prog: '',
+                eps: [
+                  ['Content calendar', 'Planning the posting schedule; producing visuals, photos and videos showcasing the jewellery.'],
+                  ['Influencer partnerships', 'Managing partnerships with content creators.'],
+                  ['Orders & stock', 'Tracking stock and inventory, dealing with suppliers; carefully packing and shipping orders, handling returns.'],
+                  ['Listings & promotion', 'Listing new pieces and optimising product pages (copy, visuals); creating banners, setting up promo codes and launching collections.'],
+                ],
+              },
+            },
+            formations: {
+              escp: { deg: 'MSc in Media Management', years: '2024 – 2025', city: 'Paris' },
+              emlyon: { deg: 'Master in Management (Grande École Programme)', years: '2020 – 2023', city: 'Lyon' },
+              coursflorent: { deg: 'Evening acting classes', years: '2023 – 2024', city: 'Paris' },
+              lbu: { deg: 'Bachelor’s degree in Business / Management', years: '2019 – 2020', city: 'Leeds' },
+              iutlyon1: { deg: 'Two-year degree in Business & Public Administration (DUT GEA)', years: '2017 – 2019', city: 'Lyon' },
+            },
+            langues: {
+              fr: ['French', 'Native'],
+              es: ['Spanish', 'Fluent · C1'],
+              ar: ['Arabic', 'Fluent · C1'],
+              en: ['English', 'Fluent · C1'],
+              it: ['Italian', 'Intermediate · B1'],
+              pt: ['Portuguese', 'Basic · A2'],
+              ca: ['Catalan', 'Fluent · C1'],
+            },
+            competences: [
+              'Film & TV project development', 'Production tracking', 'Editorial analysis', 'Script reading & coverage',
+              'Book-to-screen adaptation', 'IP scouting & evaluation', 'Supporting authors & screenwriters', 'Production package preparation',
+              'Budget tracking', 'Project coordination', 'Organisation & prioritisation', 'Scheduling',
+              'Administrative follow-up', 'Reporting & data analysis', 'Market research & analysis', 'Team coordination',
+              'Recruitment & training', 'Team leadership', 'Operations management', 'Logistics management',
+              'Client relations', 'KPI tracking', 'Campaign management', 'Advanced Excel',
+              'Building tracking sheets', 'Writing summaries & presentations',
+            ],
+            autres: ['🚗 Driving licence', '🎸 Guitar', '🎹 Piano', '🥊 Boxing', '🎾 Tennis', '🏊 Swimming', '📣 Cheerleading', '🎭 Acting', '🔨 DIY', '💻 Tech'],
+          },
+        };
         // ====== FIN DES DONNÉES ======
 
         componentDidMount() {
@@ -2195,12 +2676,17 @@
           document.body.addEventListener('scroll', this.onScroll, { passive: true });
           this.onKey = e => { if (e.key === 'Escape' && this.state.contactOpen) this.setState({ contactOpen: false }); };
           window.addEventListener('keydown', this.onKey);
+          // bouton « retour » du navigateur : revient au choix de la langue (ou à la langue précédente)
+          this.onPop = () => this.applyUrlLang();
+          window.addEventListener('popstate', this.onPop);
+          this.syncHtmlLang();
           this.setupFiches();
           if (this.props.intro === false) this.finishIntro();
         }
         componentWillUnmount() {
           window.removeEventListener('scroll', this.onScroll); document.body.removeEventListener('scroll', this.onScroll);
           window.removeEventListener('keydown', this.onKey);
+          window.removeEventListener('popstate', this.onPop);
           this.teardownFiches();
           clearInterval(this.revealTimer);
         }
@@ -2218,19 +2704,111 @@
             if (r.top < vh * 0.92 && r.bottom > 0) this.show(el);
           });
         }
+        // Appelé à chaque affichage du CV (il est retiré de la page pendant le choix de la langue)
         setupReveal() {
-          if (this.revealOn) return; this.revealOn = true;
+          void document.body.offsetHeight; // le CV vient d'être ajouté : on calcule son état de départ pour que les transitions jouent
           // le hero apparaît toujours, en cascade, sans dépendre de la position de scroll
           document.querySelectorAll('#top [data-reveal]').forEach(el => this.show(el));
           if (this.heroPhoto.current) this.heroPhoto.current.style.transform = 'scale(1)';
           this.checkReveal();
+          if (this.revealOn) return; this.revealOn = true;
           // re-vérification périodique (contenu qui arrive après coup, changements d'onglet, resize)
           this.revealTimer = setInterval(() => this.checkReveal(), 400);
           window.addEventListener('resize', () => this.checkReveal());
         }
-        componentDidUpdate() { if (this.revealOn) this.checkReveal(); }
+        componentDidUpdate() { this.syncHtmlLang(); if (this.revealOn) this.checkReveal(); }
 
-        finishIntro() { this.setState({ intro: 'done' }, () => this.setupReveal()); }
+        // après l'intro : le CV si la langue est déjà dans l'adresse, sinon la page de choix de la langue
+        finishIntro() { this.setState({ intro: 'done' }, () => { if (this.state.lang) this.setupReveal(); }); }
+
+        // --- Langue ---
+        langFromUrl() {
+          const l = new URLSearchParams(location.search).get('lang');
+          return ['fr', 'es', 'en'].includes(l) ? l : null;
+        }
+        // langue du navigateur, pour l'intro et la page de choix (avant que le visiteur ait choisi)
+        guessLang() {
+          for (const l of navigator.languages || [navigator.language || '']) {
+            const c = String(l).slice(0, 2).toLowerCase();
+            if (c === 'fr' || c === 'es' || c === 'en') return c;
+          }
+          return 'en';
+        }
+        tx() { return this.textes[this.state.lang || this.guessLang()]; }
+        syncHtmlLang() { document.documentElement.lang = this.state.lang || this.guessLang(); }
+        // affiche ce que demande l'adresse : le CV dans sa langue, ou la page de choix
+        applyUrlLang() {
+          const lang = this.langFromUrl();
+          if (lang === this.state.lang) return;
+          this.hidePop(); this.closeFiche();
+          this.setState({ lang, contactOpen: false }, () => {
+            window.scrollTo(0, 0); document.body.scrollTop = 0;
+            if (lang && this.state.intro === 'done') this.setupReveal();
+          });
+        }
+        pickLang(lang) {
+          const u = this.CV_URLS[lang];
+          if (!u || u === '#') return;
+          const url = new URL(u, location.href);
+          // autre page : on y va ; même page avec ?lang= : on change l'adresse sans recharger (pas de nouvelle intro)
+          if (url.origin !== location.origin || url.pathname !== location.pathname) { location.href = url.href; return; }
+          history.pushState(null, '', url.href);
+          this.applyUrlLang();
+        }
+        backToLangs(e) {
+          if (e && e.preventDefault) e.preventDefault();
+          const url = new URL(location.href);
+          url.searchParams.delete('lang'); url.hash = '';
+          history.pushState(null, '', url.href);
+          this.applyUrlLang();
+        }
+        // Souris : un clic ouvre le CV dans la langue de la carte.
+        // Écran tactile : un premier appui déclenche la transformation, un second appui ouvre le CV.
+        // Clavier : les cartes sont des boutons (Tab, puis Entrée).
+        langCardClick(e) {
+          const c = e.target.closest('.lg-card');
+          if (!c) return;
+          if (matchMedia('(hover:none)').matches && !c.classList.contains('on')) {
+            e.currentTarget.querySelectorAll('.lg-card').forEach(o => o.classList.remove('on'));
+            c.classList.add('on');
+            return;
+          }
+          this.pickLang(c.dataset.lang);
+        }
+        // Cartes de la maquette cvflix_langue_transformation.html (drapeaux en SVG, découpe animée en CSS)
+        langCards = `
+          <button class="lg-card" style="--pale:235,199,196;--fw:211px" data-lang="en" aria-label="English">
+            <span class="lg-bg"></span>
+            <span class="lg-fwrap"><span class="lg-flag"><svg viewBox="0 0 211 129" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="211" height="129" fill="#0b1f55"/>
+              <path d="M0 0L211 129M211 0L0 129" stroke="#fff" stroke-width="26"/>
+              <path d="M0 0L211 129M211 0L0 129" stroke="#b52a31" stroke-width="8"/>
+              <path d="M105.5 0V129M0 64.5H211" stroke="#fff" stroke-width="44"/>
+              <path d="M105.5 0V129M0 64.5H211" stroke="#b52a31" stroke-width="26"/></svg></span></span>
+            <span class="lg-txt">ENGLISH</span>
+          </button>
+          <button class="lg-card" style="--pale:252,235,199;--fw:194px" data-lang="es" aria-label="Español">
+            <span class="lg-bg"></span>
+            <span class="lg-fwrap"><span class="lg-flag"><svg viewBox="0 0 194 129" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="194" height="129" fill="#9b241b"/><rect y="32" width="194" height="65" fill="#f4b928"/></svg>
+              <img class="lg-arms" src="Vignettes 2/Langues/escudo-espana.png" alt=""></span></span>
+            <span class="lg-txt">ESPAÑOL</span>
+          </button>
+          <button class="lg-card" style="--pale:201,198,207;--fw:194px" data-lang="fr" aria-label="Français">
+            <span class="lg-bg"></span>
+            <span class="lg-fwrap"><span class="lg-flag"><svg viewBox="0 0 194 129" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="65" height="129" fill="#0b1f4d"/><rect x="65" width="64" height="129" fill="#fff"/><rect x="129" width="65" height="129" fill="#bc2a26"/></svg></span></span>
+            <span class="lg-txt">FRANÇAIS</span>
+          </button>`;
+        buildLangPage() {
+          if (this.state.intro !== 'done' || this.state.lang) return null;
+          const h = React.createElement;
+          return h('div', { className: 'lg-page' },
+            h('div', { className: 'lg-logo' }, 'CVFLIX'),
+            h('main', { className: 'lg-main' },
+              h('h1', null, this.tx().ui.choose),
+              h('div', { className: 'lg-row', onClick: e => this.langCardClick(e), dangerouslySetInnerHTML: { __html: this.langCards } })));
+        }
 
         // --- AUDIO D'INTRO ---
         // Déposez votre fichier dans le projet (ex: 'audio/intro.mp3') et indiquez le chemin ici.
@@ -2273,15 +2851,15 @@
 
         // Overlay d'intro (construit ici pour que l'animation ne soit pas réinitialisée par les re-rendus)
         buildIntro() {
-          const h = React.createElement, st = this.state.intro;
+          const h = React.createElement, st = this.state.intro, u = this.tx().ui;
           if (st === 'done') return null;
           const base = { position: 'fixed', inset: 0, zIndex: 100, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: st === 'idle' ? 'pointer' : 'default' };
           if (st === 'idle') {
             return h('div', { style: base, onClick: () => this.startIntro() },
               h('div', { style: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22 } },
                 h('div', { style: { fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(64px,14vw,150px)', letterSpacing: '.06em', color: '#E50914', lineHeight: 1, textShadow: '0 0 40px rgba(229,9,20,.5)' } }, 'CVFLIX'),
-                h('div', { style: { fontSize: 13, letterSpacing: '.2em', textTransform: 'uppercase', color: '#B3B3B3', animation: 'pulse 1.8s ease-in-out infinite' } }, 'Appuyer pour lancer'),
-                h('button', { onClick: (e) => { e.stopPropagation(); this.finishIntro(); }, style: { marginTop: 30, background: 'none', border: '1px solid #333', color: '#777', fontSize: 12, padding: '8px 18px', borderRadius: 3, cursor: 'pointer' } }, 'Passer')));
+                h('div', { style: { fontSize: 13, letterSpacing: '.2em', textTransform: 'uppercase', color: '#B3B3B3', animation: 'pulse 1.8s ease-in-out infinite' } }, u.tap),
+                h('button', { onClick: (e) => { e.stopPropagation(); this.finishIntro(); }, style: { marginTop: 30, background: 'none', border: '1px solid #333', color: '#777', fontSize: 12, padding: '8px 18px', borderRadius: 3, cursor: 'pointer' } }, u.skip)));
           }
           // 'playing' : lettres qui s'impriment puis éclatent en rubans de lumière
           const N = 34, ribbons = [];
@@ -2316,7 +2894,7 @@
         banner(id, extra = '', style = '') {
           const v = this.visual(id), src = v.src ? encodeURI(v.src) : '';
           const media = src
-            ? `<img class="cv-blur" src="${src}" alt="" aria-hidden="true"><div class="cv-fit"><img src="${src}" alt="${this.esc(v.name)}" onload="cvFit(this)"></div>`
+            ? `<img class="cv-ext" src="${src}" alt="${this.esc(v.name)}">`
             : `<div class="cv-name" style="color:${v.fg}">${this.esc(v.name)}</div>`;
           return `<div class="cv-ban" style="${style}background:${v.bg}">${media}${extra}</div>`;
         }
@@ -2324,7 +2902,7 @@
           return this.esc(d).replace(/([A-Za-zÀ-ÿ.]+) (\d{4})/g, '$1 <span class="cv-y">$2</span>');
         }
         showPop(card) {
-          const id = card.dataset.fiche, f = this.fiches[id];
+          const id = card.dataset.fiche, f = this.tx().fiches[id];
           if (!f) return;
           const pop = this.pop, r = card.getBoundingClientRect();
           const grow = card.dataset.m === 'exp-card' ? 1.1 : 1.24; // grandes vignettes : légère augmentation
@@ -2332,7 +2910,7 @@
           const chev = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
           pop.innerHTML = this.banner(id, '', 'aspect-ratio:16/9;')
             + `<div class="cv-info"><div class="cv-top"><span class="cv-pill">${this.esc(f.role)}</span>`
-            + `<button class="cv-chev" aria-label="Ouvrir la fiche">${chev}</button></div>`
+            + `<button class="cv-chev" aria-label="${this.esc(this.tx().ui.open)}">${chev}</button></div>`
             + `<div class="cv-dates">${this.yearBoxes(f.dates)}</div><div class="cv-kw">${f.kw.map(k => this.esc(k)).join(' • ')}</div></div>`;
           pop.dataset.fiche = id;
           pop.style.width = w + 'px';
@@ -2349,19 +2927,19 @@
           this.popCard = null;
         }
         openFiche(id) {
-          const f = this.fiches[id];
+          const f = this.tx().fiches[id], u = this.tx().ui;
           if (!f) return;
           this.hidePop();
           this.ficheReturn = document.activeElement;
-          const side = [['Genres', f.genres], ['Distribution', f.dist], ['Un programme', f.prog]]
-            .filter(([, v]) => v).map(([k, v]) => `<p><span>${k} : </span>${this.esc(v)}</p>`).join('');
+          const side = [[u.genres, f.genres], [u.dist, f.dist], [u.prog, f.prog]]
+            .filter(([, v]) => v).map(([k, v]) => `<p><span>${this.esc(k + u.colon)}</span>${this.esc(v)}</p>`).join('');
           this.ov.innerHTML = `<div class="cv-fiche" role="dialog" aria-modal="true" aria-label="${this.esc(f.role)}">`
             + this.banner(id, `<div class="cv-shade"></div><span class="cv-pill">${this.esc(f.role)}</span>`)
-            + `<button class="cv-x" aria-label="Fermer">✕</button>`
+            + `<button class="cv-x" aria-label="${this.esc(u.close)}">✕</button>`
             + `<div class="cv-body"><div class="cv-cols"><div><div class="cv-meta">${this.esc(f.dates)} • ${this.esc(f.city)}</div>`
             + `<div class="cv-bold">${this.esc(f.bold)}</div><p class="cv-syn">${this.esc(f.syn)}</p></div>`
             + `<div class="cv-side">${side}</div></div>`
-            + `<h3 class="cv-eh">Épisodes</h3>${f.eps.map(([t, d]) => `<div class="cv-ep"><b>${this.esc(t)}</b><span>${this.esc(d)}</span></div>`).join('')}</div></div>`;
+            + `<h3 class="cv-eh">${this.esc(u.episodes)}</h3>${f.eps.map(([t, d]) => `<div class="cv-ep"><b>${this.esc(t)}</b><span>${this.esc(d)}</span></div>`).join('')}</div></div>`;
           this.ov.classList.add('on');
           this.ov.scrollTop = 0;
           document.documentElement.style.overflow = 'hidden';
@@ -2380,14 +2958,6 @@
           }
         }
         setupFiches() {
-          // Ajuste l'image du bandeau : --r = son format ; fw/fh = bandes vides en haut-bas / sur les côtés ; fc = remplit
-          window.cvFit = img => {
-            const box = img.parentNode, ban = box.parentNode;
-            const r = img.naturalWidth / img.naturalHeight, rb = ban.clientWidth / ban.clientHeight;
-            box.style.setProperty('--r', r);
-            box.classList.remove('fw', 'fh', 'fc');
-            box.classList.add(Math.abs(r / rb - 1) < 0.08 ? 'fc' : r > rb ? 'fw' : 'fh');
-          };
           const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
           this.pop = document.createElement('div');
           this.pop.className = 'cv-pop';
@@ -2518,10 +3088,16 @@
         }
 
         renderVals() {
-          const { tab, scrolled, contactOpen, copied } = this.state;
-          const tabDefs = [['langues', 'Langues'], ['competences', 'Compétences'], ['autres', 'Autres']];
+          const { tab, scrolled, contactOpen, copied, lang, intro } = this.state;
+          const T = this.tx(), ui = T.ui;
+          const tabDefs = ['langues', 'competences', 'autres'].map(id => [id, ui.tabs[id]]);
           return {
             intro: this.buildIntro(),
+            langPage: this.buildLangPage(),
+            cvVisible: intro === 'done' && !!lang,
+            ui,
+            langHome: location.pathname,
+            backToLangs: e => this.backToLangs(e),
             contactOpen,
             openContactCard: e => {
               if (this.canOpenVcard()) return;
@@ -2531,19 +3107,19 @@
             closeContact: () => this.setState({ contactOpen: false }),
             copyPhone: () => this.copy('+33 6 20 81 04 18', 'phone'),
             copyEmail: () => this.copy('omar.errachid@icloud.com', 'email'),
-            phoneCopyLabel: copied === 'phone' ? 'Copié ✓' : 'Copier',
-            emailCopyLabel: copied === 'email' ? 'Copié ✓' : 'Copier',
+            phoneCopyLabel: copied === 'phone' ? ui.copied : ui.copy,
+            emailCopyLabel: copied === 'email' ? ui.copied : ui.copy,
             headerBg: scrolled ? '#141414' : 'linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,0) 100%)',
             showBadge: this.props.showBadge ?? true,
             rowExp: this.rowExp, rowForm: this.rowForm, heroPhoto: this.heroPhoto,
             nextExp: () => this.scroll(this.rowExp, 1),
             nextForm: () => this.scroll(this.rowForm, 1),
-            experiences: this.experiences.map(e => ({ ...this.fiches[e.id], ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? 'calc(50% - 26px)' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
-            formations: this.formations.map(f => ({ ...f, accent: f.accent || f.bg, hasLogo: !!f.logo, noLogo: !f.logo })),
-            pepites: this.pepites.map(p => ({ ...p, hasLogo: !!p.logo, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
+            experiences: this.experiences.map(e => ({ ...T.fiches[e.id], ...e, hasImage: !!e.image, hasLogo: !!e.logo, logoTop: e.logoCenter ? 'calc(50% - 26px)' : '0', logoShift: e.logoCenter ? '-50%' : '0', showName: !e.logo && !e.image })),
+            formations: this.formations.map(f => ({ ...f, ...T.formations[f.id], accent: f.accent || f.bg, hasLogo: !!f.logo, noLogo: !f.logo })),
+            pepites: this.pepites.map(p => ({ ...p, hasFull: !!p.logo && !!p.full, hasSmallLogo: !!p.logo && !p.full, noLogo: !p.logo, pad: p.full ? '0' : '14px 18px' })),
             collection: this.collection.map(c => ({ ...c, hasImage: !!c.image, hasLogo: !!c.logo, noLogo: !c.logo && !c.image, hasRole: !!c.role, titleTop: c.image ? '8%' : '39%' })),
-            competences: this.competences, autres: this.autres,
-            langues: this.langues.map(l => ({ ...l, hasArt: !!l.art })),
+            competences: T.competences, autres: T.autres,
+            langues: this.langues.map(l => ({ ...l, name: T.langues[l.id][0], level: T.langues[l.id][1], hasArt: !!l.art })),
             tabs: tabDefs.map(([id, label]) => ({
               label, select: () => this.setState({ tab: id }),
               color: tab === id ? '#fff' : '#B3B3B3', border: tab === id ? '#E50914' : 'transparent',
